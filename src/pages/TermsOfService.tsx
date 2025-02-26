@@ -19,26 +19,44 @@ const TermsOfService = () => {
             
             <div className="prose max-w-none text-gray-600">
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Agreement to Terms</h2>
-                <p>
-                  By accessing or using our website, you agree to be bound by these Terms of Service and all
-                  applicable laws and regulations.
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Agreement to Terms</h2>
+                <p className="mb-4">
+                  By accessing and using our website and services, you agree to be bound by these Terms of Service
+                  and all applicable laws and regulations. If you do not agree with any of these terms, you are
+                  prohibited from using or accessing this site.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Use License</h2>
-                <p>
-                  Permission is granted to temporarily access and view the materials on our website for
-                  personal, non-commercial use only.
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">2. Use License</h2>
+                <p className="mb-4">
+                  Permission is granted to temporarily download one copy of the materials (information or software)
+                  on our website for personal, non-commercial transitory viewing only.
+                </p>
+                <ul className="list-disc pl-6 mb-4">
+                  <li>Modify or copy the materials</li>
+                  <li>Use the materials for any commercial purpose</li>
+                  <li>Attempt to decompile or reverse engineer any software</li>
+                  <li>Remove any copyright or other proprietary notations</li>
+                </ul>
+              </section>
+
+              <section className="mb-8">
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">3. Disclaimer</h2>
+                <p className="mb-4">
+                  The materials on our website are provided on an 'as is' basis. We make no warranties, expressed
+                  or implied, and hereby disclaim and negate all other warranties including, without limitation,
+                  implied warranties or conditions of merchantability, fitness for a particular purpose, or
+                  non-infringement of intellectual property or other violation of rights.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">User Account</h2>
-                <p>
-                  If you create an account on our website, you are responsible for maintaining the
-                  confidentiality of your account and password.
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">4. Limitations</h2>
+                <p className="mb-4">
+                  In no event shall we or our suppliers be liable for any damages (including, without limitation,
+                  damages for loss of data or profit, or due to business interruption) arising out of the use or
+                  inability to use the materials on our website.
                 </p>
               </section>
             </div>

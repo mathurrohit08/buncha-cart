@@ -13,70 +13,89 @@ const AboutUs = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="space-y-8"
+            className="space-y-12"
           >
-            <h1 className="text-4xl font-bold text-center mb-12">About Us</h1>
-            
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div className="space-y-4">
-                <h2 className="text-2xl font-semibold">Our Story</h2>
-                <p className="text-gray-600 leading-relaxed">
-                  Founded in 2020, our store has grown from a small local shop to 
-                  a leading online destination for premium products. We believe in 
-                  quality, innovation, and exceptional customer service.
-                </p>
-                <p className="text-gray-600 leading-relaxed">
-                  Our mission is to provide our customers with the highest quality 
-                  products while maintaining affordable prices and excellent service.
-                </p>
-              </div>
-              <div>
+            <div className="text-center">
+              <h1 className="text-4xl font-bold mb-6">About Us</h1>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                We're passionate about bringing you the best products with an exceptional shopping experience.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
                 <img
-                  src="https://images.unsplash.com/photo-1460574283810-2aab119d8511"
-                  alt="Our Store Building"
+                  src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+                  alt="Our Team"
                   className="rounded-lg shadow-lg w-full h-[400px] object-cover"
                 />
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8 mt-16">
-              <div className="text-center space-y-4">
-                <h3 className="text-xl font-semibold">Our Vision</h3>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="space-y-6"
+              >
+                <h2 className="text-3xl font-semibold">Our Story</h2>
                 <p className="text-gray-600">
-                  To become the most trusted and innovative online retail 
-                  destination globally.
+                  Founded with a vision to revolutionize online shopping, we've grown from a small startup
+                  to a trusted e-commerce destination. Our journey has been driven by our commitment to
+                  quality, innovation, and customer satisfaction.
                 </p>
-              </div>
-              <div className="text-center space-y-4">
-                <h3 className="text-xl font-semibold">Our Values</h3>
-                <p className="text-gray-600">
-                  Quality, Integrity, Innovation, and Customer Satisfaction are 
-                  at the heart of everything we do.
-                </p>
-              </div>
-              <div className="text-center space-y-4">
-                <h3 className="text-xl font-semibold">Our Promise</h3>
-                <p className="text-gray-600">
-                  We stand behind every product we sell with our satisfaction 
-                  guarantee.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-16">
-              <h2 className="text-2xl font-semibold text-center mb-8">Our Team</h2>
-              <div className="grid md:grid-cols-4 gap-8">
-                <div className="text-center space-y-4">
-                  <img
-                    src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
-                    alt="Team Member"
-                    className="w-32 h-32 rounded-full mx-auto object-cover"
-                  />
-                  <h3 className="font-semibold">Sarah Johnson</h3>
-                  <p className="text-gray-600">CEO & Founder</p>
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-purple-600">1M+</h3>
+                    <p className="text-gray-600">Happy Customers</p>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-purple-600">50K+</h3>
+                    <p className="text-gray-600">Products</p>
+                  </div>
                 </div>
-                {/* Add more team members as needed */}
-              </div>
+              </motion.div>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                className="p-6 bg-white rounded-lg shadow-md"
+              >
+                <h3 className="text-xl font-semibold mb-4">Our Mission</h3>
+                <p className="text-gray-600">
+                  To provide accessible, high-quality products while maintaining exceptional customer service
+                  and fostering sustainable practices.
+                </p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.7 }}
+                className="p-6 bg-white rounded-lg shadow-md"
+              >
+                <h3 className="text-xl font-semibold mb-4">Our Vision</h3>
+                <p className="text-gray-600">
+                  To become the most trusted and innovative e-commerce platform, setting new standards for
+                  online shopping experiences.
+                </p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
+                className="p-6 bg-white rounded-lg shadow-md"
+              >
+                <h3 className="text-xl font-semibold mb-4">Our Values</h3>
+                <p className="text-gray-600">
+                  Built on integrity, innovation, sustainability, and an unwavering commitment to customer
+                  satisfaction.
+                </p>
+              </motion.div>
             </div>
           </motion.div>
         </div>
