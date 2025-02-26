@@ -1,6 +1,7 @@
 
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { User } from "lucide-react";
 
 const reviews = [
   {
@@ -9,6 +10,33 @@ const reviews = [
     rating: 5,
     comment:
       "Amazing product! Exactly what I was looking for. The quality is outstanding.",
+    comments: [
+      {
+        id: 1,
+        user: "Alice Smith",
+        comment: "I agree! The quality is really impressive.",
+      },
+      {
+        id: 2,
+        user: "Bob Johnson",
+        comment: "Just ordered one after reading this review!",
+      },
+      {
+        id: 3,
+        user: "Carol White",
+        comment: "The customer service is great too!",
+      },
+      {
+        id: 4,
+        user: "David Brown",
+        comment: "Best purchase I've made this year.",
+      },
+      {
+        id: 5,
+        user: "Eva Green",
+        comment: "Highly recommend to everyone!",
+      },
+    ],
   },
   {
     id: 2,
@@ -16,6 +44,33 @@ const reviews = [
     rating: 4,
     comment:
       "Great value for money. Shipping was fast and the product exceeded my expectations.",
+    comments: [
+      {
+        id: 1,
+        user: "Frank Miller",
+        comment: "Fast shipping indeed!",
+      },
+      {
+        id: 2,
+        user: "Grace Lee",
+        comment: "Worth every penny.",
+      },
+      {
+        id: 3,
+        user: "Henry Wilson",
+        comment: "The packaging was excellent.",
+      },
+      {
+        id: 4,
+        user: "Iris Chen",
+        comment: "Will buy again!",
+      },
+      {
+        id: 5,
+        user: "Jack Thompson",
+        comment: "Great experience overall.",
+      },
+    ],
   },
   {
     id: 3,
@@ -23,6 +78,33 @@ const reviews = [
     rating: 5,
     comment:
       "Excellent customer service and the product quality is superb. Highly recommend!",
+    comments: [
+      {
+        id: 1,
+        user: "Karen Davis",
+        comment: "The support team is amazing!",
+      },
+      {
+        id: 2,
+        user: "Liam Murphy",
+        comment: "Quick response to all my questions.",
+      },
+      {
+        id: 3,
+        user: "Maria Garcia",
+        comment: "Perfect experience from start to finish.",
+      },
+      {
+        id: 4,
+        user: "Noah Taylor",
+        comment: "Exactly as described.",
+      },
+      {
+        id: 5,
+        user: "Olivia Martin",
+        comment: "Can't wait to order more!",
+      },
+    ],
   },
 ];
 
@@ -67,7 +149,28 @@ export const Reviews = () => {
                 ))}
               </div>
               <p className="text-gray-300 mb-4">{review.comment}</p>
-              <p className="font-medium">{review.name}</p>
+              <p className="font-medium mb-6">{review.name}</p>
+              
+              <div className="space-y-4">
+                <h4 className="text-sm font-medium text-gray-400">Comments</h4>
+                {review.comments.map((comment) => (
+                  <motion.div
+                    key={comment.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="flex items-start gap-3 bg-gray-700/50 p-3 rounded-lg"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center flex-shrink-0">
+                      <User className="w-4 h-4 text-gray-300" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-300">{comment.user}</p>
+                      <p className="text-sm text-gray-400">{comment.comment}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </motion.div>
           ))}
         </div>
