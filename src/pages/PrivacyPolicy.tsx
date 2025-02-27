@@ -2,6 +2,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
+import { Shield, Lock, Server, Eye, Database, FileText } from "lucide-react";
 
 const PrivacyPolicy = () => {
   return (
@@ -13,66 +14,193 @@ const PrivacyPolicy = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="space-y-8"
+            className="space-y-12"
           >
-            <h1 className="text-4xl font-bold text-center mb-12">Privacy Policy</h1>
+            <div className="text-center">
+              <h1 className="text-4xl font-bold mb-6">Privacy Policy</h1>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                We are committed to protecting your privacy and ensuring your data is handled securely and responsibly.
+              </p>
+            </div>
+            
+            {/* Visual elements for privacy concepts */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-lg text-center"
+              >
+                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Shield className="w-8 h-8 text-blue-600" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Data Protection</h3>
+                <p className="text-gray-600">We implement strict security measures to protect your personal information</p>
+              </motion.div>
+              
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="bg-gradient-to-br from-purple-50 to-violet-50 p-8 rounded-lg text-center"
+              >
+                <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Lock className="w-8 h-8 text-purple-600" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Secure Transactions</h3>
+                <p className="text-gray-600">All payment information is encrypted and processed securely</p>
+              </motion.div>
+              
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="bg-gradient-to-br from-teal-50 to-emerald-50 p-8 rounded-lg text-center"
+              >
+                <div className="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Eye className="w-8 h-8 text-teal-600" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Transparency</h3>
+                <p className="text-gray-600">We are clear about what data we collect and how we use it</p>
+              </motion.div>
+            </div>
             
             <div className="prose max-w-none text-gray-600">
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Information We Collect</h2>
-                <p className="mb-4">
-                  We collect information that you provide directly to us, including when you:
-                </p>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>Create an account</li>
-                  <li>Make a purchase</li>
-                  <li>Sign up for our newsletter</li>
-                  <li>Contact us for support</li>
-                </ul>
+              <section className="mb-12">
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="bg-blue-100 p-2 rounded-md mt-1">
+                    <Database className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-4">Information We Collect</h2>
+                    <div className="relative">
+                      <div className="absolute left-0 w-1 h-full bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
+                      <div className="pl-6">
+                        <p className="mb-4">
+                          We collect information that you provide directly to us, including when you:
+                        </p>
+                        <ul className="list-disc pl-6 mb-4 space-y-2">
+                          <li>Create an account</li>
+                          <li>Make a purchase</li>
+                          <li>Sign up for our newsletter</li>
+                          <li>Contact us for support</li>
+                          <li>Participate in surveys or promotions</li>
+                          <li>Post reviews or comments</li>
+                        </ul>
+                        
+                        <p className="mb-4">
+                          We may also automatically collect certain information about your device and how you interact with our services, including:
+                        </p>
+                        <ul className="list-disc pl-6 mb-4 space-y-2">
+                          <li>IP address and device identifiers</li>
+                          <li>Browser type and operating system</li>
+                          <li>Pages you view and links you click</li>
+                          <li>Time spent on our services and referring website</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </section>
 
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">How We Use Your Information</h2>
-                <p className="mb-4">
-                  We use the information we collect to:
-                </p>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>Process your orders and payments</li>
-                  <li>Send you order confirmations and updates</li>
-                  <li>Respond to your comments and questions</li>
-                  <li>Send you marketing communications (with your consent)</li>
-                </ul>
+              <section className="mb-12">
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="bg-purple-100 p-2 rounded-md mt-1">
+                    <Server className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-4">How We Use Your Information</h2>
+                    <div className="relative">
+                      <div className="absolute left-0 w-1 h-full bg-gradient-to-b from-purple-500 to-pink-500 rounded-full"></div>
+                      <div className="pl-6">
+                        <p className="mb-4">
+                          We use the information we collect to:
+                        </p>
+                        <ul className="list-disc pl-6 mb-4 space-y-2">
+                          <li>Process your orders and payments</li>
+                          <li>Send you order confirmations and updates</li>
+                          <li>Respond to your comments and questions</li>
+                          <li>Send you marketing communications (with your consent)</li>
+                          <li>Improve our website and products</li>
+                          <li>Detect and prevent fraud</li>
+                          <li>Analyze how users interact with our services</li>
+                          <li>Comply with legal obligations</li>
+                        </ul>
+                        
+                        <div className="bg-purple-50 p-4 rounded-lg border border-purple-100 mb-4">
+                          <h4 className="font-semibold text-purple-700 mb-2">Personalized Experience</h4>
+                          <p>
+                            We use your browsing history and purchase data to provide personalized product recommendations
+                            and a tailored shopping experience. You can adjust your preferences in your account settings.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </section>
 
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Information Sharing</h2>
-                <p className="mb-4">
-                  We do not sell or rent your personal information to third parties. We may share your
-                  information with trusted service providers who assist us in operating our website,
-                  conducting our business, or servicing you.
-                </p>
+              <section className="mb-12">
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="bg-teal-100 p-2 rounded-md mt-1">
+                    <FileText className="w-6 h-6 text-teal-600" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-4">Your Rights</h2>
+                    <div className="relative">
+                      <div className="absolute left-0 w-1 h-full bg-gradient-to-b from-teal-500 to-emerald-500 rounded-full"></div>
+                      <div className="pl-6">
+                        <p className="mb-4">
+                          You have the right to:
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-4 mb-4">
+                          <div className="bg-teal-50 p-4 rounded-lg border border-teal-100">
+                            <h4 className="font-semibold text-teal-700 mb-2">Access Your Data</h4>
+                            <p>Request a copy of the personal information we hold about you</p>
+                          </div>
+                          <div className="bg-teal-50 p-4 rounded-lg border border-teal-100">
+                            <h4 className="font-semibold text-teal-700 mb-2">Correct Your Data</h4>
+                            <p>Ask us to update or correct inaccurate information</p>
+                          </div>
+                          <div className="bg-teal-50 p-4 rounded-lg border border-teal-100">
+                            <h4 className="font-semibold text-teal-700 mb-2">Delete Your Data</h4>
+                            <p>Request deletion of your personal information</p>
+                          </div>
+                          <div className="bg-teal-50 p-4 rounded-lg border border-teal-100">
+                            <h4 className="font-semibold text-teal-700 mb-2">Data Portability</h4>
+                            <p>Receive your data in a structured, machine-readable format</p>
+                          </div>
+                        </div>
+                        
+                        <p>
+                          To exercise these rights, please contact our privacy team at privacy@storex.com. We will respond to your request within 30 days.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </section>
-
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Data Security</h2>
+              
+              <div className="bg-blue-50 p-6 rounded-lg border border-blue-100">
+                <h3 className="text-xl font-semibold text-blue-800 mb-4">Contact Us</h3>
                 <p className="mb-4">
-                  We implement appropriate technical and organizational security measures to protect your
-                  personal information against unauthorized access, alteration, disclosure, or destruction.
+                  If you have any questions about this Privacy Policy or our data practices, please contact us at:
                 </p>
-              </section>
-
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Your Rights</h2>
-                <p className="mb-4">
-                  You have the right to:
-                </p>
-                <ul className="list-disc pl-6 mb-4">
-                  <li>Access your personal information</li>
-                  <li>Correct inaccurate information</li>
-                  <li>Request deletion of your information</li>
-                  <li>Opt-out of marketing communications</li>
-                </ul>
-              </section>
+                <div className="flex flex-col md:flex-row md:space-x-12 space-y-4 md:space-y-0">
+                  <div>
+                    <p className="font-semibold text-gray-700">Email:</p>
+                    <p className="text-blue-600">privacy@storex.com</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-700">Mail:</p>
+                    <p>Privacy Officer<br />StoreX Inc.<br />123 Commerce St<br />San Francisco, CA 94103</p>
+                  </div>
+                </div>
+              </div>
+              
+              <p className="text-sm text-gray-500 text-center mt-8">
+                Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
             </div>
           </motion.div>
         </div>
