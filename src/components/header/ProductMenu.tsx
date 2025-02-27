@@ -24,23 +24,26 @@ const productTypes = [
 export const ProductMenu = () => {
   return (
     <HoverCard openDelay={0} closeDelay={100}>
-      <HoverCardTrigger className="text-gray-600 hover:text-gray-900 transition-colors">
+      <HoverCardTrigger className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
         Products
       </HoverCardTrigger>
-      <HoverCardContent className="w-[400px]" align="start">
+      <HoverCardContent 
+        className="w-[calc(100vw-2rem)] sm:w-[400px] border dark:border-gray-700 bg-white dark:bg-gray-800" 
+        align="start"
+      >
         <div className="grid grid-cols-1 gap-4">
           {productTypes.map((type) => (
             <Link
               key={type.name}
               to={`/products/${type.name.toLowerCase().replace(" ", "-")}`}
-              className="flex items-center gap-4 p-2 hover:bg-gray-50 rounded-lg transition-colors"
+              className="flex items-center gap-4 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
             >
               <img
                 src={type.image}
                 alt={type.name}
                 className="w-16 h-16 object-cover rounded-lg"
               />
-              <span>{type.name}</span>
+              <span className="dark:text-gray-300">{type.name}</span>
             </Link>
           ))}
         </div>

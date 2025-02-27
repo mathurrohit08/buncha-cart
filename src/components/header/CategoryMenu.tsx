@@ -32,26 +32,29 @@ export const CategoryMenu = () => {
 
   return (
     <HoverCard openDelay={0} closeDelay={100}>
-      <HoverCardTrigger className="text-gray-600 hover:text-gray-900 transition-colors">
+      <HoverCardTrigger className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
         Categories
       </HoverCardTrigger>
-      <HoverCardContent className="w-[500px] p-0" align="start">
-        <div className="grid grid-cols-5 h-[400px]">
-          <div className="col-span-2 bg-gray-50 p-4">
+      <HoverCardContent 
+        className="w-[calc(100vw-2rem)] sm:w-[500px] p-0 border dark:border-gray-700 bg-white dark:bg-gray-800" 
+        align="start"
+      >
+        <div className="grid grid-cols-3 sm:grid-cols-5 h-[400px]">
+          <div className="col-span-1 sm:col-span-2 bg-gray-50 dark:bg-gray-900 p-4">
             {categories.map((category) => (
               <div
                 key={category.name}
                 className="group"
                 onMouseEnter={() => setHoveredCategory(category.name)}
               >
-                <div className="flex items-center justify-between p-2 rounded-lg hover:bg-white transition-colors cursor-pointer">
-                  <span>{category.name}</span>
+                <div className="flex items-center justify-between p-2 rounded-lg hover:bg-white dark:hover:bg-gray-800 transition-colors cursor-pointer">
+                  <span className="dark:text-gray-300">{category.name}</span>
                   <ChevronRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
               </div>
             ))}
           </div>
-          <div className="col-span-3 p-4">
+          <div className="col-span-2 sm:col-span-3 p-4">
             {hoveredCategory && (
               <motion.div
                 initial={{ opacity: 0, y: 5 }}
@@ -64,8 +67,8 @@ export const CategoryMenu = () => {
                   ?.subcategories.map((sub) => (
                     <Link
                       key={sub}
-                      to={`/category/${sub.toLowerCase()}`}
-                      className="block p-2 hover:bg-gray-50 rounded-lg transition-colors"
+                      to={`/category/${hoveredCategory.toLowerCase().replace(/\s+/g, "-")}/${sub.toLowerCase().replace(/\s+/g, "-")}`}
+                      className="block p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors dark:text-gray-300"
                     >
                       {sub}
                     </Link>

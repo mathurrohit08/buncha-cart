@@ -79,8 +79,8 @@
 
 /* Custom scrollbar styles */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -88,7 +88,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-400/50 rounded-full hover:bg-gray-400/70 transition-colors;
+  @apply bg-gray-400/50 dark:bg-gray-600/50 rounded-full hover:bg-gray-400/70 dark:hover:bg-gray-600/70 transition-colors;
 }
 
 .scrollbar-none {
