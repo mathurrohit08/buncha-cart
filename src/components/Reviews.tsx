@@ -1,5 +1,5 @@
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { User } from "lucide-react";
 
@@ -26,26 +26,6 @@ const reviews = [
         user: "Carol White",
         comment: "The customer service is great too!",
       },
-      {
-        id: 4,
-        user: "David Brown",
-        comment: "Best purchase I've made this year.",
-      },
-      {
-        id: 5,
-        user: "Eva Green",
-        comment: "Highly recommend to everyone!",
-      },
-      {
-        id: 6,
-        user: "Frank Miller",
-        comment: "Agreed! The shipping was super fast too.",
-      },
-      {
-        id: 7,
-        user: "Grace Wong",
-        comment: "I've already recommended it to all my friends.",
-      },
     ],
   },
   {
@@ -69,26 +49,6 @@ const reviews = [
         id: 3,
         user: "Henry Wilson",
         comment: "The packaging was excellent.",
-      },
-      {
-        id: 4,
-        user: "Iris Chen",
-        comment: "Will buy again!",
-      },
-      {
-        id: 5,
-        user: "Jack Thompson",
-        comment: "Great experience overall.",
-      },
-      {
-        id: 6,
-        user: "Katie Reynolds",
-        comment: "The customer service was very responsive.",
-      },
-      {
-        id: 7,
-        user: "Leo Martinez",
-        comment: "Perfect for what I needed.",
       },
     ],
   },
@@ -114,26 +74,6 @@ const reviews = [
         user: "Maria Garcia",
         comment: "Perfect experience from start to finish.",
       },
-      {
-        id: 4,
-        user: "Noah Taylor",
-        comment: "Exactly as described.",
-      },
-      {
-        id: 5,
-        user: "Olivia Martin",
-        comment: "Can't wait to order more!",
-      },
-      {
-        id: 6,
-        user: "Peter Johnson",
-        comment: "The quality exceeded my expectations.",
-      },
-      {
-        id: 7,
-        user: "Quinn Adams",
-        comment: "Five stars all the way!",
-      },
     ],
   },
   {
@@ -157,16 +97,6 @@ const reviews = [
         id: 3,
         user: "Thomas Hill",
         comment: "Very sleek and modern design.",
-      },
-      {
-        id: 4,
-        user: "Uma Patel",
-        comment: "Exactly what I was looking for in terms of aesthetics.",
-      },
-      {
-        id: 5,
-        user: "Victor Nguyen",
-        comment: "My friends all want one after seeing mine!",
       },
     ],
   },
@@ -192,16 +122,6 @@ const reviews = [
         user: "Yasmine Ali",
         comment: "Perfect for my daily use needs.",
       },
-      {
-        id: 4,
-        user: "Zach Turner",
-        comment: "Very impressed with the build quality.",
-      },
-      {
-        id: 5,
-        user: "Amy Wilson",
-        comment: "Great value compared to other options.",
-      },
     ],
   },
   {
@@ -226,16 +146,6 @@ const reviews = [
         user: "Dylan Martin",
         comment: "I'm already thinking about buying a second one.",
       },
-      {
-        id: 4,
-        user: "Emma Thompson",
-        comment: "Absolutely perfect, no complaints at all.",
-      },
-      {
-        id: 5,
-        user: "Felix White",
-        comment: "So glad I made this purchase!",
-      },
     ],
   },
 ];
@@ -259,29 +169,18 @@ export const Reviews = () => {
   };
 
   return (
-    <div className="bg-gray-900 text-white py-16">
+    <div className="bg-gray-900 text-white py-8 md:py-12">
       <div className="max-w-[1600px] mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-8">Customer Reviews</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 md:mb-8">Customer Reviews</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {reviews.map((review, index) => (
             <motion.div
               key={review.id}
               className="relative rounded-lg overflow-hidden"
-              initial={{ y: 0 }}
-              animate={
-                isPaused
-                  ? { y: 0 }
-                  : {
-                      y: [0, index % 2 === 0 ? 20 : -20, 0],
-                      transition: {
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      },
-                    }
-              }
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
             >
               {/* Animated border */}
               <motion.div 
@@ -296,19 +195,19 @@ export const Reviews = () => {
                   ],
                 }}
                 transition={{
-                  duration: 4,
+                  duration: 3,
                   repeat: Infinity,
                   ease: "linear"
                 }}
               />
               
               {/* Content with slight inset to show border */}
-              <div className="bg-gray-800 m-[3px] p-6 rounded-lg relative z-10 h-full">
-                <div className="flex items-center gap-2 mb-4">
+              <div className="bg-gray-800 m-[2px] p-4 md:p-5 rounded-lg relative z-10 h-full">
+                <div className="flex items-center gap-1 mb-3">
                   {[...Array(review.rating)].map((_, i) => (
                     <svg
                       key={i}
-                      className="w-5 h-5 text-yellow-400"
+                      className="w-4 h-4 text-yellow-400"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -316,25 +215,25 @@ export const Reviews = () => {
                     </svg>
                   ))}
                 </div>
-                <p className="text-gray-300 mb-4">{review.comment}</p>
-                <p className="font-medium mb-6">{review.name}</p>
+                <p className="text-gray-300 text-sm mb-3 line-clamp-3">{review.comment}</p>
+                <p className="font-medium text-sm mb-4">{review.name}</p>
                 
-                <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 scrollbar-none">
-                  <h4 className="text-sm font-medium text-gray-400">Comments</h4>
+                <div className="space-y-3 max-h-[180px] overflow-y-auto pr-2 scrollbar-none">
+                  <h4 className="text-xs font-medium text-gray-400">Comments</h4>
                   {review.comments.map((comment) => (
                     <motion.div
                       key={comment.id}
-                      initial={{ opacity: 0, x: -10 }}
+                      initial={{ opacity: 0, x: -5 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="flex items-start gap-3 bg-gray-700/50 p-3 rounded-lg"
+                      transition={{ duration: 0.2 }}
+                      className="flex items-start gap-2 bg-gray-700/50 p-2 rounded-lg"
                     >
-                      <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center flex-shrink-0">
-                        <User className="w-4 h-4 text-gray-300" />
+                      <div className="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center flex-shrink-0">
+                        <User className="w-3 h-3 text-gray-300" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-gray-300">{comment.user}</p>
-                        <p className="text-sm text-gray-400">{comment.comment}</p>
+                        <p className="text-xs font-medium text-gray-300">{comment.user}</p>
+                        <p className="text-xs text-gray-400">{comment.comment}</p>
                       </div>
                     </motion.div>
                   ))}
