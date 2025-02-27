@@ -8,8 +8,28 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart, Heart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+// Define types for our data structure
+type Product = {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  description: string;
+};
+
+type Subcategory = {
+  name: string;
+  products: Product[];
+};
+
+type CategoryData = {
+  name: string;
+  banner: string;
+  subcategories: Record<string, Subcategory>;
+};
+
 // Mock categories data with subcategories
-const categories = {
+const categories: Record<string, CategoryData> = {
   electronics: {
     name: "Electronics",
     banner: "https://images.unsplash.com/photo-1498049794561-7780e7231661",
@@ -278,43 +298,43 @@ const CategoryPage = () => {
 
   // Convert category name to format used in data object
   const categoryKey = categoryName?.toLowerCase().replace(/\s+/g, "-");
-  const category = categoryKey ? categories[categoryKey as keyof typeof categories] : null;
+  const category = categoryKey && categories[categoryKey] ? categories[categoryKey] : null;
 
   // Get subcategory if specified, otherwise use first subcategory
   const getSubcategoryProducts = () => {
     if (!category) return [];
 
-    if (subCategory && category.subcategories[subCategory as keyof typeof category.subcategories]) {
-      return category.subcategories[subCategory as keyof typeof category.subcategories].products;
+    if (subCategory && category.subcategories[subCategory]) {
+      return category.subcategories[subCategory].products;
     }
 
     // If no subcategory specified, use first subcategory
     const firstSubcategoryKey = Object.keys(category.subcategories)[0];
-    return category.subcategories[firstSubcategoryKey as keyof typeof category.subcategories].products;
+    return category.subcategories[firstSubcategoryKey].products;
   };
 
   const getSubcategoryName = () => {
     if (!category) return "";
 
-    if (subCategory && category.subcategories[subCategory as keyof typeof category.subcategories]) {
-      return category.subcategories[subCategory as keyof typeof category.subcategories].name;
+    if (subCategory && category.subcategories[subCategory]) {
+      return category.subcategories[subCategory].name;
     }
 
     // If no subcategory specified, use first subcategory
     const firstSubcategoryKey = Object.keys(category.subcategories)[0];
-    return category.subcategories[firstSubcategoryKey as keyof typeof category.subcategories].name;
+    return category.subcategories[firstSubcategoryKey].name;
   };
 
   const products = getSubcategoryProducts();
 
-  const handleAddToCart = (product: any) => {
+  const handleAddToCart = (product: Product) => {
     toast({
       title: "Added to cart",
       description: `${product.name} has been added to your cart.`,
     });
   };
 
-  const handleAddToWishlist = (product: any) => {
+  const handleAddToWishlist = (product: Product) => {
     toast({
       title: "Added to wishlist",
       description: `${product.name} has been added to your wishlist.`,
