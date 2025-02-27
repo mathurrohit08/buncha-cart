@@ -2,13 +2,15 @@
 import { motion } from "framer-motion";
 import { Review, getBorderColor } from "./types";
 import { CommentItem } from "./CommentItem";
+import { CommentForm } from "./CommentForm";
 
 interface ReviewCardProps {
   review: Review;
   index: number;
+  onAddComment: (reviewId: number, username: string, comment: string) => void;
 }
 
-export const ReviewCard = ({ review, index }: ReviewCardProps) => {
+export const ReviewCard = ({ review, index, onAddComment }: ReviewCardProps) => {
   return (
     <motion.div
       key={review.id}
@@ -60,6 +62,8 @@ export const ReviewCard = ({ review, index }: ReviewCardProps) => {
             <CommentItem key={comment.id} comment={comment} />
           ))}
         </div>
+        
+        <CommentForm reviewId={review.id} onAddComment={onAddComment} />
       </div>
     </motion.div>
   );
