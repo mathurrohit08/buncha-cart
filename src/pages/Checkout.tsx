@@ -1,14 +1,15 @@
-
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
-import { Check, Truck, CreditCard, Info, Plus, Minus, Trash2 } from "lucide-react";
+import { Check, Truck, CreditCard, Info, Plus, Minus, Trash2, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Mock cart data
 const initialCartItems = [
@@ -35,6 +36,46 @@ const shippingOptions = [
   { id: "nextday", name: "Next Day Delivery", price: 19.99, days: "1" },
 ];
 
+// Mock saved addresses
+const savedAddresses = [
+  {
+    id: 1,
+    name: "Home",
+    firstName: "John",
+    lastName: "Doe",
+    email: "john@example.com",
+    address: "123 Main St",
+    city: "San Francisco",
+    state: "CA",
+    zipCode: "94103",
+    country: "United States",
+    default: true
+  },
+  {
+    id: 2,
+    name: "Work",
+    firstName: "John",
+    lastName: "Doe",
+    email: "john@example.com",
+    address: "456 Market St",
+    city: "San Francisco",
+    state: "CA",
+    zipCode: "94105",
+    country: "United States",
+    default: false
+  }
+];
+
+// Payment method options
+const paymentMethods = [
+  { id: "credit", name: "Credit Card", icon: "💳" },
+  { id: "debit", name: "Debit Card", icon: "💳" },
+  { id: "wire", name: "Wire Transfer", icon: "🏦" },
+  { id: "googlepay", name: "Google Pay", icon: "🔵" },
+  { id: "amazonpay", name: "Amazon Pay", icon: "📦" },
+  { id: "netbanking", name: "Net Banking", icon: "🖥️" },
+];
+
 const Checkout = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
@@ -50,6 +91,15 @@ const Checkout = () => {
   const [shipping, setShipping] = useState(shippingOptions[0]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [cartItems, setCartItems] = useState(initialCartItems);
+  const [addressMode, setAddressMode] = useState("saved"); // "saved" or "new"
+  const [selectedAddressId, setSelectedAddressId] = useState(savedAddresses.find(addr => addr.default)?.id || 1);
+  const [paymentMethod, setPaymentMethod] = useState("credit");
+  const [cardDetails, setCardDetails] = useState({
+    cardNumber: "",
+    cardName: "",
+    expiryDate: "",
+    cvv: ""
+  });
 
   const subtotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -61,6 +111,11 @@ const Checkout = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCardDetailsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCardDetails((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleShippingChange = (option: typeof shippingOptions[0]) => {
@@ -104,6 +159,24 @@ const Checkout = () => {
     }, 1500);
   };
 
+  const selectAddress = (id: number) => {
+    setSelectedAddressId(id);
+    // You could also pre-fill the form with the selected address
+    const selected = savedAddresses.find(addr => addr.id === id);
+    if (selected) {
+      setFormData({
+        firstName: selected.firstName,
+        lastName: selected.lastName,
+        email: selected.email,
+        address: selected.address,
+        city: selected.city,
+        state: selected.state,
+        zipCode: selected.zipCode,
+        country: selected.country,
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       <Header />
@@ -119,182 +192,378 @@ const Checkout = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Left column - Form */}
               <div className="lg:col-span-2">
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
                   <h2 className="text-xl font-semibold mb-4 dark:text-white">Shipping Information</h2>
-                  <form onSubmit={handleSubmit}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                      <div>
-                        <Label htmlFor="firstName">First Name</Label>
-                        <Input
-                          id="firstName"
-                          name="firstName"
-                          value={formData.firstName}
-                          onChange={handleInputChange}
-                          required
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="lastName">Last Name</Label>
-                        <Input
-                          id="lastName"
-                          name="lastName"
-                          value={formData.lastName}
-                          onChange={handleInputChange}
-                          required
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          required
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="address">Address</Label>
-                        <Input
-                          id="address"
-                          name="address"
-                          value={formData.address}
-                          onChange={handleInputChange}
-                          required
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="city">City</Label>
-                        <Input
-                          id="city"
-                          name="city"
-                          value={formData.city}
-                          onChange={handleInputChange}
-                          required
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="state">State/Province</Label>
-                        <Input
-                          id="state"
-                          name="state"
-                          value={formData.state}
-                          onChange={handleInputChange}
-                          required
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="zipCode">ZIP/Postal Code</Label>
-                        <Input
-                          id="zipCode"
-                          name="zipCode"
-                          value={formData.zipCode}
-                          onChange={handleInputChange}
-                          required
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="country">Country</Label>
-                        <Input
-                          id="country"
-                          name="country"
-                          value={formData.country}
-                          onChange={handleInputChange}
-                          required
-                          className="mt-1"
-                        />
-                      </div>
-                    </div>
-
-                    <h3 className="text-lg font-semibold mb-3 dark:text-white">Shipping Method</h3>
-                    <div className="space-y-3 mb-6">
-                      {shippingOptions.map((option) => (
-                        <div
-                          key={option.id}
-                          className={`flex items-center justify-between p-3 border rounded-md cursor-pointer ${
-                            shipping.id === option.id
-                              ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400"
-                              : "border-gray-200 dark:border-gray-700"
-                          }`}
-                          onClick={() => handleShippingChange(option)}
-                        >
-                          <div className="flex items-center">
-                            <div
-                              className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center ${
-                                shipping.id === option.id
-                                  ? "border-blue-500 dark:border-blue-400"
-                                  : "border-gray-400 dark:border-gray-600"
-                              }`}
-                            >
-                              {shipping.id === option.id && (
-                                <div className="w-3 h-3 rounded-full bg-blue-500 dark:bg-blue-400" />
+                  
+                  {/* Address Tabs */}
+                  <Tabs 
+                    value={addressMode} 
+                    onValueChange={setAddressMode}
+                    className="mb-6"
+                  >
+                    <TabsList className="grid grid-cols-2 mb-4">
+                      <TabsTrigger value="saved">Saved Addresses</TabsTrigger>
+                      <TabsTrigger value="new">New Address</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="saved">
+                      <div className="space-y-4">
+                        {savedAddresses.map((address) => (
+                          <div 
+                            key={address.id}
+                            className={`p-4 border rounded-md cursor-pointer transition-colors ${
+                              selectedAddressId === address.id 
+                                ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20" 
+                                : "border-gray-200 dark:border-gray-700"
+                            }`}
+                            onClick={() => selectAddress(address.id)}
+                          >
+                            <div className="flex justify-between">
+                              <div className="flex gap-2 items-center">
+                                <RadioGroupItem 
+                                  id={`address-${address.id}`} 
+                                  value={String(address.id)}
+                                  checked={selectedAddressId === address.id}
+                                  className="sr-only"
+                                />
+                                <h3 className="font-medium dark:text-white">
+                                  {address.name}
+                                  {address.default && (
+                                    <span className="ml-2 text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 px-2 py-0.5 rounded">
+                                      Default
+                                    </span>
+                                  )}
+                                </h3>
+                              </div>
+                              {selectedAddressId === address.id && (
+                                <Check className="h-5 w-5 text-blue-500" />
                               )}
                             </div>
-                            <div>
-                              <p className="font-medium dark:text-white">{option.name}</p>
-                              <p className="text-sm text-gray-500 dark:text-gray-400">
-                                {option.days} business days
-                              </p>
+                            <div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                              <p>{address.firstName} {address.lastName}</p>
+                              <p>{address.address}</p>
+                              <p>{address.city}, {address.state} {address.zipCode}</p>
+                              <p>{address.country}</p>
                             </div>
                           </div>
-                          <p className="font-medium dark:text-white">${option.price.toFixed(2)}</p>
+                        ))}
+                        
+                        <Button 
+                          variant="outline" 
+                          className="w-full mt-2 border-dashed"
+                          onClick={() => setAddressMode("new")}
+                        >
+                          <PlusCircle className="mr-2 h-4 w-4" />
+                          Add New Address
+                        </Button>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="new">
+                      <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="firstName">First Name</Label>
+                          <Input
+                            id="firstName"
+                            name="firstName"
+                            value={formData.firstName}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="lastName">Last Name</Label>
+                          <Input
+                            id="lastName"
+                            name="lastName"
+                            value={formData.lastName}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="email">Email</Label>
+                          <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="address">Address</Label>
+                          <Input
+                            id="address"
+                            name="address"
+                            value={formData.address}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="city">City</Label>
+                          <Input
+                            id="city"
+                            name="city"
+                            value={formData.city}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="state">State/Province</Label>
+                          <Input
+                            id="state"
+                            name="state"
+                            value={formData.state}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="zipCode">ZIP/Postal Code</Label>
+                          <Input
+                            id="zipCode"
+                            name="zipCode"
+                            value={formData.zipCode}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="country">Country</Label>
+                          <Input
+                            id="country"
+                            name="country"
+                            value={formData.country}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1"
+                          />
+                        </div>
+                      </form>
+                    </TabsContent>
+                  </Tabs>
+
+                  <h3 className="text-lg font-semibold mb-3 dark:text-white">Shipping Method</h3>
+                  <div className="space-y-3 mb-6">
+                    {shippingOptions.map((option) => (
+                      <div
+                        key={option.id}
+                        className={`flex items-center justify-between p-3 border rounded-md cursor-pointer ${
+                          shipping.id === option.id
+                            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400"
+                            : "border-gray-200 dark:border-gray-700"
+                        }`}
+                        onClick={() => handleShippingChange(option)}
+                      >
+                        <div className="flex items-center">
+                          <div
+                            className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center ${
+                              shipping.id === option.id
+                                ? "border-blue-500 dark:border-blue-400"
+                                : "border-gray-400 dark:border-gray-600"
+                            }`}
+                          >
+                            {shipping.id === option.id && (
+                              <div className="w-3 h-3 rounded-full bg-blue-500 dark:bg-blue-400" />
+                            )}
+                          </div>
+                          <div>
+                            <p className="font-medium dark:text-white">{option.name}</p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              {option.days} business days
+                            </p>
+                          </div>
+                        </div>
+                        <p className="font-medium dark:text-white">${option.price.toFixed(2)}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Payment Section */}
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                  <h2 className="text-xl font-semibold mb-4 dark:text-white">Payment Information</h2>
+                  
+                  <div className="mb-6">
+                    <Label className="text-base mb-3 block">Select Payment Method</Label>
+                    <RadioGroup 
+                      value={paymentMethod} 
+                      onValueChange={setPaymentMethod}
+                      className="grid grid-cols-2 md:grid-cols-3 gap-3"
+                    >
+                      {paymentMethods.map((method) => (
+                        <div 
+                          key={method.id}
+                          className={`flex items-center p-3 border rounded-md cursor-pointer ${
+                            paymentMethod === method.id 
+                              ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20" 
+                              : "border-gray-200 dark:border-gray-700"
+                          }`}
+                          onClick={() => setPaymentMethod(method.id)}
+                        >
+                          <RadioGroupItem 
+                            id={`payment-${method.id}`} 
+                            value={method.id} 
+                            className="sr-only"
+                          />
+                          <div className="flex items-center">
+                            <span className="text-xl mr-2">{method.icon}</span>
+                            <span className="font-medium text-sm dark:text-white">{method.name}</span>
+                          </div>
                         </div>
                       ))}
-                    </div>
+                    </RadioGroup>
+                  </div>
 
-                    <h3 className="text-lg font-semibold mb-3 dark:text-white">Payment Information</h3>
-                    <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-md mb-6 flex items-start gap-2">
-                      <Info className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
-                      <p className="text-sm text-blue-700 dark:text-blue-300">
-                        This is a demo checkout. No actual payment will be processed.
+                  {/* Credit/Debit Card Form */}
+                  {(paymentMethod === "credit" || paymentMethod === "debit") && (
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="cardNumber">Card Number</Label>
+                        <Input
+                          id="cardNumber"
+                          name="cardNumber"
+                          placeholder="XXXX XXXX XXXX XXXX"
+                          value={cardDetails.cardNumber}
+                          onChange={handleCardDetailsChange}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="cardName">Name on Card</Label>
+                        <Input
+                          id="cardName"
+                          name="cardName"
+                          placeholder="John Doe"
+                          value={cardDetails.cardName}
+                          onChange={handleCardDetailsChange}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="expiryDate">Expiry Date</Label>
+                          <Input
+                            id="expiryDate"
+                            name="expiryDate"
+                            placeholder="MM/YY"
+                            value={cardDetails.expiryDate}
+                            onChange={handleCardDetailsChange}
+                            className="mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="cvv">CVV</Label>
+                          <Input
+                            id="cvv"
+                            name="cvv"
+                            placeholder="123"
+                            type="password"
+                            maxLength={4}
+                            value={cardDetails.cvv}
+                            onChange={handleCardDetailsChange}
+                            className="mt-1"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Placeholder for other payment methods */}
+                  {paymentMethod === "wire" && (
+                    <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-800">
+                      <h4 className="font-medium mb-2 dark:text-white">Wire Transfer Instructions</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-300">
+                        Please transfer the amount to the following bank account:
+                      </p>
+                      <div className="mt-2 space-y-1 text-sm">
+                        <p className="dark:text-white"><span className="text-gray-500 dark:text-gray-400">Bank: </span>Global Bank</p>
+                        <p className="dark:text-white"><span className="text-gray-500 dark:text-gray-400">Account Name: </span>StoreX Inc.</p>
+                        <p className="dark:text-white"><span className="text-gray-500 dark:text-gray-400">Account Number: </span>XXXX-XXXX-XXXX-XXXX</p>
+                        <p className="dark:text-white"><span className="text-gray-500 dark:text-gray-400">Routing Number: </span>XXXXXXXX</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {(paymentMethod === "googlepay" || paymentMethod === "amazonpay") && (
+                    <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-800">
+                      <p className="text-center dark:text-white">
+                        You'll be redirected to {paymentMethod === "googlepay" ? "Google Pay" : "Amazon Pay"} to complete your payment after you place your order.
                       </p>
                     </div>
+                  )}
 
-                    <Button
-                      type="submit"
-                      className="w-full"
-                      disabled={isProcessing}
-                    >
-                      {isProcessing ? (
-                        <span className="flex items-center">
-                          <svg
-                            className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                          </svg>
-                          Processing...
-                        </span>
-                      ) : (
-                        <span className="flex items-center">
-                          <CreditCard className="mr-2 h-4 w-4" />
-                          Complete Purchase
-                        </span>
-                      )}
-                    </Button>
-                  </form>
+                  {paymentMethod === "netbanking" && (
+                    <div className="p-4 space-y-4">
+                      <Label htmlFor="bankSelect">Select Your Bank</Label>
+                      <select 
+                        id="bankSelect" 
+                        className="w-full h-10 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-base"
+                      >
+                        <option value="">Select a bank</option>
+                        <option value="bank1">Global Bank</option>
+                        <option value="bank2">City Bank</option>
+                        <option value="bank3">National Bank</option>
+                        <option value="bank4">State Bank</option>
+                      </select>
+                    </div>
+                  )}
+
+                  <div className="p-4 mt-6 bg-blue-50 dark:bg-blue-900/20 rounded-md mb-6 flex items-start gap-2">
+                    <Info className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
+                    <p className="text-sm text-blue-700 dark:text-blue-300">
+                      This is a demo checkout. No actual payment will be processed.
+                    </p>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={isProcessing}
+                    onClick={handleSubmit}
+                  >
+                    {isProcessing ? (
+                      <span className="flex items-center">
+                        <svg
+                          className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        Processing...
+                      </span>
+                    ) : (
+                      <span className="flex items-center">
+                        <CreditCard className="mr-2 h-4 w-4" />
+                        Complete Purchase
+                      </span>
+                    )}
+                  </Button>
                 </div>
               </div>
 

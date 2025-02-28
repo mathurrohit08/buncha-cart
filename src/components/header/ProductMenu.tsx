@@ -41,6 +41,17 @@ export const productTypes = [
       { name: "Mesh WiFi System", image: "https://images.unsplash.com/photo-1602526429747-ac387a91d43b" },
     ]
   },
+  {
+    name: "Home Improvement",
+    image: "https://images.unsplash.com/photo-1556909114-44e3e9399a2c",
+    products: [
+      { name: "Kitchen Cabinets", image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f" },
+      { name: "Ceramic Tiles", image: "https://images.unsplash.com/photo-1592928038511-20202bdad1fd" },
+      { name: "Wooden Flooring", image: "https://images.unsplash.com/photo-1573319434585-13fee50a2e52" },
+      { name: "Bathroom Vanity", image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a" },
+      { name: "Kitchen Sinks", image: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1" },
+    ]
+  },
 ];
 
 export const ProductMenu = () => {
