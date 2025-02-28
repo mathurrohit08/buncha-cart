@@ -11,6 +11,11 @@ import { CartMenu } from "./header/CartMenu";
 import { ThemeToggle } from "./theme/ThemeToggle";
 import { Link } from "react-router-dom";
 
+// Import the categories data from CategoryMenu
+import { categories } from "./header/CategoryMenu";
+// Import the productTypes data from ProductMenu
+import { productTypes } from "./header/ProductMenu";
+
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);

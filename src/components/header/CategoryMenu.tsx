@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/hover-card";
 import { motion } from "framer-motion";
 
-const categories = [
+export const categories = [
   {
     name: "Electronics",
     subcategories: ["Phones", "Laptops", "Tablets", "Accessories"],

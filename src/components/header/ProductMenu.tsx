@@ -6,7 +6,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 
-const productTypes = [
+export const productTypes = [
   {
     name: "New Arrivals",
     image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
