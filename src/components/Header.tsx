@@ -178,6 +178,20 @@ export const Header = () => {
               >
                 FAQ
               </Link>
+              <Link 
+                to="/privacy-policy" 
+                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Privacy Policy
+              </Link>
+              <Link 
+                to="/terms-of-service" 
+                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Terms of Service
+              </Link>
             </div>
           </div>
         </div>

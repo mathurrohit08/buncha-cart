@@ -1,70 +1,107 @@
 
-import { motion } from "framer-motion";
-import { Review, getBorderColor } from "./types";
+import { useState } from "react";
+import { ThumbsUp, MessageSquare } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { CommentItem } from "./CommentItem";
 import { CommentForm } from "./CommentForm";
+import { Review } from "./types";
 
 interface ReviewCardProps {
   review: Review;
-  index: number;
-  onAddComment: (reviewId: number, username: string, comment: string) => void;
+  onMarkHelpful: (reviewId: number) => void;
+  onAddComment: (comment: string) => void;
+  showCommentForm: boolean;
+  toggleCommentForm: () => void;
 }
 
-export const ReviewCard = ({ review, index, onAddComment }: ReviewCardProps) => {
+export const ReviewCard = ({
+  review,
+  onMarkHelpful,
+  onAddComment,
+  showCommentForm,
+  toggleCommentForm
+}: ReviewCardProps) => {
+  const [comment, setComment] = useState("");
+
+  const handleCommentSubmit = () => {
+    onAddComment(comment);
+    setComment("");
+  };
+
+  // Generate star rating
+  const renderStars = () => {
+    return Array(5)
+      .fill(0)
+      .map((_, i) => (
+        <svg
+          key={i}
+          className={`w-4 h-4 ${i < review.rating ? "text-yellow-400" : "text-gray-300 dark:text-gray-600"}`}
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 22 20"
+        >
+          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+        </svg>
+      ));
+  };
+
   return (
-    <motion.div
-      key={review.id}
-      className="relative rounded-lg overflow-hidden"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-    >
-      {/* Animated border */}
-      <motion.div 
-        className={`absolute inset-0 bg-gradient-to-r ${getBorderColor(index)} rounded-lg`}
-        animate={{
-          background: [
-            `linear-gradient(0deg, ${getBorderColor(index)})`,
-            `linear-gradient(90deg, ${getBorderColor(index)})`,
-            `linear-gradient(180deg, ${getBorderColor(index)})`,
-            `linear-gradient(270deg, ${getBorderColor(index)})`,
-            `linear-gradient(360deg, ${getBorderColor(index)})`
-          ],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "linear"
-        }}
-      />
-      
-      {/* Content with slight inset to show border */}
-      <div className="bg-gray-800 m-[2px] p-4 md:p-5 rounded-lg relative z-10 h-full">
-        <div className="flex items-center gap-1 mb-3">
-          {[...Array(review.rating)].map((_, i) => (
-            <svg
-              key={i}
-              className="w-4 h-4 text-yellow-400"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-          ))}
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+      <div className="flex justify-between items-start mb-4">
+        <div>
+          <h3 className="font-bold text-lg dark:text-white">{review.title}</h3>
+          <div className="flex items-center gap-2 mt-1">
+            <div className="flex">{renderStars()}</div>
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              by {review.userName} • {new Date(review.date).toLocaleDateString()}
+            </span>
+          </div>
         </div>
-        <p className="text-gray-300 text-sm mb-3 line-clamp-3">{review.comment}</p>
-        <p className="font-medium text-sm mb-4">{review.name}</p>
-        
-        <div className="space-y-3 max-h-[180px] overflow-y-auto pr-2 scrollbar-none">
-          <h4 className="text-xs font-medium text-gray-400">Comments</h4>
-          {review.comments.map((comment) => (
-            <CommentItem key={comment.id} comment={comment} />
-          ))}
-        </div>
-        
-        <CommentForm reviewId={review.id} onAddComment={onAddComment} />
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onMarkHelpful(review.id)}
+          className="flex items-center gap-1 text-sm"
+        >
+          <ThumbsUp className="w-3.5 h-3.5" />
+          <span>Helpful ({review.helpful})</span>
+        </Button>
       </div>
-    </motion.div>
+
+      <p className="text-gray-700 dark:text-gray-300 mb-4">{review.content}</p>
+
+      {review.comments.length > 0 && (
+        <div className="bg-gray-800 rounded-lg p-4 mb-4">
+          <h4 className="font-medium text-white text-sm mb-3">Comments ({review.comments.length})</h4>
+          <div className="space-y-3">
+            {review.comments.map((comment) => (
+              <CommentItem key={comment.id} comment={comment} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="mt-3">
+        {!showCommentForm ? (
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={toggleCommentForm}
+            className="text-sm flex items-center gap-1"
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            Add Comment
+          </Button>
+        ) : (
+          <CommentForm 
+            value={comment} 
+            onChange={setComment} 
+            onSubmit={handleCommentSubmit} 
+            onCancel={toggleCommentForm}
+          />
+        )}
+      </div>
+    </div>
   );
 };

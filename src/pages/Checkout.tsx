@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
-import { Check, Truck, CreditCard, Info } from "lucide-react";
+import { Check, Truck, CreditCard, Info, Plus, Minus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
 
 // Mock cart data
-const cartItems = [
+const initialCartItems = [
   {
     id: 1,
     name: "Premium Headphones",
@@ -49,6 +49,7 @@ const Checkout = () => {
   });
   const [shipping, setShipping] = useState(shippingOptions[0]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [cartItems, setCartItems] = useState(initialCartItems);
 
   const subtotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -64,6 +65,28 @@ const Checkout = () => {
 
   const handleShippingChange = (option: typeof shippingOptions[0]) => {
     setShipping(option);
+  };
+
+  const updateQuantity = (id: number, change: number) => {
+    setCartItems(prev => 
+      prev.map(item => 
+        item.id === id 
+          ? { 
+              ...item, 
+              quantity: Math.max(1, item.quantity + change) // Ensure quantity doesn't go below 1
+            } 
+          : item
+      )
+    );
+  };
+
+  const removeItem = (id: number) => {
+    setCartItems(prev => prev.filter(item => item.id !== id));
+    toast({
+      title: "Item removed",
+      description: "The item has been removed from your cart",
+      variant: "default",
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -289,11 +312,35 @@ const Checkout = () => {
                         />
                         <div className="flex-1">
                           <h3 className="font-medium dark:text-white">{item.name}</h3>
-                          <p className="text-gray-500 dark:text-gray-400">
-                            Qty: {item.quantity}
+                          <p className="text-gray-500 dark:text-gray-400 flex items-center gap-2 mt-1">
+                            <Button 
+                              variant="outline" 
+                              size="icon" 
+                              className="h-6 w-6"
+                              onClick={() => updateQuantity(item.id, -1)}
+                            >
+                              <Minus className="h-3 w-3" />
+                            </Button>
+                            <span>{item.quantity}</span>
+                            <Button 
+                              variant="outline" 
+                              size="icon" 
+                              className="h-6 w-6"
+                              onClick={() => updateQuantity(item.id, 1)}
+                            >
+                              <Plus className="h-3 w-3" />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-6 w-6 ml-auto text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30"
+                              onClick={() => removeItem(item.id)}
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
                           </p>
-                          <p className="font-medium dark:text-white">
-                            ${item.price.toFixed(2)}
+                          <p className="font-medium dark:text-white mt-1">
+                            ${(item.price * item.quantity).toFixed(2)}
                           </p>
                         </div>
                       </div>

@@ -40,8 +40,8 @@ export const CategoryMenu = () => {
         align="start"
         sideOffset={8}
       >
-        <div className="grid grid-cols-3 h-[400px] max-h-[70vh]">
-          <div className="col-span-1 bg-gray-50 dark:bg-gray-900 p-4 overflow-y-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 h-[400px] max-h-[70vh]">
+          <div className="sm:col-span-1 bg-gray-50 dark:bg-gray-900 p-4 overflow-y-auto">
             {categories.map((category) => (
               <div
                 key={category.name}
@@ -56,7 +56,7 @@ export const CategoryMenu = () => {
               </div>
             ))}
           </div>
-          <div className="col-span-2 p-4 overflow-y-auto">
+          <div className="sm:col-span-2 p-4 overflow-y-auto">
             {hoveredCategory && (
               <motion.div
                 initial={{ opacity: 0, y: 5 }}
@@ -65,17 +65,19 @@ export const CategoryMenu = () => {
                 className="space-y-3"
               >
                 <h3 className="font-medium dark:text-white text-sm mb-2">{hoveredCategory}</h3>
-                {categories
-                  .find((c) => c.name === hoveredCategory)
-                  ?.subcategories.map((sub) => (
-                    <Link
-                      key={sub}
-                      to={`/category/${hoveredCategory.toLowerCase().replace(/\s+/g, "-")}/${sub.toLowerCase().replace(/\s+/g, "-")}`}
-                      className="block p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors dark:text-gray-300 text-sm"
-                    >
-                      {sub}
-                    </Link>
-                  ))}
+                <div className="grid grid-cols-2 gap-2">
+                  {categories
+                    .find((c) => c.name === hoveredCategory)
+                    ?.subcategories.map((sub) => (
+                      <Link
+                        key={sub}
+                        to={`/category/${hoveredCategory.toLowerCase().replace(/\s+/g, "-")}/${sub.toLowerCase().replace(/\s+/g, "-")}`}
+                        className="block p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors dark:text-gray-300 text-sm"
+                      >
+                        {sub}
+                      </Link>
+                    ))}
+                </div>
                 <img
                   src={
                     categories.find((c) => c.name === hoveredCategory)?.image
