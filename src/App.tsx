@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Index from "./pages/Index";
 import CategoryPage from "./pages/CategoryPage";
 import Products from "./pages/Products";
+import ProductsPage from "./pages/ProductsPage";
 import NotFound from "./pages/NotFound";
 import AboutUs from "./pages/AboutUs";
 import FAQ from "./pages/FAQ";
@@ -39,6 +40,7 @@ function App() {
               <Route path="/category/:categoryName/:subcategory" element={<CategoryPage />} />
               <Route path="/products/:productType" element={<Products />} />
               <Route path="/products/:productType/:productName" element={<Products />} />
+              <Route path="/all-products" element={<ProductsPage />} />
               <Route path="/about-us" element={<AboutUs />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/contact" element={<Contact />} />

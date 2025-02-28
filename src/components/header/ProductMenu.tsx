@@ -5,6 +5,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { ChevronRight } from "lucide-react";
 
 export const productTypes = [
   {
@@ -54,6 +55,14 @@ export const ProductMenu = () => {
         sideOffset={8}
       >
         <div className="grid grid-cols-1 gap-4 max-h-[70vh] overflow-y-auto">
+          <Link
+            to="/all-products"
+            className="flex items-center justify-between p-2 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 rounded-lg transition-colors"
+          >
+            <span className="font-medium text-purple-800 dark:text-purple-300">All Products</span>
+            <ChevronRight className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+          </Link>
+
           {productTypes.map((type) => (
             <div key={type.name} className="space-y-3">
               <Link
