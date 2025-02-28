@@ -1,9 +1,10 @@
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
-import { ShoppingCart, Truck, Package } from "lucide-react";
+import { ShoppingCart, Truck, Package, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -55,7 +56,7 @@ const Products = () => {
               <img
                 src={selectedProduct.image}
                 alt={selectedProduct.name}
-                className="w-full h-[400px] object-cover rounded-lg"
+                className="w-full h-[300px] md:h-[400px] object-cover rounded-lg"
               />
             </motion.div>
             <motion.div
@@ -65,17 +66,17 @@ const Products = () => {
               className="space-y-6"
             >
               <div>
-                <h1 className="text-3xl font-bold">{selectedProduct.name}</h1>
-                <p className="text-2xl font-bold text-gray-900 mt-2">
+                <h1 className="text-2xl md:text-3xl font-bold">{selectedProduct.name}</h1>
+                <p className="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-2">
                   ${selectedProduct.price}
                 </p>
               </div>
 
-              <p className="text-gray-600">{selectedProduct.description}</p>
+              <p className="text-gray-600 dark:text-gray-300">{selectedProduct.description}</p>
 
               <div>
-                <h2 className="text-lg font-bold mb-2">Specifications</h2>
-                <ul className="list-disc list-inside text-gray-600 space-y-1">
+                <h2 className="text-base md:text-lg font-bold mb-2">Specifications</h2>
+                <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-1">
                   {selectedProduct.specs.map((spec, index) => (
                     <li key={index}>{spec}</li>
                   ))}
@@ -83,17 +84,17 @@ const Products = () => {
               </div>
 
               <div>
-                <h2 className="text-lg font-bold mb-2">Shipping Information</h2>
+                <h2 className="text-base md:text-lg font-bold mb-2">Shipping Information</h2>
                 <div className="space-y-2">
                   {selectedProduct.shipping.pickup && (
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Package className="h-5 w-5" />
+                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                      <Package className="h-5 w-5 flex-shrink-0" />
                       <span>Pickup available</span>
                     </div>
                   )}
                   {selectedProduct.shipping.delivery && (
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Truck className="h-5 w-5" />
+                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                      <Truck className="h-5 w-5 flex-shrink-0" />
                       <span>
                         Delivery in {selectedProduct.shipping.estimatedDays} days
                       </span>
@@ -102,14 +103,35 @@ const Products = () => {
                 </div>
               </div>
 
-              <Button
-                onClick={handleAddToCart}
-                className="w-full md:w-auto"
-                size="lg"
-              >
-                <ShoppingCart className="mr-2 h-5 w-5" />
-                Add to Cart
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                <Button
+                  onClick={handleAddToCart}
+                  size="lg"
+                  className="w-full sm:flex-1"
+                >
+                  <ShoppingCart className="mr-2 h-5 w-5" />
+                  Add to Cart
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
+                  <Heart className="mr-2 h-5 w-5" />
+                  Wishlist
+                </Button>
+                
+                <Link to="/checkout" className="w-full sm:flex-1">
+                  <Button
+                    variant="secondary"
+                    size="lg"
+                    className="w-full"
+                  >
+                    Checkout
+                  </Button>
+                </Link>
+              </div>
             </motion.div>
           </div>
         </div>
