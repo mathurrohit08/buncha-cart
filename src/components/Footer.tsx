@@ -5,7 +5,7 @@ import { Facebook, Twitter, Instagram, Youtube } from "lucide-react";
 export const Footer = () => {
   const links = {
     company: [
-      { name: "About Us", path: "/about" },
+      { name: "About Us", path: "/about-us" },
       { name: "Contact", path: "/contact" },
       { name: "Careers", path: "/careers" },
     ],
@@ -15,8 +15,8 @@ export const Footer = () => {
       { name: "FAQ", path: "/faq" },
     ],
     legal: [
-      { name: "Privacy Policy", path: "/privacy" },
-      { name: "Terms of Service", path: "/terms" },
+      { name: "Privacy Policy", path: "/privacy-policy" },
+      { name: "Terms of Service", path: "/terms-of-service" },
       { name: "Return Policy", path: "/return-policy" },
     ],
   };
