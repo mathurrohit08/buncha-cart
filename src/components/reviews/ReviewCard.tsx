@@ -35,7 +35,7 @@ export const ReviewCard = ({
       .map((_, i) => (
         <svg
           key={i}
-          className={`w-4 h-4 ${i < review.rating ? "text-yellow-400" : "text-gray-300 dark:text-gray-600"}`}
+          className={`w-3 h-3 ${i < review.rating ? "text-yellow-400" : "text-gray-300 dark:text-gray-600"}`}
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
@@ -47,34 +47,34 @@ export const ReviewCard = ({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-      <div className="flex justify-between items-start mb-4">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 border border-gray-200 dark:border-gray-700 h-full flex flex-col">
+      <div className="flex justify-between items-start mb-2">
         <div>
-          <h3 className="font-bold text-lg dark:text-white">{review.title}</h3>
-          <div className="flex items-center gap-2 mt-1">
+          <h3 className="font-bold text-sm dark:text-white">{review.title}</h3>
+          <div className="flex items-center gap-1 mt-1">
             <div className="flex">{renderStars()}</div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              by {review.userName} • {new Date(review.date).toLocaleDateString()}
+            <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
+              {review.userName}
             </span>
           </div>
         </div>
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
           onClick={() => onMarkHelpful(review.id)}
-          className="flex items-center gap-1 text-sm"
+          className="flex items-center gap-1 text-xs h-7 px-2"
         >
-          <ThumbsUp className="w-3.5 h-3.5" />
-          <span>Helpful ({review.helpful})</span>
+          <ThumbsUp className="w-3 h-3" />
+          <span>{review.helpful}</span>
         </Button>
       </div>
 
-      <p className="text-gray-700 dark:text-gray-300 mb-4">{review.content}</p>
+      <p className="text-gray-700 dark:text-gray-300 text-xs mb-3 line-clamp-3">{review.content}</p>
 
       {review.comments.length > 0 && (
-        <div className="bg-gray-800 rounded-lg p-4 mb-4">
-          <h4 className="font-medium text-white text-sm mb-3">Comments ({review.comments.length})</h4>
-          <div className="space-y-3">
+        <div className="bg-gray-800 rounded-lg p-3 mb-3 max-h-24 overflow-y-auto">
+          <h4 className="font-medium text-white text-xs mb-2">Comments ({review.comments.length})</h4>
+          <div className="space-y-2">
             {review.comments.map((comment) => (
               <CommentItem key={comment.id} comment={comment} />
             ))}
@@ -82,15 +82,15 @@ export const ReviewCard = ({
         </div>
       )}
 
-      <div className="mt-3">
+      <div className="mt-auto pt-2">
         {!showCommentForm ? (
           <Button 
             variant="ghost" 
             size="sm" 
             onClick={toggleCommentForm}
-            className="text-sm flex items-center gap-1"
+            className="text-xs flex items-center gap-1 h-7 px-2"
           >
-            <MessageSquare className="w-3.5 h-3.5" />
+            <MessageSquare className="w-3 h-3" />
             Add Comment
           </Button>
         ) : (

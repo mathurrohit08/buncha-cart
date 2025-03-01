@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -10,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LocationMap } from "@/components/checkout/LocationMap";
 
 // Mock cart data
 const initialCartItems = [
@@ -100,6 +102,7 @@ const Checkout = () => {
     expiryDate: "",
     cvv: ""
   });
+  const [showMap, setShowMap] = useState(false);
 
   const subtotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -174,8 +177,14 @@ const Checkout = () => {
         zipCode: selected.zipCode,
         country: selected.country,
       });
+      
+      // Show the map after selecting an address
+      setShowMap(true);
     }
   };
+
+  // Find the selected address for the map
+  const selectedAddress = savedAddresses.find(addr => addr.id === selectedAddressId);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
@@ -220,12 +229,13 @@ const Checkout = () => {
                           >
                             <div className="flex justify-between">
                               <div className="flex gap-2 items-center">
-                                <RadioGroupItem 
-                                  id={`address-${address.id}`} 
-                                  value={String(address.id)}
-                                  checked={selectedAddressId === address.id}
-                                  className="sr-only"
-                                />
+                                <RadioGroup value={String(selectedAddressId)} onValueChange={(value) => selectAddress(Number(value))}>
+                                  <RadioGroupItem 
+                                    id={`address-${address.id}`} 
+                                    value={String(address.id)}
+                                    className="data-[state=checked]:border-primary"
+                                  />
+                                </RadioGroup>
                                 <h3 className="font-medium dark:text-white">
                                   {address.name}
                                   {address.default && (
@@ -354,40 +364,48 @@ const Checkout = () => {
                     </TabsContent>
                   </Tabs>
 
+                  {/* Location Map */}
+                  {showMap && selectedAddress && (
+                    <div className="mt-4 mb-6">
+                      <h3 className="text-lg font-semibold mb-3 dark:text-white">Delivery Location</h3>
+                      <div className="h-60 rounded-lg overflow-hidden">
+                        <LocationMap 
+                          address={`${selectedAddress.address}, ${selectedAddress.city}, ${selectedAddress.state} ${selectedAddress.zipCode}`} 
+                          zipCode={selectedAddress.zipCode}
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   <h3 className="text-lg font-semibold mb-3 dark:text-white">Shipping Method</h3>
                   <div className="space-y-3 mb-6">
-                    {shippingOptions.map((option) => (
-                      <div
-                        key={option.id}
-                        className={`flex items-center justify-between p-3 border rounded-md cursor-pointer ${
-                          shipping.id === option.id
-                            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400"
-                            : "border-gray-200 dark:border-gray-700"
-                        }`}
-                        onClick={() => handleShippingChange(option)}
-                      >
-                        <div className="flex items-center">
-                          <div
-                            className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center ${
-                              shipping.id === option.id
-                                ? "border-blue-500 dark:border-blue-400"
-                                : "border-gray-400 dark:border-gray-600"
-                            }`}
-                          >
-                            {shipping.id === option.id && (
-                              <div className="w-3 h-3 rounded-full bg-blue-500 dark:bg-blue-400" />
-                            )}
+                    <RadioGroup value={shipping.id} onValueChange={(value) => {
+                      const option = shippingOptions.find(opt => opt.id === value);
+                      if (option) handleShippingChange(option);
+                    }}>
+                      {shippingOptions.map((option) => (
+                        <div
+                          key={option.id}
+                          className={`flex items-center justify-between p-3 border rounded-md cursor-pointer ${
+                            shipping.id === option.id
+                              ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400"
+                              : "border-gray-200 dark:border-gray-700"
+                          }`}
+                          onClick={() => handleShippingChange(option)}
+                        >
+                          <div className="flex items-center">
+                            <RadioGroupItem value={option.id} id={`shipping-${option.id}`} className="mr-3" />
+                            <div>
+                              <p className="font-medium dark:text-white">{option.name}</p>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">
+                                {option.days} business days
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="font-medium dark:text-white">{option.name}</p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                              {option.days} business days
-                            </p>
-                          </div>
+                          <p className="font-medium dark:text-white">${option.price.toFixed(2)}</p>
                         </div>
-                        <p className="font-medium dark:text-white">${option.price.toFixed(2)}</p>
-                      </div>
-                    ))}
+                      ))}
+                    </RadioGroup>
                   </div>
                 </div>
 
@@ -415,12 +433,12 @@ const Checkout = () => {
                           <RadioGroupItem 
                             id={`payment-${method.id}`} 
                             value={method.id} 
-                            className="sr-only"
+                            className="mr-2"
                           />
-                          <div className="flex items-center">
+                          <Label htmlFor={`payment-${method.id}`} className="flex items-center cursor-pointer">
                             <span className="text-xl mr-2">{method.icon}</span>
                             <span className="font-medium text-sm dark:text-white">{method.name}</span>
-                          </div>
+                          </Label>
                         </div>
                       ))}
                     </RadioGroup>
