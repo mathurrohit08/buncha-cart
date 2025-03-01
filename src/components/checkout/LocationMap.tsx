@@ -12,13 +12,21 @@ export const LocationMap = ({ address, zipCode }: LocationMapProps) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Create a Google Maps URL with the address
-    // Using a free embed URL that doesn't require an API key
-    const encodedAddress = encodeURIComponent(`${address} ${zipCode}`);
-    const openStreetMapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=-122.4194,37.7749,-122.4094,37.7849&layer=mapnik&marker=${encodedAddress}`;
-    
-    setMapUrl(openStreetMapUrl);
-    setLoading(false);
+    try {
+      // Create a map URL that works more reliably
+      const encodedAddress = encodeURIComponent(`${address} ${zipCode}`);
+      const mapboxToken = 'pk.eyJ1IjoibG92YWJsZWRldiIsImEiOiJjbG5hMjBiemgwN2ducG1udTd5dXQydHJzIn0.e6hEshWZpGwrI5aXjNdzuw'; // public token for demo
+      
+      // Using OpenStreetMap which is more reliable without API key
+      const openStreetMapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik&marker=${encodedAddress}`;
+      
+      setMapUrl(openStreetMapUrl);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error setting up map:", err);
+      setError("We couldn't load the map. Please verify your address.");
+      setLoading(false);
+    }
   }, [address, zipCode]);
 
   if (error) {
@@ -53,6 +61,8 @@ export const LocationMap = ({ address, zipCode }: LocationMapProps) => {
           src={mapUrl}
           allowFullScreen
           className="rounded-lg"
+          style={{ border: 0 }}
+          loading="lazy"
         ></iframe>
       )}
     </div>
