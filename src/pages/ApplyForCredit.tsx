@@ -1,252 +1,429 @@
 
+import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
-import { CreditCard, ShieldCheck, FileText, Calculator } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { Check, CreditCard, FileText, Upload, Building2 } from "lucide-react";
 
 const ApplyForCredit = () => {
   const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    businessName: "",
+    businessType: "",
+    yearsInBusiness: "",
+    federalTaxId: "",
+    annualRevenue: "",
+    creditAmount: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    businessDescription: "",
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [step, setStep] = useState(1);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
+    
     // Simulate form submission
     setTimeout(() => {
       setIsSubmitting(false);
       toast({
-        title: "Application Received",
-        description: "Your credit application has been successfully submitted.",
+        title: "Application Submitted",
+        description: "Your credit application has been received. We'll contact you shortly.",
         variant: "default",
       });
     }, 1500);
   };
 
+  const nextStep = () => setStep(step + 1);
+  const prevStep = () => setStep(step - 1);
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       <Header />
-      <main className="pt-24 pb-16">
-        <div className="max-w-[1200px] mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-12"
-          >
-            <div className="text-center">
-              <h1 className="text-4xl font-bold mb-4 dark:text-white">Apply for Credit</h1>
-              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-                Flexible financing options to help you complete your home improvement projects.
-              </p>
+      <main className="flex-grow container mx-auto px-4 py-24">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-4xl mx-auto"
+        >
+          <div className="text-center mb-10">
+            <h1 className="text-3xl font-bold mb-3 dark:text-white">Apply for Business Credit</h1>
+            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+              Get access to our flexible payment terms and credit lines tailored for your business needs.
+              Complete the application below to get started.
+            </p>
+          </div>
+
+          {/* Progress Steps */}
+          <div className="mb-10">
+            <div className="flex items-center justify-center">
+              <div className="flex items-center w-full max-w-3xl mx-auto">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="relative flex-1">
+                    <div 
+                      className={`w-10 h-10 mx-auto rounded-full flex items-center justify-center border-2 ${
+                        step >= i 
+                          ? "bg-blue-500 border-blue-500 text-white" 
+                          : "border-gray-300 text-gray-500 dark:border-gray-700 dark:text-gray-400"
+                      }`}
+                    >
+                      {step > i ? <Check className="w-5 h-5" /> : i}
+                    </div>
+                    <div className="text-xs text-center mt-2 dark:text-gray-400">
+                      {i === 1 ? "Business Information" : i === 2 ? "Contact Details" : "Financial Information"}
+                    </div>
+                    {i < 3 && (
+                      <div className={`absolute top-5 left-0 right-0 h-0.5 -z-10 ${
+                        step > i ? "bg-blue-500" : "bg-gray-300 dark:bg-gray-700"
+                      }`}>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-            
-            {/* Hero Banner */}
-            <div className="relative rounded-xl overflow-hidden">
-              <img 
-                src="https://images.unsplash.com/photo-1586473219010-2ffc57b0d282?auto=format&fit=crop&q=80&w=2000" 
-                alt="Credit Application" 
-                className="w-full h-[300px] object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex items-center">
-                <div className="text-white p-8 max-w-lg">
-                  <h2 className="text-3xl font-bold mb-4">Buy Now, Pay Later</h2>
-                  <p className="text-lg mb-6">Get approved for credit in minutes with competitive rates and flexible payment options.</p>
-                  <div className="flex items-center gap-2 text-white/90">
-                    <ShieldCheck className="h-5 w-5" />
-                    <span>Fast approval process • No hidden fees</span>
+          </div>
+
+          {/* Form */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+            <form onSubmit={handleSubmit}>
+              {/* Step 1: Business Information */}
+              {step === 1 && (
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-3 mb-6">
+                    <Building2 className="h-8 w-8 text-blue-500" />
+                    <h2 className="text-xl font-semibold dark:text-white">Business Information</h2>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <Label htmlFor="businessName">Business Name</Label>
+                      <Input 
+                        id="businessName" 
+                        name="businessName" 
+                        value={formData.businessName} 
+                        onChange={handleInputChange} 
+                        required 
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="businessType">Business Type</Label>
+                      <select 
+                        id="businessType" 
+                        name="businessType" 
+                        value={formData.businessType} 
+                        onChange={handleInputChange as any} 
+                        required 
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                      >
+                        <option value="">Select business type</option>
+                        <option value="Sole Proprietorship">Sole Proprietorship</option>
+                        <option value="Partnership">Partnership</option>
+                        <option value="LLC">LLC</option>
+                        <option value="Corporation">Corporation</option>
+                        <option value="Non-profit">Non-profit</option>
+                      </select>
+                    </div>
+                    <div>
+                      <Label htmlFor="yearsInBusiness">Years in Business</Label>
+                      <Input 
+                        id="yearsInBusiness" 
+                        name="yearsInBusiness" 
+                        type="number" 
+                        min="0" 
+                        value={formData.yearsInBusiness} 
+                        onChange={handleInputChange} 
+                        required 
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="federalTaxId">Federal Tax ID / EIN</Label>
+                      <Input 
+                        id="federalTaxId" 
+                        name="federalTaxId" 
+                        value={formData.federalTaxId} 
+                        onChange={handleInputChange} 
+                        required 
+                        className="mt-1" 
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="businessDescription">Business Description</Label>
+                    <Textarea 
+                      id="businessDescription" 
+                      name="businessDescription" 
+                      value={formData.businessDescription} 
+                      onChange={handleInputChange} 
+                      rows={4} 
+                      className="mt-1"
+                    />
+                  </div>
+                  
+                  <div className="flex justify-end pt-6">
+                    <Button type="button" onClick={nextStep}>
+                      Continue to Contact Details
+                    </Button>
                   </div>
                 </div>
-              </div>
-            </div>
-            
-            {/* Benefits */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                  <CreditCard className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                </div>
-                <h3 className="text-xl font-semibold mb-3 dark:text-white">Credit Line up to $25,000</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Qualifying customers can receive a credit line of up to $25,000 to finance their home improvement projects.
-                </p>
-              </div>
-              
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-                <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                  <Calculator className="h-6 w-6 text-green-600 dark:text-green-400" />
-                </div>
-                <h3 className="text-xl font-semibold mb-3 dark:text-white">Competitive Interest Rates</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Our financing partners offer competitive interest rates starting as low as 5.99% APR for qualified applicants.
-                </p>
-              </div>
-              
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-                <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                  <FileText className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-                </div>
-                <h3 className="text-xl font-semibold mb-3 dark:text-white">Flexible Payment Terms</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Choose from various payment terms ranging from 6 to 60 months to fit your budget and financial goals.
-                </p>
-              </div>
-            </div>
-            
-            <Separator className="my-8" />
-            
-            {/* Application Form */}
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-              <div className="lg:col-span-2">
-                <h2 className="text-2xl font-bold mb-6 dark:text-white">Credit Application</h2>
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-                  <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    Complete the form to apply for credit. All information is secure and confidential. Applications are typically processed within 24-48 hours.
-                  </p>
+              )}
+
+              {/* Step 2: Contact Details */}
+              {step === 2 && (
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-3 mb-6">
+                    <CreditCard className="h-8 w-8 text-blue-500" />
+                    <h2 className="text-xl font-semibold dark:text-white">Contact Details</h2>
+                  </div>
                   
-                  <h3 className="font-semibold text-lg mb-4 dark:text-white">What You'll Need:</h3>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-2">
-                      <div className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full p-1 mt-0.5">
-                        <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
-                        </svg>
-                      </div>
-                      <span className="text-gray-600 dark:text-gray-400">Valid government-issued ID</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full p-1 mt-0.5">
-                        <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
-                        </svg>
-                      </div>
-                      <span className="text-gray-600 dark:text-gray-400">Proof of income (last 2 pay stubs)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full p-1 mt-0.5">
-                        <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
-                        </svg>
-                      </div>
-                      <span className="text-gray-600 dark:text-gray-400">Social Security Number</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full p-1 mt-0.5">
-                        <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
-                        </svg>
-                      </div>
-                      <span className="text-gray-600 dark:text-gray-400">Banking information</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              
-              <div className="lg:col-span-3">
-                <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-                  <h3 className="text-xl font-semibold mb-6 dark:text-white">Personal Information</h3>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <Label htmlFor="firstName">First Name</Label>
-                      <Input id="firstName" name="firstName" required className="mt-1" />
+                      <Input 
+                        id="firstName" 
+                        name="firstName" 
+                        value={formData.firstName} 
+                        onChange={handleInputChange} 
+                        required 
+                        className="mt-1"
+                      />
                     </div>
                     <div>
                       <Label htmlFor="lastName">Last Name</Label>
-                      <Input id="lastName" name="lastName" required className="mt-1" />
+                      <Input 
+                        id="lastName" 
+                        name="lastName" 
+                        value={formData.lastName} 
+                        onChange={handleInputChange} 
+                        required 
+                        className="mt-1"
+                      />
                     </div>
                     <div>
                       <Label htmlFor="email">Email Address</Label>
-                      <Input id="email" name="email" type="email" required className="mt-1" />
+                      <Input 
+                        id="email" 
+                        name="email" 
+                        type="email" 
+                        value={formData.email} 
+                        onChange={handleInputChange} 
+                        required 
+                        className="mt-1"
+                      />
                     </div>
                     <div>
                       <Label htmlFor="phone">Phone Number</Label>
-                      <Input id="phone" name="phone" required className="mt-1" />
-                    </div>
-                    <div>
-                      <Label htmlFor="dob">Date of Birth</Label>
-                      <Input id="dob" name="dob" type="date" required className="mt-1" />
-                    </div>
-                    <div>
-                      <Label htmlFor="ssn">Social Security Number</Label>
-                      <Input id="ssn" name="ssn" required className="mt-1" />
+                      <Input 
+                        id="phone" 
+                        name="phone" 
+                        value={formData.phone} 
+                        onChange={handleInputChange} 
+                        required 
+                        className="mt-1"
+                      />
                     </div>
                   </div>
                   
-                  <h3 className="text-xl font-semibold mb-6 dark:text-white">Address</h3>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="md:col-span-2">
                       <Label htmlFor="address">Street Address</Label>
-                      <Input id="address" name="address" required className="mt-1" />
+                      <Input 
+                        id="address" 
+                        name="address" 
+                        value={formData.address} 
+                        onChange={handleInputChange} 
+                        required 
+                        className="mt-1"
+                      />
                     </div>
                     <div>
                       <Label htmlFor="city">City</Label>
-                      <Input id="city" name="city" required className="mt-1" />
+                      <Input 
+                        id="city" 
+                        name="city" 
+                        value={formData.city} 
+                        onChange={handleInputChange} 
+                        required 
+                        className="mt-1"
+                      />
                     </div>
                     <div>
                       <Label htmlFor="state">State</Label>
-                      <Input id="state" name="state" required className="mt-1" />
+                      <Input 
+                        id="state" 
+                        name="state" 
+                        value={formData.state} 
+                        onChange={handleInputChange} 
+                        required 
+                        className="mt-1"
+                      />
                     </div>
                     <div>
                       <Label htmlFor="zipCode">ZIP Code</Label>
-                      <Input id="zipCode" name="zipCode" required className="mt-1" />
-                    </div>
-                    <div>
-                      <Label htmlFor="timeAtAddress">Time at Current Address</Label>
-                      <Input id="timeAtAddress" name="timeAtAddress" placeholder="e.g., 3 years" required className="mt-1" />
-                    </div>
-                  </div>
-                  
-                  <h3 className="text-xl font-semibold mb-6 dark:text-white">Employment & Income</h3>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <div>
-                      <Label htmlFor="employer">Current Employer</Label>
-                      <Input id="employer" name="employer" required className="mt-1" />
-                    </div>
-                    <div>
-                      <Label htmlFor="jobTitle">Job Title</Label>
-                      <Input id="jobTitle" name="jobTitle" required className="mt-1" />
-                    </div>
-                    <div>
-                      <Label htmlFor="employmentLength">Length of Employment</Label>
-                      <Input id="employmentLength" name="employmentLength" placeholder="e.g., 2 years" required className="mt-1" />
-                    </div>
-                    <div>
-                      <Label htmlFor="annualIncome">Annual Income</Label>
-                      <Input id="annualIncome" name="annualIncome" placeholder="$" required className="mt-1" />
+                      <Input 
+                        id="zipCode" 
+                        name="zipCode" 
+                        value={formData.zipCode} 
+                        onChange={handleInputChange} 
+                        required 
+                        className="mt-1"
+                      />
                     </div>
                   </div>
                   
-                  <div className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-                    By submitting this application, you authorize us to obtain your credit report and verify the information provided.
+                  <div className="flex justify-between pt-6">
+                    <Button type="button" variant="outline" onClick={prevStep}>
+                      Back
+                    </Button>
+                    <Button type="button" onClick={nextStep}>
+                      Continue to Financial Information
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 3: Financial Information */}
+              {step === 3 && (
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-3 mb-6">
+                    <FileText className="h-8 w-8 text-blue-500" />
+                    <h2 className="text-xl font-semibold dark:text-white">Financial Information</h2>
                   </div>
                   
-                  <Button type="submit" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? (
-                      <span className="flex items-center">
-                        <svg className="animate-spin mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Processing...
-                      </span>
-                    ) : (
-                      "Submit Application"
-                    )}
-                  </Button>
-                </form>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <Label htmlFor="annualRevenue">Annual Business Revenue</Label>
+                      <div className="relative mt-1">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                        <Input 
+                          id="annualRevenue" 
+                          name="annualRevenue" 
+                          type="number" 
+                          min="0" 
+                          value={formData.annualRevenue} 
+                          onChange={handleInputChange} 
+                          required 
+                          className="pl-7"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="creditAmount">Requested Credit Amount</Label>
+                      <div className="relative mt-1">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                        <Input 
+                          id="creditAmount" 
+                          name="creditAmount" 
+                          type="number" 
+                          min="0" 
+                          value={formData.creditAmount} 
+                          onChange={handleInputChange} 
+                          required 
+                          className="pl-7"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="border border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <Upload className="h-5 w-5 text-blue-500" />
+                      <h3 className="font-medium dark:text-white">Upload Supporting Documents</h3>
+                    </div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Please upload copies of your business license, tax returns, and bank statements from the last 3 months.
+                    </p>
+                    <div className="mt-2">
+                      <Input 
+                        id="documents" 
+                        type="file" 
+                        className="cursor-pointer" 
+                        multiple 
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="pt-4 dark:text-gray-300">
+                    <p className="flex items-start">
+                      <input 
+                        type="checkbox" 
+                        id="terms" 
+                        required 
+                        className="mt-1 mr-2" 
+                      />
+                      <label htmlFor="terms" className="text-sm">
+                        By submitting this form, I authorize your company to make inquiries into my banking and business credit history. I understand that this application does not guarantee approval for credit.
+                      </label>
+                    </p>
+                  </div>
+                  
+                  <div className="flex justify-between pt-6">
+                    <Button type="button" variant="outline" onClick={prevStep}>
+                      Back
+                    </Button>
+                    <Button type="submit" disabled={isSubmitting}>
+                      {isSubmitting ? (
+                        <span className="flex items-center">
+                          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Processing...
+                        </span>
+                      ) : "Submit Application"}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </form>
+          </div>
+
+          <div className="mt-10 bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+            <h2 className="text-xl font-semibold mb-4 dark:text-white">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-medium dark:text-white">What are the credit requirements?</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
+                  We evaluate applications based on business longevity, revenue history, and credit background. Most approved businesses have been operating for at least 1 year with minimum monthly revenues of $10,000.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-medium dark:text-white">How long does the approval process take?</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
+                  Most applications are reviewed within 2-3 business days. Once approved, your credit line will be available immediately.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-medium dark:text-white">What documents will I need to provide?</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
+                  Required documents typically include business license, recent bank statements, tax returns, and financial statements. Our team may request additional documentation during the review process.
+                </p>
               </div>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </main>
       <Footer />
     </div>

@@ -10,19 +10,29 @@ export const LocationMap = ({ address, zipCode }: LocationMapProps) => {
   const [mapUrl, setMapUrl] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [locationDetails, setLocationDetails] = useState<any>(null);
 
   useEffect(() => {
+    if (!address || !zipCode) {
+      setError("Please provide both address and zip code");
+      setLoading(false);
+      return;
+    }
+    
     try {
       // Create a properly encoded address for the map URL
       const encodedAddress = encodeURIComponent(`${address}, ${zipCode}`);
       
       // Using Nominatim to get coordinates from address (free and doesn't require API key)
-      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}`)
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&addressdetails=1`)
         .then(response => response.json())
         .then(data => {
           if (data && data.length > 0) {
             const lat = data[0].lat;
             const lon = data[0].lon;
+            
+            // Store location details for display
+            setLocationDetails(data[0]);
             
             // Generate OpenStreetMap URL with the correct coordinates and marker
             const openStreetMapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${parseFloat(lon)-0.01}%2C${parseFloat(lat)-0.01}%2C${parseFloat(lon)+0.01}%2C${parseFloat(lat)+0.01}&layer=mapnik&marker=${lat}%2C${lon}`;
@@ -64,23 +74,35 @@ export const LocationMap = ({ address, zipCode }: LocationMapProps) => {
   }
 
   return (
-    <div className="w-full h-full relative rounded-lg overflow-hidden">
+    <div className="w-full h-full flex flex-col">
       {loading ? (
         <div className="flex items-center justify-center h-full bg-gray-100 dark:bg-gray-700">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
       ) : (
-        <iframe
-          title="Location Map"
-          width="100%"
-          height="100%"
-          frameBorder="0"
-          src={mapUrl}
-          allowFullScreen
-          className="rounded-lg"
-          style={{ border: 0 }}
-          loading="lazy"
-        ></iframe>
+        <>
+          <div className="relative rounded-lg overflow-hidden flex-grow">
+            <iframe
+              title="Location Map"
+              width="100%"
+              height="100%"
+              frameBorder="0"
+              src={mapUrl}
+              allowFullScreen
+              className="rounded-lg"
+              style={{ border: 0 }}
+              loading="lazy"
+            ></iframe>
+          </div>
+          {locationDetails && (
+            <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm border border-gray-200 dark:border-gray-700">
+              <h4 className="font-medium mb-1 dark:text-white">Verified Address:</h4>
+              <p className="text-gray-700 dark:text-gray-300">
+                {locationDetails.display_name}
+              </p>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
