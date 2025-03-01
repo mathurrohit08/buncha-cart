@@ -13,15 +13,32 @@ export const LocationMap = ({ address, zipCode }: LocationMapProps) => {
 
   useEffect(() => {
     try {
-      // Create a map URL that works more reliably
-      const encodedAddress = encodeURIComponent(`${address} ${zipCode}`);
-      const mapboxToken = 'pk.eyJ1IjoibG92YWJsZWRldiIsImEiOiJjbG5hMjBiemgwN2ducG1udTd5dXQydHJzIn0.e6hEshWZpGwrI5aXjNdzuw'; // public token for demo
+      // Create a properly encoded address for the map URL
+      const encodedAddress = encodeURIComponent(`${address}, ${zipCode}`);
       
-      // Using OpenStreetMap which is more reliable without API key
-      const openStreetMapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik&marker=${encodedAddress}`;
-      
-      setMapUrl(openStreetMapUrl);
-      setLoading(false);
+      // Using Nominatim to get coordinates from address (free and doesn't require API key)
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.length > 0) {
+            const lat = data[0].lat;
+            const lon = data[0].lon;
+            
+            // Generate OpenStreetMap URL with the correct coordinates and marker
+            const openStreetMapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${parseFloat(lon)-0.01}%2C${parseFloat(lat)-0.01}%2C${parseFloat(lon)+0.01}%2C${parseFloat(lat)+0.01}&layer=mapnik&marker=${lat}%2C${lon}`;
+            
+            setMapUrl(openStreetMapUrl);
+            setLoading(false);
+            setError(null);
+          } else {
+            throw new Error("Location not found");
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching location data:", err);
+          setError("We couldn't find this location. Please verify your address.");
+          setLoading(false);
+        });
     } catch (err) {
       console.error("Error setting up map:", err);
       setError("We couldn't load the map. Please verify your address.");
@@ -39,7 +56,7 @@ export const LocationMap = ({ address, zipCode }: LocationMapProps) => {
             </svg>
           </div>
           <p className="text-sm text-gray-600 dark:text-gray-300">
-            We couldn't load the map. Please verify your address or try again later.
+            {error}
           </p>
         </div>
       </div>
