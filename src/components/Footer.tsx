@@ -1,6 +1,7 @@
 
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Instagram, Youtube } from "lucide-react";
+import { Facebook, Twitter, Instagram, Youtube, MapPin, Mail, Phone, CreditCard, Users, Package, Heart } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 export const Footer = () => {
   const links = {
@@ -8,44 +9,73 @@ export const Footer = () => {
       { name: "About Us", path: "/about-us" },
       { name: "Contact", path: "/contact" },
       { name: "Careers", path: "/careers" },
+      { name: "Blog", path: "/blog" },
     ],
     support: [
-      { name: "Shipping", path: "/shipping" },
+      { name: "Shipping Policy", path: "/shipping" },
       { name: "Returns", path: "/returns" },
+      { name: "Return Policy", path: "/return-policy" },
       { name: "FAQ", path: "/faq" },
+    ],
+    programs: [
+      { name: "Apply For Credit", path: "/apply-for-credit" },
+      { name: "Bulk Sale Inquiry", path: "/bulk-sale" },
+      { name: "Distributor Registration", path: "/distributor-registration" },
+      { name: "Affiliate Program", path: "/affiliate-program" },
     ],
     legal: [
       { name: "Privacy Policy", path: "/privacy-policy" },
       { name: "Terms of Service", path: "/terms-of-service" },
-      { name: "Return Policy", path: "/return-policy" },
+      { name: "Accessibility", path: "/accessibility" },
+      { name: "Warranty", path: "/warranty" },
     ],
   };
 
   const socialLinks = [
-    { icon: Facebook, href: "#" },
-    { icon: Twitter, href: "#" },
-    { icon: Instagram, href: "#" },
-    { icon: Youtube, href: "#" },
+    { icon: Facebook, href: "#", label: "Facebook" },
+    { icon: Twitter, href: "#", label: "Twitter" },
+    { icon: Instagram, href: "#", label: "Instagram" },
+    { icon: Youtube, href: "#", label: "Youtube" },
   ];
 
   return (
-    <footer className="bg-gray-100">
-      <div className="max-w-[1600px] mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <h3 className="text-lg font-bold mb-4">Store</h3>
-            <p className="text-gray-600">
-              Your one-stop shop for quality products.
-            </p>
+    <footer className="bg-gray-900 text-white">
+      <div className="max-w-[1600px] mx-auto px-4">
+        {/* Newsletter Section */}
+        <div className="py-12 border-b border-gray-800">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <h3 className="text-2xl font-bold mb-2">Subscribe to our newsletter</h3>
+              <p className="text-gray-400 mb-4">
+                Get the latest updates, exclusive offers, and design tips straight to your inbox.
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-grow px-4 py-3 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 transition-colors rounded-md font-medium">
+                Subscribe
+              </button>
+            </div>
           </div>
+        </div>
+
+        {/* Main Footer Links */}
+        <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-lg font-bold mb-4">Company</h3>
-            <ul className="space-y-2">
+            <h3 className="text-lg font-bold mb-6 relative inline-block">
+              Company
+              <span className="absolute -bottom-2 left-0 w-16 h-1 bg-blue-600"></span>
+            </h3>
+            <ul className="space-y-3">
               {links.company.map((link) => (
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-gray-600 hover:text-gray-900 transition-colors"
+                    className="text-gray-400 hover:text-white transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -54,13 +84,16 @@ export const Footer = () => {
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-bold mb-4">Support</h3>
-            <ul className="space-y-2">
+            <h3 className="text-lg font-bold mb-6 relative inline-block">
+              Support
+              <span className="absolute -bottom-2 left-0 w-16 h-1 bg-blue-600"></span>
+            </h3>
+            <ul className="space-y-3">
               {links.support.map((link) => (
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-gray-600 hover:text-gray-900 transition-colors"
+                    className="text-gray-400 hover:text-white transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -69,13 +102,34 @@ export const Footer = () => {
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-bold mb-4">Legal</h3>
-            <ul className="space-y-2">
+            <h3 className="text-lg font-bold mb-6 relative inline-block">
+              Programs
+              <span className="absolute -bottom-2 left-0 w-16 h-1 bg-blue-600"></span>
+            </h3>
+            <ul className="space-y-3">
+              {links.programs.map((link) => (
+                <li key={link.path}>
+                  <Link
+                    to={link.path}
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-lg font-bold mb-6 relative inline-block">
+              Legal
+              <span className="absolute -bottom-2 left-0 w-16 h-1 bg-blue-600"></span>
+            </h3>
+            <ul className="space-y-3">
               {links.legal.map((link) => (
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-gray-600 hover:text-gray-900 transition-colors"
+                    className="text-gray-400 hover:text-white transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -84,24 +138,108 @@ export const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="mt-8 pt-8 border-t">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-gray-600">
-              © {new Date().getFullYear()} Store. All rights reserved.
-            </p>
-            <div className="flex gap-4">
+
+        {/* Contact Info Section */}
+        <div className="py-8 border-t border-gray-800">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="flex items-start gap-3">
+              <MapPin className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-medium mb-1">Our Location</h4>
+                <p className="text-gray-400">123 Design Avenue, Suite 100</p>
+                <p className="text-gray-400">New York, NY 10001, USA</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <Phone className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-medium mb-1">Call Us</h4>
+                <p className="text-gray-400">+1 (800) 123-4567</p>
+                <p className="text-gray-400">Mon-Fri: 9am - 6pm EST</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <Mail className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-medium mb-1">Email Us</h4>
+                <p className="text-gray-400">info@store.com</p>
+                <p className="text-gray-400">support@store.com</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Features Section */}
+        <div className="py-8 border-t border-gray-800">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="flex items-center gap-3">
+              <div className="bg-blue-900/50 p-3 rounded-full">
+                <Package className="h-6 w-6 text-blue-400" />
+              </div>
+              <div>
+                <h4 className="font-medium">Free Shipping</h4>
+                <p className="text-sm text-gray-400">On orders over $50</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="bg-blue-900/50 p-3 rounded-full">
+                <CreditCard className="h-6 w-6 text-blue-400" />
+              </div>
+              <div>
+                <h4 className="font-medium">Secure Payment</h4>
+                <p className="text-sm text-gray-400">100% secure checkout</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="bg-blue-900/50 p-3 rounded-full">
+                <Users className="h-6 w-6 text-blue-400" />
+              </div>
+              <div>
+                <h4 className="font-medium">24/7 Support</h4>
+                <p className="text-sm text-gray-400">Dedicated assistance</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="bg-blue-900/50 p-3 rounded-full">
+                <Heart className="h-6 w-6 text-blue-400" />
+              </div>
+              <div>
+                <h4 className="font-medium">Satisfaction Guarantee</h4>
+                <p className="text-sm text-gray-400">30-day money back</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <Separator className="bg-gray-800" />
+
+        {/* Social & Copyright Footer */}
+        <div className="py-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <Link to="/" className="flex items-center gap-2">
+                <img src="public/lovable-uploads/d0289308-98a6-4913-b7cd-73b0278e8893.png" alt="Logo" className="h-10" />
+                <span className="text-xl font-bold">Store</span>
+              </Link>
+            </div>
+            <div className="flex gap-6">
               {socialLinks.map((social) => (
                 <a
-                  key={social.href}
+                  key={social.label}
                   href={social.href}
-                  className="text-gray-600 hover:text-gray-900 transition-colors"
+                  className="text-gray-400 hover:text-blue-500 transition-colors"
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={social.label}
                 >
-                  <social.icon className="h-5 w-5" />
+                  <social.icon className="h-6 w-6" />
                 </a>
               ))}
             </div>
+            <p className="text-gray-400 text-sm text-center md:text-right">
+              © {new Date().getFullYear()} Store. All rights reserved. <br />
+              <span className="text-gray-500">Designed and developed with ❤️</span>
+            </p>
           </div>
         </div>
       </div>
