@@ -10,13 +10,13 @@ import { UserMenu } from "./header/UserMenu";
 import { WishlistButton } from "./header/WishlistButton";
 import { CartMenu } from "./header/CartMenu";
 import { CompareButton } from "./header/CompareButton";
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,7 +27,6 @@ export const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Prevent body scrolling when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -96,7 +95,6 @@ export const Header = () => {
           </div>
         </div>
 
-        {/* Search Bar */}
         {searchOpen && (
           <div className="py-3 border-t border-gray-200 dark:border-gray-700">
             <div className="relative">
@@ -111,7 +109,6 @@ export const Header = () => {
         )}
       </div>
 
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 bg-white dark:bg-gray-900 overflow-y-auto">
           <div className="max-w-[1600px] mx-auto px-4 py-4">
