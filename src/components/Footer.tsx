@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Youtube, MapPin, Mail, Phone, CreditCard, Users, Package, Heart } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
 export const Footer = () => {
   const links = {
@@ -54,21 +55,21 @@ export const Footer = () => {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-grow px-4 py-3 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-grow px-4 py-3 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
-              <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 transition-colors rounded-md font-medium">
+              <Button className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 transition-colors rounded-md font-medium">
                 Subscribe
-              </button>
+              </Button>
             </div>
           </div>
         </div>
 
         {/* Main Footer Links */}
-        <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <h3 className="text-lg font-bold mb-6 relative inline-block">
               Company
-              <span className="absolute -bottom-2 left-0 w-16 h-1 bg-blue-600"></span>
+              <span className="absolute -bottom-2 left-0 w-16 h-1 bg-indigo-600"></span>
             </h3>
             <ul className="space-y-3">
               {links.company.map((link) => (
@@ -86,7 +87,7 @@ export const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-6 relative inline-block">
               Support
-              <span className="absolute -bottom-2 left-0 w-16 h-1 bg-blue-600"></span>
+              <span className="absolute -bottom-2 left-0 w-16 h-1 bg-indigo-600"></span>
             </h3>
             <ul className="space-y-3">
               {links.support.map((link) => (
@@ -104,7 +105,7 @@ export const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-6 relative inline-block">
               Programs
-              <span className="absolute -bottom-2 left-0 w-16 h-1 bg-blue-600"></span>
+              <span className="absolute -bottom-2 left-0 w-16 h-1 bg-indigo-600"></span>
             </h3>
             <ul className="space-y-3">
               {links.programs.map((link) => (
@@ -122,7 +123,7 @@ export const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-6 relative inline-block">
               Legal
-              <span className="absolute -bottom-2 left-0 w-16 h-1 bg-blue-600"></span>
+              <span className="absolute -bottom-2 left-0 w-16 h-1 bg-indigo-600"></span>
             </h3>
             <ul className="space-y-3">
               {links.legal.map((link) => (
@@ -139,29 +140,35 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Contact Info Section */}
+        {/* Contact Info Section - Improved alignment */}
         <div className="py-8 border-t border-gray-800">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="flex items-start gap-3">
-              <MapPin className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start space-x-4">
+              <div className="bg-indigo-900/50 p-3 rounded-full flex-shrink-0">
+                <MapPin className="h-5 w-5 text-indigo-400" />
+              </div>
               <div>
-                <h4 className="font-medium mb-1">Our Location</h4>
+                <h4 className="font-medium mb-2 text-white">Our Location</h4>
                 <p className="text-gray-400">123 Design Avenue, Suite 100</p>
                 <p className="text-gray-400">New York, NY 10001, USA</p>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <Phone className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start space-x-4">
+              <div className="bg-indigo-900/50 p-3 rounded-full flex-shrink-0">
+                <Phone className="h-5 w-5 text-indigo-400" />
+              </div>
               <div>
-                <h4 className="font-medium mb-1">Call Us</h4>
+                <h4 className="font-medium mb-2 text-white">Call Us</h4>
                 <p className="text-gray-400">+1 (800) 123-4567</p>
                 <p className="text-gray-400">Mon-Fri: 9am - 6pm EST</p>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <Mail className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start space-x-4">
+              <div className="bg-indigo-900/50 p-3 rounded-full flex-shrink-0">
+                <Mail className="h-5 w-5 text-indigo-400" />
+              </div>
               <div>
-                <h4 className="font-medium mb-1">Email Us</h4>
+                <h4 className="font-medium mb-2 text-white">Email Us</h4>
                 <p className="text-gray-400">info@store.com</p>
                 <p className="text-gray-400">support@store.com</p>
               </div>
@@ -169,39 +176,39 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Features Section */}
+        {/* Features Section - Better responsive design */}
         <div className="py-8 border-t border-gray-800">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="flex items-center gap-3">
-              <div className="bg-blue-900/50 p-3 rounded-full">
-                <Package className="h-6 w-6 text-blue-400" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="flex items-center gap-4 bg-gray-800/50 p-4 rounded-lg">
+              <div className="bg-indigo-900/50 p-3 rounded-full">
+                <Package className="h-6 w-6 text-indigo-400" />
               </div>
               <div>
                 <h4 className="font-medium">Free Shipping</h4>
                 <p className="text-sm text-gray-400">On orders over $50</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="bg-blue-900/50 p-3 rounded-full">
-                <CreditCard className="h-6 w-6 text-blue-400" />
+            <div className="flex items-center gap-4 bg-gray-800/50 p-4 rounded-lg">
+              <div className="bg-indigo-900/50 p-3 rounded-full">
+                <CreditCard className="h-6 w-6 text-indigo-400" />
               </div>
               <div>
                 <h4 className="font-medium">Secure Payment</h4>
                 <p className="text-sm text-gray-400">100% secure checkout</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="bg-blue-900/50 p-3 rounded-full">
-                <Users className="h-6 w-6 text-blue-400" />
+            <div className="flex items-center gap-4 bg-gray-800/50 p-4 rounded-lg">
+              <div className="bg-indigo-900/50 p-3 rounded-full">
+                <Users className="h-6 w-6 text-indigo-400" />
               </div>
               <div>
                 <h4 className="font-medium">24/7 Support</h4>
                 <p className="text-sm text-gray-400">Dedicated assistance</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="bg-blue-900/50 p-3 rounded-full">
-                <Heart className="h-6 w-6 text-blue-400" />
+            <div className="flex items-center gap-4 bg-gray-800/50 p-4 rounded-lg">
+              <div className="bg-indigo-900/50 p-3 rounded-full">
+                <Heart className="h-6 w-6 text-indigo-400" />
               </div>
               <div>
                 <h4 className="font-medium">Satisfaction Guarantee</h4>
@@ -218,7 +225,7 @@ export const Footer = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <Link to="/" className="flex items-center gap-2">
-                <img src="public/lovable-uploads/d0289308-98a6-4913-b7cd-73b0278e8893.png" alt="Logo" className="h-10" />
+                <img src="/lovable-uploads/d0289308-98a6-4913-b7cd-73b0278e8893.png" alt="Logo" className="h-10" />
                 <span className="text-xl font-bold">Store</span>
               </Link>
             </div>
@@ -227,7 +234,7 @@ export const Footer = () => {
                 <a
                   key={social.label}
                   href={social.href}
-                  className="text-gray-400 hover:text-blue-500 transition-colors"
+                  className="text-gray-400 hover:text-indigo-500 transition-colors"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
