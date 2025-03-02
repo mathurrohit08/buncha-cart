@@ -23,6 +23,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import Returns from "./pages/Returns";
 import Careers from "./pages/Careers";
+import HomeImprovementProducts from "./pages/HomeImprovementProducts";
 
 import "./App.css";
 
@@ -54,6 +55,7 @@ function App() {
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/returns" element={<Returns />} />
               <Route path="/careers" element={<Careers />} />
+              <Route path="/home-improvement" element={<HomeImprovementProducts />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />
