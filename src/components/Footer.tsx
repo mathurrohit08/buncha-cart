@@ -143,7 +143,7 @@ export const Footer = () => {
         {/* Contact Info Section - Improved alignment */}
         <div className="py-8 border-t border-gray-800">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="flex items-start space-x-4">
+            <div className="flex items-start gap-4">
               <div className="bg-indigo-900/50 p-3 rounded-full flex-shrink-0">
                 <MapPin className="h-5 w-5 text-indigo-400" />
               </div>
@@ -153,7 +153,7 @@ export const Footer = () => {
                 <p className="text-gray-400">New York, NY 10001, USA</p>
               </div>
             </div>
-            <div className="flex items-start space-x-4">
+            <div className="flex items-start gap-4">
               <div className="bg-indigo-900/50 p-3 rounded-full flex-shrink-0">
                 <Phone className="h-5 w-5 text-indigo-400" />
               </div>
@@ -163,7 +163,7 @@ export const Footer = () => {
                 <p className="text-gray-400">Mon-Fri: 9am - 6pm EST</p>
               </div>
             </div>
-            <div className="flex items-start space-x-4">
+            <div className="flex items-start gap-4">
               <div className="bg-indigo-900/50 p-3 rounded-full flex-shrink-0">
                 <Mail className="h-5 w-5 text-indigo-400" />
               </div>

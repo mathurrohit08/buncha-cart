@@ -21,16 +21,16 @@ const Index = () => {
             <img 
               src="https://images.unsplash.com/photo-1556909114-44e3e9399a2c" 
               alt="Home Improvement" 
-              className="w-full h-[300px] object-cover"
+              className="w-full h-[300px] md:h-[400px] object-cover"
             />
             <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-6">
-              <h2 className="text-3xl font-bold text-white mb-4">Browse Our Home Improvement Products</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Browse Our Home Improvement Products</h2>
               <p className="text-white mb-6 max-w-2xl">
                 Explore our extensive collection of tiles, flooring, cabinets, sinks, vanities, 
                 and more for your renovation projects.
               </p>
               <Link to="/home-improvement">
-                <Button size="lg">Shop Home Improvement</Button>
+                <Button size="lg" className="px-8 py-6 text-base font-medium">Shop Home Improvement</Button>
               </Link>
             </div>
           </div>

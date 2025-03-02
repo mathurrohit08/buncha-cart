@@ -103,6 +103,7 @@ export const LocationMap = ({ address, zipCode }: LocationMapProps) => {
               className="rounded-lg absolute inset-0"
               style={{ border: 0 }}
               loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
             ></iframe>
           </div>
           {locationDetails && (
