@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
@@ -9,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { productTypes } from "@/components/header/ProductMenu";
 import { categories } from "@/components/header/CategoryMenu";
 import { useToast } from "@/hooks/use-toast";
+import { addToCart } from "@/components/header/CartMenu";
+import { addToWishlist, isInWishlist } from "@/components/header/WishlistButton";
 
 const ProductsPage = () => {
   const { toast } = useToast();
@@ -29,10 +30,30 @@ const ProductsPage = () => {
     ? allProducts.filter(product => product.type === selectedCategory)
     : allProducts;
 
-  const handleAddToCart = (productName: string) => {
+  const handleAddToCart = (product: { name: string, image: string, type: string }) => {
+    addToCart({
+      name: product.name,
+      price: (Math.random() * 300 + 50).toFixed(2),
+      image: product.image,
+      quantity: 1
+    });
+    
     toast({
       title: "Added to cart",
-      description: `${productName} has been added to your cart.`,
+      description: `${product.name} has been added to your cart.`,
+    });
+  };
+
+  const handleAddToWishlist = (product: { name: string, image: string, type: string }) => {
+    addToWishlist({
+      name: product.name,
+      price: `$${(Math.random() * 300 + 50).toFixed(2)}`,
+      image: product.image
+    });
+    
+    toast({
+      title: "Added to wishlist",
+      description: `${product.name} has been added to your wishlist.`,
     });
   };
 
@@ -50,7 +71,6 @@ const ProductsPage = () => {
             >
               <h1 className="text-3xl font-bold mb-4">All Products</h1>
               
-              {/* Categories Section */}
               <div className="mb-10">
                 <h2 className="text-xl font-semibold mb-4">Shop by Category</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -76,7 +96,6 @@ const ProductsPage = () => {
                 </div>
               </div>
               
-              {/* Product Types Section */}
               <div className="mb-10">
                 <h2 className="text-xl font-semibold mb-4">Shop by Collection</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -103,9 +122,7 @@ const ProductsPage = () => {
               </div>
             </motion.div>
             
-            {/* Product Listing Section */}
             <div className="flex flex-col lg:flex-row gap-8">
-              {/* Mobile Filter Toggle */}
               <div className="lg:hidden mb-4">
                 <Button 
                   variant="outline" 
@@ -120,7 +137,6 @@ const ProductsPage = () => {
                 </Button>
               </div>
               
-              {/* Filter Sidebar */}
               <motion.div 
                 className={`w-full lg:w-64 flex-shrink-0 ${showFilters ? 'block' : 'hidden'} lg:block`}
                 initial={{ opacity: 0, x: -20 }}
@@ -153,7 +169,6 @@ const ProductsPage = () => {
                 </div>
               </motion.div>
               
-              {/* Products Grid */}
               <motion.div 
                 className="flex-grow"
                 initial={{ opacity: 0 }}
@@ -182,8 +197,9 @@ const ProductsPage = () => {
                             variant="ghost" 
                             size="icon"
                             className="absolute top-2 right-2 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 rounded-full"
+                            onClick={() => handleAddToWishlist(product)}
                           >
-                            <Heart className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+                            <Heart className={`h-5 w-5 ${isInWishlist(product.name) ? 'fill-red-500 text-red-500' : 'text-gray-600 dark:text-gray-300'}`} />
                           </Button>
                         </div>
                         <div className="p-4">
@@ -210,7 +226,7 @@ const ProductsPage = () => {
                             <Button 
                               size="sm" 
                               className="h-8"
-                              onClick={() => handleAddToCart(product.name)}
+                              onClick={() => handleAddToCart(product)}
                             >
                               <ShoppingCart className="h-4 w-4 mr-1" />
                               Add

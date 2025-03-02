@@ -1,80 +1,67 @@
-
-import { useState, useEffect, useRef } from "react";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+import { Menu, Search, X } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Logo } from "./header/Logo";
-import { CategoryMenu } from "./header/CategoryMenu";
+import { ThemeToggle } from "./theme/ThemeToggle";
+import { Button } from "@/components/ui/button";
 import { ProductMenu } from "./header/ProductMenu";
+import { CategoryMenu } from "./header/CategoryMenu";
 import { UserMenu } from "./header/UserMenu";
 import { WishlistButton } from "./header/WishlistButton";
 import { CartMenu } from "./header/CartMenu";
-import { ThemeToggle } from "./theme/ThemeToggle";
-import { Link } from "react-router-dom";
-
-// Import the categories data from CategoryMenu
-import { categories } from "./header/CategoryMenu";
-// Import the productTypes data from ProductMenu
-import { productTypes } from "./header/ProductMenu";
+import { CompareButton } from "./header/CompareButton";
+import { useMobile } from "@/hooks/use-mobile";
 
 export const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const [scrolled, setScrolled] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isMobile = useMobile();
 
   useEffect(() => {
-    // Close menu when clicking outside
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false);
-      }
+    const handleScroll = () => {
+      const offset = window.scrollY;
+      setScrolled(offset > 30);
     };
-
-    // Add event listener
-    if (isMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    // Clean up
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isMenuOpen]);
-
-  // Close mobile menu on larger screens
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Prevent body scrolling when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b dark:border-gray-800">
-      <div className="container mx-auto px-4">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm" : "bg-white dark:bg-gray-900"
+      }`}
+    >
+      <div className="max-w-[1600px] mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center">
             <Button
               variant="ghost"
               size="icon"
-              onClick={toggleMenu}
-              className="lg:hidden"
-              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              className="mr-2 lg:hidden"
+              onClick={() => setMobileMenuOpen(true)}
             >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              <Menu className="h-6 w-6" />
             </Button>
             <Logo />
           </div>
 
           <nav className="hidden lg:flex items-center space-x-8">
-            <CategoryMenu />
             <ProductMenu />
+            <CategoryMenu />
             <Link to="/new-arrivals" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
               New Arrivals
             </Link>
@@ -86,113 +73,133 @@ export const Header = () => {
             </Link>
           </nav>
 
-          <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex items-center">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="mr-2"
+              onClick={() => setSearchOpen(!searchOpen)}
+            >
+              {searchOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Search className="h-5 w-5" />
+              )}
+            </Button>
             <ThemeToggle />
-            <UserMenu />
-            <WishlistButton />
-            <CartMenu />
+            <div className="hidden md:flex items-center space-x-1">
+              <WishlistButton />
+              <CompareButton />
+              <CartMenu />
+              <UserMenu />
+            </div>
           </div>
         </div>
+
+        {/* Search Bar */}
+        {searchOpen && (
+          <div className="py-3 border-t border-gray-200 dark:border-gray-700">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <input
+                type="text"
+                placeholder="Search for products..."
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Mobile menu */}
-      {isMenuOpen && (
-        <div 
-          ref={menuRef}
-          className="lg:hidden fixed inset-0 top-16 bg-white dark:bg-gray-900 z-40 overflow-y-auto"
-        >
-          <div className="container mx-auto px-4 py-6 space-y-6">
-            <div className="border-b dark:border-gray-800 pb-4">
-              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">Categories</h3>
-              {categories.map((category) => (
-                <div key={category.name} className="mb-4">
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 bg-white dark:bg-gray-900 overflow-y-auto">
+          <div className="max-w-[1600px] mx-auto px-4 py-4">
+            <div className="flex items-center justify-between mb-6">
+              <Logo />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <X className="h-6 w-6" />
+              </Button>
+            </div>
+            
+            <nav className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <Link 
+                  to="/all-products"
+                  className="flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-800 rounded-lg"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span className="text-lg font-medium">All Products</span>
+                </Link>
+                <Link 
+                  to="/new-arrivals"
+                  className="flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-800 rounded-lg"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span className="text-lg font-medium">New Arrivals</span>
+                </Link>
+                <Link 
+                  to="/best-sellers"
+                  className="flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-800 rounded-lg"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span className="text-lg font-medium">Best Sellers</span>
+                </Link>
+                <Link 
+                  to="/deals"
+                  className="flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-800 rounded-lg"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span className="text-lg font-medium">Deals</span>
+                </Link>
+              </div>
+              
+              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                <h3 className="text-lg font-medium mb-2">Categories</h3>
+                <div className="grid grid-cols-2 gap-2">
                   <Link 
-                    to={`/category/${category.name.toLowerCase().replace(/\s+/g, "-")}`}
-                    className="text-lg font-medium dark:text-white mb-2 block"
-                    onClick={() => setIsMenuOpen(false)}
+                    to="/category/furniture" 
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
+                    onClick={() => setMobileMenuOpen(false)}
                   >
-                    {category.name}
+                    Furniture
                   </Link>
-                  <div className="grid grid-cols-2 gap-2 pl-2">
-                    {category.subcategories.map((sub) => (
-                      <Link
-                        key={sub}
-                        to={`/category/${category.name.toLowerCase().replace(/\s+/g, "-")}/${sub.toLowerCase().replace(/\s+/g, "-")}`}
-                        className="text-sm dark:text-gray-300 py-1"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        {sub}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="border-b dark:border-gray-800 pb-4">
-              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">Products</h3>
-              {productTypes.map((type) => (
-                <div key={type.name} className="mb-4">
                   <Link 
-                    to={`/products/${type.name.toLowerCase().replace(/\s+/g, "-")}`}
-                    className="text-lg font-medium dark:text-white mb-2 block"
-                    onClick={() => setIsMenuOpen(false)}
+                    to="/category/electronics" 
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
+                    onClick={() => setMobileMenuOpen(false)}
                   >
-                    {type.name}
+                    Electronics
                   </Link>
-                  <div className="grid grid-cols-2 gap-2 pl-2">
-                    {type.products.slice(0, 4).map((product, index) => (
-                      <Link
-                        key={index}
-                        to={`/products/${type.name.toLowerCase().replace(/\s+/g, "-")}/${product.name.toLowerCase().replace(/\s+/g, "-")}`}
-                        className="text-sm dark:text-gray-300 py-1"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        {product.name}
-                      </Link>
-                    ))}
-                  </div>
+                  <Link 
+                    to="/category/kitchen" 
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Kitchen
+                  </Link>
+                  <Link 
+                    to="/category/bathroom" 
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Bathroom
+                  </Link>
                 </div>
-              ))}
-            </div>
+              </div>
 
-            <div className="flex flex-col space-y-4">
-              <Link 
-                to="/about-us" 
-                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                About Us
-              </Link>
-              <Link 
-                to="/contact" 
-                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Contact
-              </Link>
-              <Link 
-                to="/faq" 
-                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                FAQ
-              </Link>
-              <Link 
-                to="/privacy-policy" 
-                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Privacy Policy
-              </Link>
-              <Link 
-                to="/terms-of-service" 
-                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Terms of Service
-              </Link>
-            </div>
+              <div className="flex justify-around border-t border-b border-gray-200 dark:border-gray-700 py-4">
+                <WishlistButton />
+                <CompareButton />
+                <CartMenu />
+                <UserMenu />
+                <ThemeToggle />
+              </div>
+            </nav>
           </div>
         </div>
       )}

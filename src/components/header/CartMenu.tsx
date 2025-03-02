@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ShoppingCart, Plus, Minus, Trash2 } from "lucide-react";
 import {
   HoverCard,
@@ -10,8 +10,17 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
-// Mock cart data - in a real app, this would come from a state management solution
-const initialCartItems = [
+// Create a cart context to share cart state across components
+export type CartItem = {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+};
+
+// Default cart items
+const defaultCartItems: CartItem[] = [
   {
     id: 1,
     name: "Premium Headphones",
@@ -28,33 +37,103 @@ const initialCartItems = [
   },
 ];
 
+// Get cart from localStorage or use default
+const getInitialCart = (): CartItem[] => {
+  const savedCart = localStorage.getItem('cart');
+  return savedCart ? JSON.parse(savedCart) : defaultCartItems;
+};
+
+// Create a global cart state that can be imported by other components
+let globalCartItems: CartItem[] = getInitialCart();
+let cartUpdateListeners: Function[] = [];
+
+export const addToCart = (product: {
+  name: string;
+  price: number | string;
+  image: string;
+  quantity?: number;
+}) => {
+  const price = typeof product.price === 'string' 
+    ? parseFloat(product.price.replace('$', '')) 
+    : product.price;
+  
+  const existingItem = globalCartItems.find(item => item.name === product.name);
+  
+  if (existingItem) {
+    existingItem.quantity += product.quantity || 1;
+  } else {
+    const newItem: CartItem = {
+      id: globalCartItems.length + 1,
+      name: product.name,
+      price: price,
+      quantity: product.quantity || 1,
+      image: product.image
+    };
+    globalCartItems = [...globalCartItems, newItem];
+  }
+  
+  // Save to localStorage and notify listeners
+  localStorage.setItem('cart', JSON.stringify(globalCartItems));
+  cartUpdateListeners.forEach(listener => listener(globalCartItems));
+  return globalCartItems;
+};
+
+export const removeFromCart = (id: number) => {
+  globalCartItems = globalCartItems.filter(item => item.id !== id);
+  localStorage.setItem('cart', JSON.stringify(globalCartItems));
+  cartUpdateListeners.forEach(listener => listener(globalCartItems));
+  return globalCartItems;
+};
+
+export const updateCartItemQuantity = (id: number, change: number) => {
+  globalCartItems = globalCartItems.map(item => 
+    item.id === id 
+      ? { ...item, quantity: Math.max(1, item.quantity + change) } 
+      : item
+  );
+  localStorage.setItem('cart', JSON.stringify(globalCartItems));
+  cartUpdateListeners.forEach(listener => listener(globalCartItems));
+  return globalCartItems;
+};
+
+export const getCartCount = (): number => {
+  return globalCartItems.reduce((sum, item) => sum + item.quantity, 0);
+};
+
+export const getCartTotal = (): number => {
+  return globalCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+};
+
 export const CartMenu = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [cartItems, setCartItems] = useState(initialCartItems);
+  const [cartItems, setCartItems] = useState<CartItem[]>(getInitialCart());
   
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const cartTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  // Subscribe to cart updates
+  useEffect(() => {
+    const updateCart = (newCart: CartItem[]) => {
+      setCartItems([...newCart]);
+    };
+    
+    cartUpdateListeners.push(updateCart);
+    return () => {
+      cartUpdateListeners = cartUpdateListeners.filter(listener => listener !== updateCart);
+    };
+  }, []);
 
   const handleCheckout = () => {
     navigate("/checkout");
   };
 
-  const updateQuantity = (id: number, change: number) => {
-    setCartItems(prev => 
-      prev.map(item => 
-        item.id === id 
-          ? { 
-              ...item, 
-              quantity: Math.max(1, item.quantity + change) // Ensure quantity doesn't go below 1
-            } 
-          : item
-      )
-    );
+  const handleUpdateQuantity = (id: number, change: number) => {
+    updateCartItemQuantity(id, change);
   };
 
-  const removeItem = (id: number) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
+  const handleRemoveItem = (id: number) => {
+    removeFromCart(id);
     toast({
       title: "Item removed",
       description: "The item has been removed from your cart",
@@ -99,7 +178,7 @@ export const CartMenu = () => {
                           variant="outline" 
                           size="icon" 
                           className="h-6 w-6"
-                          onClick={() => updateQuantity(item.id, -1)}
+                          onClick={() => handleUpdateQuantity(item.id, -1)}
                         >
                           <Minus className="h-3 w-3" />
                         </Button>
@@ -108,7 +187,7 @@ export const CartMenu = () => {
                           variant="outline" 
                           size="icon" 
                           className="h-6 w-6"
-                          onClick={() => updateQuantity(item.id, 1)}
+                          onClick={() => handleUpdateQuantity(item.id, 1)}
                         >
                           <Plus className="h-3 w-3" />
                         </Button>
@@ -116,7 +195,7 @@ export const CartMenu = () => {
                           variant="ghost" 
                           size="icon" 
                           className="h-6 w-6 ml-auto text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30"
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => handleRemoveItem(item.id)}
                         >
                           <Trash2 className="h-3 w-3" />
                         </Button>

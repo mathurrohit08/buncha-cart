@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Header } from "@/components/Header";
@@ -8,31 +7,29 @@ import { ShoppingCart, Truck, Package, Heart, Star, Info, ArrowLeft } from "luci
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { productTypes } from "@/components/header/ProductMenu";
+import { addToCart } from "@/components/header/CartMenu";
+import { addToWishlist, isInWishlist } from "@/components/header/WishlistButton";
 
 const Products = () => {
   const { toast } = useToast();
   const { productType, productName } = useParams();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  
-  // Find the matching product type
+
   const productTypeData = productTypes.find(
     type => type.name.toLowerCase().replace(/\s+/g, "-") === productType
   );
-  
-  // Find the specific product if productName is provided
+
   const product = productName 
     ? productTypeData?.products.find(
         p => p.name.toLowerCase().replace(/\s+/g, "-") === productName
       )
     : null;
-  
-  // If we have productType but no specific product, we show all products of that type
+
   const productsToShow = !productName && productTypeData 
     ? productTypeData.products 
     : [];
-  
-  // Set default selected image
+
   useEffect(() => {
     if (product) {
       setSelectedImage(product.image);
@@ -41,6 +38,13 @@ const Products = () => {
 
   const handleAddToCart = () => {
     if (product) {
+      addToCart({
+        name: product.name,
+        price: parseFloat(productPrice),
+        image: product.image,
+        quantity: quantity
+      });
+      
       toast({
         title: "Added to cart",
         description: `${quantity} x ${product.name} has been added to your cart.`,
@@ -48,14 +52,24 @@ const Products = () => {
     }
   };
 
-  // Random price based on product name to make it consistent
+  const handleAddToWishlist = (product: { name: string, image: string }) => {
+    addToWishlist({
+      name: product.name,
+      price: getProductPrice(product.name),
+      image: product.image
+    });
+    
+    toast({
+      title: "Added to wishlist",
+      description: `${product.name} has been added to your wishlist.`,
+    });
+  };
+
   const getProductPrice = (name: string) => {
-    // Simple hash function to create deterministic prices
     const hash = name.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
     return (hash % 300 + 99.99).toFixed(2);
   };
 
-  // Generate some realistic specifications
   const generateSpecs = (name: string) => {
     if (name.includes("Headphones") || name.includes("Earbuds")) {
       return [
@@ -108,7 +122,7 @@ const Products = () => {
     return (
       <div className="min-h-screen">
         <Header />
-        <main className="pt-24 pb-16 max-w-[1600px] mx-auto px-4">
+        <main className="pt-24 pb-16">
           <div className="text-center">
             <h1 className="text-3xl font-bold mb-4">Product Category Not Found</h1>
             <p className="mb-8">Sorry, we couldn't find the product category you're looking for.</p>
@@ -122,7 +136,6 @@ const Products = () => {
     );
   }
 
-  // Product category page (list of products)
   if (!productName) {
     return (
       <div className="min-h-screen">
@@ -165,8 +178,9 @@ const Products = () => {
                           variant="ghost" 
                           size="icon"
                           className="absolute top-2 right-2 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 rounded-full"
+                          onClick={() => handleAddToWishlist(product)}
                         >
-                          <Heart className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+                          <Heart className={`h-5 w-5 ${isInWishlist(product.name) ? 'fill-red-500 text-red-500' : 'text-gray-600 dark:text-gray-300'}`} />
                         </Button>
                       </div>
                       <div className="p-4">
@@ -191,6 +205,13 @@ const Products = () => {
                             size="sm" 
                             className="h-8"
                             onClick={() => {
+                              addToCart({
+                                name: product.name,
+                                price: parseFloat(getProductPrice(product.name)),
+                                image: product.image,
+                                quantity: 1
+                              });
+                              
                               toast({
                                 title: "Added to cart",
                                 description: `${product.name} has been added to your cart.`,
@@ -214,7 +235,6 @@ const Products = () => {
     );
   }
 
-  // Single product page
   if (!product) {
     return (
       <div className="min-h-screen">
@@ -269,7 +289,6 @@ const Products = () => {
                 >
                   <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                 </div>
-                {/* Adding extra sample images for gallery effect */}
                 {[...Array(3)].map((_, index) => (
                   <div 
                     key={index}
@@ -369,8 +388,9 @@ const Products = () => {
                     variant="outline"
                     size="lg"
                     className="w-full sm:w-auto"
+                    onClick={() => handleAddToWishlist(product)}
                   >
-                    <Heart className="mr-2 h-5 w-5" />
+                    <Heart className={`mr-2 h-5 w-5 ${isInWishlist(product.name) ? 'fill-red-500 text-red-500' : ''}`} />
                     Wishlist
                   </Button>
                   
@@ -379,6 +399,14 @@ const Products = () => {
                       variant="secondary"
                       size="lg"
                       className="w-full"
+                      onClick={() => {
+                        addToCart({
+                          name: product.name,
+                          price: parseFloat(productPrice),
+                          image: product.image,
+                          quantity: quantity
+                        });
+                      }}
                     >
                       Buy Now
                     </Button>
@@ -395,7 +423,6 @@ const Products = () => {
             </motion.div>
           </div>
 
-          {/* Related Products */}
           {relatedProducts && relatedProducts.length > 0 && (
             <div className="mt-16">
               <h2 className="text-2xl font-bold mb-6">You Might Also Like</h2>
@@ -417,6 +444,14 @@ const Products = () => {
                             className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         </Link>
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          className="absolute top-2 right-2 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 rounded-full"
+                          onClick={() => handleAddToWishlist(relatedProduct)}
+                        >
+                          <Heart className={`h-5 w-5 ${isInWishlist(relatedProduct.name) ? 'fill-red-500 text-red-500' : 'text-gray-600 dark:text-gray-300'}`} />
+                        </Button>
                       </div>
                       <div className="p-4">
                         <Link to={`/products/${productType}/${relatedProduct.name.toLowerCase().replace(/\s+/g, "-")}`}>
@@ -431,6 +466,13 @@ const Products = () => {
                           <Button 
                             size="sm"
                             onClick={() => {
+                              addToCart({
+                                name: relatedProduct.name,
+                                price: parseFloat(getProductPrice(relatedProduct.name)),
+                                image: relatedProduct.image,
+                                quantity: 1
+                              });
+                              
                               toast({
                                 title: "Added to cart",
                                 description: `${relatedProduct.name} has been added to your cart.`,
