@@ -40,24 +40,25 @@ export const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="max-w-[1600px] mx-auto px-4">
+    <footer className="bg-gray-900 text-white overflow-hidden">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6">
         {/* Newsletter Section */}
-        <div className="py-12 border-b border-gray-800">
+        <div className="py-10 sm:py-12 border-b border-gray-800">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
-              <h3 className="text-2xl font-bold mb-2">Subscribe to our newsletter</h3>
+              <h3 className="text-xl sm:text-2xl font-bold mb-2">Subscribe to our newsletter</h3>
               <p className="text-gray-400 mb-4">
                 Get the latest updates, exclusive offers, and design tips straight to your inbox.
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <input
                 type="email"
                 placeholder="Enter your email"
                 className="flex-grow px-4 py-3 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                aria-label="Email address"
               />
-              <Button className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 transition-colors rounded-md font-medium">
+              <Button className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 transition-colors rounded-md font-medium whitespace-nowrap">
                 Subscribe
               </Button>
             </div>
@@ -65,7 +66,7 @@ export const Footer = () => {
         </div>
 
         {/* Main Footer Links */}
-        <div className="py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="py-10 sm:py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <h3 className="text-lg font-bold mb-6 relative inline-block">
               Company
@@ -223,8 +224,8 @@ export const Footer = () => {
         {/* Social & Copyright Footer */}
         <div className="py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div>
-              <Link to="/" className="flex items-center gap-2">
+            <div className="text-center md:text-left">
+              <Link to="/" className="flex items-center justify-center md:justify-start gap-2">
                 <img src="/lovable-uploads/d0289308-98a6-4913-b7cd-73b0278e8893.png" alt="Logo" className="h-10" />
                 <span className="text-xl font-bold">Store</span>
               </Link>

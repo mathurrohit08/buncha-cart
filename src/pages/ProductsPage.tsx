@@ -1,15 +1,17 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
-import { ShoppingCart, Filter, Star, ChevronDown, ChevronUp, Heart } from "lucide-react";
+import { ShoppingCart, Filter, Star, ChevronDown, ChevronUp, Heart, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { productTypes } from "@/components/header/ProductMenu";
-import { categories } from "@/components/header/CategoryMenu";
+import { categories } from "@/components/Categories";
 import { useToast } from "@/hooks/use-toast";
 import { addToCart } from "@/components/header/CartMenu";
 import { addToWishlist, isInWishlist } from "@/components/header/WishlistButton";
+import { QuickView } from "@/components/QuickView";
 
 const ProductsPage = () => {
   const { toast } = useToast();
@@ -74,9 +76,9 @@ const ProductsPage = () => {
               <div className="mb-10">
                 <h2 className="text-xl font-semibold mb-4">Shop by Category</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                  {categories.map((category) => (
+                  {categories.slice(0, 5).map((category) => (
                     <motion.div
-                      key={category.name}
+                      key={category.id}
                       whileHover={{ scale: 1.05 }}
                       className="cursor-pointer"
                       onClick={() => navigate(`/category/${category.name.toLowerCase().replace(/\s+/g, "-")}`)}
@@ -193,14 +195,25 @@ const ProductsPage = () => {
                               className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                             />
                           </Link>
-                          <Button 
-                            variant="ghost" 
-                            size="icon"
-                            className="absolute top-2 right-2 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 rounded-full"
-                            onClick={() => handleAddToWishlist(product)}
-                          >
-                            <Heart className={`h-5 w-5 ${isInWishlist(product.name) ? 'fill-red-500 text-red-500' : 'text-gray-600 dark:text-gray-300'}`} />
-                          </Button>
+                          <div className="absolute top-2 right-2 flex flex-col gap-2">
+                            <Button 
+                              variant="ghost" 
+                              size="icon"
+                              className="bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 rounded-full"
+                              onClick={() => handleAddToWishlist(product)}
+                            >
+                              <Heart className={`h-5 w-5 ${isInWishlist(product.name) ? 'fill-red-500 text-red-500' : 'text-gray-600 dark:text-gray-300'}`} />
+                            </Button>
+                            <QuickView product={product}>
+                              <Button 
+                                variant="ghost" 
+                                size="icon"
+                                className="bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 rounded-full"
+                              >
+                                <Eye className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+                              </Button>
+                            </QuickView>
+                          </div>
                         </div>
                         <div className="p-4">
                           <div className="flex items-center mb-1">
