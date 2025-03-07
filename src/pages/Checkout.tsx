@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -10,9 +11,18 @@ import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { LocationMap } from "@/components/checkout/LocationMap";
 import { CartItem, getCartCount, getCartTotal } from "@/components/header/CartMenu"; 
-import { calculateShippingCost, estimateDistanceByZipCode, STORE_ZIP_CODE, ShippingTier, shippingTiers } from "@/utils/shippingCalculator";
+import { 
+  calculateShippingCost, 
+  estimateDistanceByZipCode, 
+  STORE_ZIP_CODE, 
+  ShippingTier, 
+  shippingTiers, 
+  countries, 
+  getLocationFromZipCode 
+} from "@/utils/shippingCalculator";
 import { Link } from "react-router-dom";
 
 // Mock saved addresses
@@ -103,6 +113,10 @@ const Checkout = () => {
   const [showMap, setShowMap] = useState(false);
   const [shippingTier, setShippingTier] = useState<ShippingTier | null>(null);
   const [selectedShippingTier, setSelectedShippingTier] = useState<ShippingTier | null>(null);
+  const [showShippingOptions, setShowShippingOptions] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState<string>("United States");
+  const [availableStates, setAvailableStates] = useState<{name: string, code: string}[]>([]);
+  const [availableCities, setAvailableCities] = useState<{name: string, zipCodes: string[]}[]>([]);
   
   useEffect(() => {
     // Get cart items from localStorage on component mount
@@ -119,8 +133,15 @@ const Checkout = () => {
       const tier = calculateShippingCost(distance);
       setShippingTier(tier);
       setSelectedShippingTier(tier);
+      setShowShippingOptions(true);
     }
-  }, [selectedAddressId]);
+
+    // Set available states based on default country
+    const countryData = countries.find(c => c.name === selectedCountry);
+    if (countryData) {
+      setAvailableStates(countryData.states.map(s => ({name: s.name, code: s.code})));
+    }
+  }, [selectedAddressId, selectedCountry]);
 
   const handleAddToCart = (product: { id: number, name: string, price: number, image: string }) => {
     const newItem: CartItem = {
@@ -159,7 +180,72 @@ const Checkout = () => {
       const tier = calculateShippingCost(distance);
       setShippingTier(tier);
       setSelectedShippingTier(tier);
+      setShowShippingOptions(true);
+      
+      // Try to auto-detect location based on zip code
+      const locationInfo = getLocationFromZipCode(value);
+      if (locationInfo) {
+        setFormData(prev => ({
+          ...prev,
+          city: locationInfo.city,
+          state: locationInfo.state,
+          country: locationInfo.country
+        }));
+      }
     }
+  };
+
+  const handleCountryChange = (value: string) => {
+    setFormData(prev => ({ ...prev, country: value }));
+    setSelectedCountry(value);
+    
+    // Reset state and city when country changes
+    setFormData(prev => ({ ...prev, state: '', city: '', zipCode: '' }));
+    
+    // Update available states based on selected country
+    const countryData = countries.find(c => c.name === value);
+    if (countryData) {
+      setAvailableStates(countryData.states.map(s => ({name: s.name, code: s.code})));
+      setAvailableCities([]);
+    }
+    
+    // Hide shipping options until zip code is entered
+    setShowShippingOptions(false);
+    setShippingTier(null);
+    setSelectedShippingTier(null);
+  };
+
+  const handleStateChange = (value: string) => {
+    setFormData(prev => ({ ...prev, state: value }));
+    
+    // Reset city and zip when state changes
+    setFormData(prev => ({ ...prev, city: '', zipCode: '' }));
+    
+    // Update available cities based on selected state
+    const countryData = countries.find(c => c.name === selectedCountry);
+    if (countryData) {
+      const stateData = countryData.states.find(s => s.name === value);
+      if (stateData) {
+        setAvailableCities(stateData.cities);
+      }
+    }
+    
+    // Hide shipping options until zip code is entered
+    setShowShippingOptions(false);
+    setShippingTier(null);
+    setSelectedShippingTier(null);
+  };
+
+  const handleCityChange = (value: string) => {
+    setFormData(prev => ({ ...prev, city: value }));
+    
+    // Reset zip when city changes
+    setFormData(prev => ({ ...prev, zipCode: '' }));
+    
+    // Hide shipping options until zip code is entered
+    setShowShippingOptions(false);
+    setShippingTier(null);
+    setSelectedShippingTier(null);
   };
 
   const handleCardDetailsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -229,9 +315,34 @@ const Checkout = () => {
       const tier = calculateShippingCost(distance);
       setShippingTier(tier);
       setSelectedShippingTier(tier);
+      setShowShippingOptions(true);
       
       // Show the map after selecting an address
       setShowMap(true);
+    }
+  };
+
+  const resetNewAddressForm = () => {
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      address: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      country: "United States",
+    });
+    setShowShippingOptions(false);
+    setShippingTier(null);
+    setSelectedShippingTier(null);
+    setShowMap(false);
+    
+    // Set available states for default country
+    const countryData = countries.find(c => c.name === "United States");
+    if (countryData) {
+      setAvailableStates(countryData.states.map(s => ({name: s.name, code: s.code})));
+      setAvailableCities([]);
     }
   };
 
@@ -286,7 +397,12 @@ const Checkout = () => {
                   {/* Address Tabs */}
                   <Tabs 
                     value={addressMode} 
-                    onValueChange={setAddressMode}
+                    onValueChange={(value) => {
+                      setAddressMode(value);
+                      if (value === "new") {
+                        resetNewAddressForm();
+                      }
+                    }}
                     className="mb-6"
                   >
                     <TabsList className="grid grid-cols-2 mb-4">
@@ -340,7 +456,10 @@ const Checkout = () => {
                         <Button 
                           variant="outline" 
                           className="w-full mt-2 border-dashed"
-                          onClick={() => setAddressMode("new")}
+                          onClick={() => {
+                            setAddressMode("new");
+                            resetNewAddressForm();
+                          }}
                         >
                           <PlusCircle className="mr-2 h-4 w-4" />
                           Add New Address
@@ -396,26 +515,66 @@ const Checkout = () => {
                           />
                         </div>
                         <div>
-                          <Label htmlFor="city">City</Label>
-                          <Input
-                            id="city"
-                            name="city"
-                            value={formData.city}
-                            onChange={handleInputChange}
-                            required
-                            className="mt-1"
-                          />
+                          <Label htmlFor="country">Country</Label>
+                          <Select 
+                            value={formData.country} 
+                            onValueChange={handleCountryChange}
+                          >
+                            <SelectTrigger className="w-full mt-1">
+                              <SelectValue placeholder="Select country" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                {countries.map(country => (
+                                  <SelectItem key={country.code} value={country.name}>
+                                    {country.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
                         </div>
                         <div>
                           <Label htmlFor="state">State/Province</Label>
-                          <Input
-                            id="state"
-                            name="state"
-                            value={formData.state}
-                            onChange={handleInputChange}
-                            required
-                            className="mt-1"
-                          />
+                          <Select 
+                            value={formData.state} 
+                            onValueChange={handleStateChange}
+                            disabled={availableStates.length === 0}
+                          >
+                            <SelectTrigger className="w-full mt-1">
+                              <SelectValue placeholder="Select state" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                {availableStates.map(state => (
+                                  <SelectItem key={state.code} value={state.name}>
+                                    {state.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="city">City</Label>
+                          <Select 
+                            value={formData.city} 
+                            onValueChange={handleCityChange}
+                            disabled={availableCities.length === 0}
+                          >
+                            <SelectTrigger className="w-full mt-1">
+                              <SelectValue placeholder="Select city" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                {availableCities.map(city => (
+                                  <SelectItem key={city.name} value={city.name}>
+                                    {city.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
                         </div>
                         <div>
                           <Label htmlFor="zipCode">ZIP/Postal Code</Label>
@@ -423,17 +582,6 @@ const Checkout = () => {
                             id="zipCode"
                             name="zipCode"
                             value={formData.zipCode}
-                            onChange={handleInputChange}
-                            required
-                            className="mt-1"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="country">Country</Label>
-                          <Input
-                            id="country"
-                            name="country"
-                            value={formData.country}
                             onChange={handleInputChange}
                             required
                             className="mt-1"
@@ -456,54 +604,59 @@ const Checkout = () => {
                     </div>
                   )}
 
-                  <h3 className="text-lg font-semibold mb-3 dark:text-white">Shipping Method</h3>
-                  
-                  {shippingTier && (
-                    <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md border border-blue-200 dark:border-blue-800">
-                      <p className="flex items-center text-blue-700 dark:text-blue-300">
-                        <Truck className="h-5 w-5 mr-2" />
-                        Based on your location, we recommend: <span className="font-medium ml-1">{shippingTier.description}</span>
-                      </p>
-                    </div>
-                  )}
-                  
-                  <RadioGroup 
-                    value={selectedShippingTier?.description || ""} 
-                    onValueChange={(value) => {
-                      const tier = shippingTiers.find(t => t.description === value);
-                      if (tier) setSelectedShippingTier(tier);
-                    }}
-                    className="space-y-3 mb-6"
-                  >
-                    {shippingTiers.map((tier) => (
-                      <div
-                        key={tier.description}
-                        className={`flex items-center justify-between p-3 border rounded-md cursor-pointer ${
-                          selectedShippingTier?.description === tier.description
-                            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400"
-                            : "border-gray-200 dark:border-gray-700"
-                        }`}
-                        onClick={() => setSelectedShippingTier(tier)}
+                  {/* Show shipping options only after a valid zip code is provided */}
+                  {showShippingOptions && (
+                    <>
+                      <h3 className="text-lg font-semibold mb-3 dark:text-white">Shipping Method</h3>
+                      
+                      {shippingTier && (
+                        <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md border border-blue-200 dark:border-blue-800">
+                          <p className="flex items-center text-blue-700 dark:text-blue-300">
+                            <Truck className="h-5 w-5 mr-2" />
+                            Based on your location, we recommend: <span className="font-medium ml-1">{shippingTier.description}</span>
+                          </p>
+                        </div>
+                      )}
+                      
+                      <RadioGroup 
+                        value={selectedShippingTier?.description || ""} 
+                        onValueChange={(value) => {
+                          const tier = shippingTiers.find(t => t.description === value);
+                          if (tier) setSelectedShippingTier(tier);
+                        }}
+                        className="space-y-3 mb-6"
                       >
-                        <div className="flex items-center">
-                          <RadioGroupItem 
-                            value={tier.description} 
-                            id={`shipping-${tier.minMiles}-${tier.maxMiles}`} 
-                            className="mr-3"
-                          />
-                          <div>
-                            <p className="font-medium dark:text-white">{tier.description}</p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                              {tier.minMiles}-{tier.maxMiles === Infinity ? '∞' : tier.maxMiles} miles away
+                        {shippingTiers.map((tier) => (
+                          <div
+                            key={tier.description}
+                            className={`flex items-center justify-between p-3 border rounded-md cursor-pointer ${
+                              selectedShippingTier?.description === tier.description
+                                ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400"
+                                : "border-gray-200 dark:border-gray-700"
+                            }`}
+                            onClick={() => setSelectedShippingTier(tier)}
+                          >
+                            <div className="flex items-center">
+                              <RadioGroupItem 
+                                value={tier.description} 
+                                id={`shipping-${tier.minMiles}-${tier.maxMiles}`} 
+                                className="mr-3"
+                              />
+                              <div>
+                                <p className="font-medium dark:text-white">{tier.description}</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                  {tier.minMiles}-{tier.maxMiles === Infinity ? '∞' : tier.maxMiles} miles away
+                                </p>
+                              </div>
+                            </div>
+                            <p className="font-medium dark:text-white">
+                              {tier.cost === 0 ? 'FREE' : `$${tier.cost.toFixed(2)}`}
                             </p>
                           </div>
-                        </div>
-                        <p className="font-medium dark:text-white">
-                          {tier.cost === 0 ? 'FREE' : `$${tier.cost.toFixed(2)}`}
-                        </p>
-                      </div>
-                    ))}
-                  </RadioGroup>
+                        ))}
+                      </RadioGroup>
+                    </>
+                  )}
                 </div>
 
                 {/* Payment Section */}
@@ -512,33 +665,35 @@ const Checkout = () => {
                   
                   <div className="mb-6">
                     <Label className="text-base mb-3 block">Select Payment Method</Label>
-                    <RadioGroup 
-                      value={paymentMethod} 
-                      onValueChange={setPaymentMethod}
-                      className="grid grid-cols-2 md:grid-cols-3 gap-3"
-                    >
-                      {paymentMethods.map((method) => (
-                        <div 
-                          key={method.id}
-                          className={`flex items-center p-3 border rounded-md cursor-pointer ${
-                            paymentMethod === method.id 
-                              ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20" 
-                              : "border-gray-200 dark:border-gray-700"
-                          }`}
-                          onClick={() => setPaymentMethod(method.id)}
-                        >
-                          <RadioGroupItem 
-                            id={`payment-${method.id}`} 
-                            value={method.id} 
-                            className="mr-2"
-                          />
-                          <Label htmlFor={`payment-${method.id}`} className="flex items-center cursor-pointer">
-                            <span className="text-xl mr-2">{method.icon}</span>
-                            <span className="font-medium text-sm dark:text-white">{method.name}</span>
-                          </Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      <RadioGroup 
+                        value={paymentMethod} 
+                        onValueChange={setPaymentMethod}
+                        className="w-full grid grid-cols-2 md:grid-cols-3 gap-3"
+                      >
+                        {paymentMethods.map((method) => (
+                          <div 
+                            key={method.id}
+                            className={`flex items-center p-3 border rounded-md cursor-pointer ${
+                              paymentMethod === method.id 
+                                ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20" 
+                                : "border-gray-200 dark:border-gray-700"
+                            }`}
+                            onClick={() => setPaymentMethod(method.id)}
+                          >
+                            <RadioGroupItem 
+                              id={`payment-${method.id}`} 
+                              value={method.id} 
+                              className="mr-2"
+                            />
+                            <Label htmlFor={`payment-${method.id}`} className="flex items-center cursor-pointer w-full">
+                              <span className="text-xl mr-2">{method.icon}</span>
+                              <span className="font-medium text-sm dark:text-white">{method.name}</span>
+                            </Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </div>
                   </div>
 
                   {/* Credit/Debit Card Form */}
@@ -622,16 +777,17 @@ const Checkout = () => {
                   {paymentMethod === "netbanking" && (
                     <div className="p-4 space-y-4">
                       <Label htmlFor="bankSelect">Select Your Bank</Label>
-                      <select 
-                        id="bankSelect" 
-                        className="w-full h-10 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-base"
-                      >
-                        <option value="">Select a bank</option>
-                        <option value="bank1">Global Bank</option>
-                        <option value="bank2">City Bank</option>
-                        <option value="bank3">National Bank</option>
-                        <option value="bank4">State Bank</option>
-                      </select>
+                      <Select>
+                        <SelectTrigger id="bankSelect" className="w-full">
+                          <SelectValue placeholder="Select a bank" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="bank1">Global Bank</SelectItem>
+                          <SelectItem value="bank2">City Bank</SelectItem>
+                          <SelectItem value="bank3">National Bank</SelectItem>
+                          <SelectItem value="bank4">State Bank</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   )}
 
@@ -645,7 +801,7 @@ const Checkout = () => {
                   <Button
                     type="submit"
                     className="w-full"
-                    disabled={isProcessing || cartItems.length === 0}
+                    disabled={isProcessing || cartItems.length === 0 || !selectedShippingTier}
                     onClick={handleSubmit}
                   >
                     {isProcessing ? (
@@ -714,7 +870,7 @@ const Checkout = () => {
                   <h2 className="text-xl font-semibold mb-4 dark:text-white">Order Summary</h2>
                   
                   {cartItems.length > 0 ? (
-                    <div className="space-y-4 mb-6">
+                    <div className="space-y-4 mb-6 max-h-[50vh] overflow-y-auto pr-2 scrollbar-none">
                       {cartItems.map((item) => (
                         <div key={item.id} className="flex gap-4">
                           <img
@@ -820,4 +976,3 @@ const Checkout = () => {
 };
 
 export default Checkout;
-
