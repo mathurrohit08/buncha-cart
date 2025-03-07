@@ -51,24 +51,40 @@ export const IndustryTrust: React.FC = () => {
         
         <div className="relative">
           {/* First row scrolling left */}
-          <div className="overflow-hidden">
+          <div className="overflow-hidden relative">
             <motion.div
               initial={{ x: 0 }}
               animate={{ x: "-50%" }}
               transition={{
-                duration: 30,
+                duration: 40,
                 repeat: Infinity,
                 ease: "linear",
                 repeatType: "loop"
               }}
-              className="flex"
+              className="flex absolute whitespace-nowrap"
             >
               {duplicatedLogos.map((company, index) => (
                 <div key={`${company.name}-${index}`} className="mx-8 flex-shrink-0">
                   <img
                     src={company.logo}
                     alt={company.name}
-                    className="h-20 w-20 object-contain rounded-full bg-white p-2"
+                    className="h-20 w-20 object-contain rounded-full bg-white p-2 shadow-sm"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
+                    }}
+                  />
+                  <p className="text-center text-sm mt-2 dark:text-gray-300">{company.name}</p>
+                </div>
+              ))}
+              {duplicatedLogos.map((company, index) => (
+                <div key={`${company.name}-repeat-${index}`} className="mx-8 flex-shrink-0">
+                  <img
+                    src={company.logo}
+                    alt={company.name}
+                    className="h-20 w-20 object-contain rounded-full bg-white p-2 shadow-sm"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
+                    }}
                   />
                   <p className="text-center text-sm mt-2 dark:text-gray-300">{company.name}</p>
                 </div>
@@ -77,24 +93,40 @@ export const IndustryTrust: React.FC = () => {
           </div>
           
           {/* Second row scrolling right with different logos */}
-          <div className="overflow-hidden mt-6">
+          <div className="overflow-hidden mt-12 relative h-32">
             <motion.div
               initial={{ x: "-50%" }}
-              animate={{ x: 0 }}
+              animate={{ x: "0%" }}
               transition={{
-                duration: 30,
+                duration: 40,
                 repeat: Infinity,
                 ease: "linear",
                 repeatType: "loop"
               }}
-              className="flex"
+              className="flex absolute whitespace-nowrap"
             >
               {[...duplicatedLogos].reverse().map((company, index) => (
                 <div key={`${company.name}-rev-${index}`} className="mx-8 flex-shrink-0">
                   <img
                     src={company.logo}
                     alt={company.name}
-                    className="h-20 w-20 object-contain rounded-full bg-white p-2"
+                    className="h-20 w-20 object-contain rounded-full bg-white p-2 shadow-sm"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
+                    }}
+                  />
+                  <p className="text-center text-sm mt-2 dark:text-gray-300">{company.name}</p>
+                </div>
+              ))}
+              {[...duplicatedLogos].reverse().map((company, index) => (
+                <div key={`${company.name}-rev-repeat-${index}`} className="mx-8 flex-shrink-0">
+                  <img
+                    src={company.logo}
+                    alt={company.name}
+                    className="h-20 w-20 object-contain rounded-full bg-white p-2 shadow-sm"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
+                    }}
                   />
                   <p className="text-center text-sm mt-2 dark:text-gray-300">{company.name}</p>
                 </div>

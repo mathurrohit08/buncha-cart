@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
@@ -135,6 +136,9 @@ const ProductsPage = () => {
                           src={category.image}
                           alt={category.name}
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=500&h=350";
+                          }}
                         />
                         <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
                           <span className="text-white font-medium">{category.name}</span>
@@ -177,99 +181,112 @@ const ProductsPage = () => {
             {/* Industry Trust banner */}
             <IndustryTrust />
             
-            {/* Product Filters component */}
-            <ProductFilters 
-              availableCategories={productTypes.map(type => ({ id: type.name, name: type.name }))}
-              availableProductTypes={productTypes}
-              filterOptions={filterOptions}
-              setFilterOptions={setFilterOptions}
-              minPrice={minPrice}
-              maxPrice={maxPrice}
-            />
-            
-            <motion.div 
-              className="flex-grow"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <div className={`grid ${getGridCols()} gap-6`}>
-                {filteredProducts.map((product, index) => (
-                  <motion.div
-                    key={`${product.name}-${index}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className="group"
-                  >
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-                      <div className="relative">
-                        <Link to={`/products/${product.type.toLowerCase().replace(/\s+/g, "-")}/${product.name.toLowerCase().replace(/\s+/g, "-")}`}>
-                          <img
-                            src={product.image || "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=500&h=350"}
-                            alt={product.name}
-                            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=500&h=350";
-                            }}
-                          />
-                        </Link>
-                        <div className="absolute top-2 right-2 flex flex-col gap-2">
-                          <Button 
-                            variant="ghost" 
-                            size="icon"
-                            className="bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 rounded-full"
-                            onClick={() => handleAddToWishlist(product)}
-                          >
-                            <Heart className={`h-5 w-5 ${isInWishlist(product.name) ? 'fill-red-500 text-red-500' : 'text-gray-600 dark:text-gray-300'}`} />
-                          </Button>
-                          <QuickView product={product}>
+            <div className="flex flex-col lg:flex-row gap-6 mt-8">
+              {/* Product Filters component */}
+              <div className="lg:w-64 flex-shrink-0">
+                <ProductFilters 
+                  availableCategories={productTypes.map(type => ({ id: type.name, name: type.name }))}
+                  availableProductTypes={productTypes}
+                  filterOptions={filterOptions}
+                  setFilterOptions={setFilterOptions}
+                  minPrice={minPrice}
+                  maxPrice={maxPrice}
+                />
+              </div>
+              
+              <motion.div 
+                className="flex-grow"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <div className={`grid ${getGridCols()} gap-6`}>
+                  {filteredProducts.map((product, index) => (
+                    <motion.div
+                      key={`${product.name}-${index}`}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                      className="group"
+                    >
+                      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden h-full flex flex-col">
+                        <div className="relative">
+                          <Link to={`/products/${product.type.toLowerCase().replace(/\s+/g, "-")}/${product.name.toLowerCase().replace(/\s+/g, "-")}`}>
+                            <img
+                              src={product.image || "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=500&h=350"}
+                              alt={product.name}
+                              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=500&h=350";
+                              }}
+                            />
+                          </Link>
+                          <div className="absolute top-2 right-2 flex flex-col gap-2">
                             <Button 
                               variant="ghost" 
                               size="icon"
                               className="bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 rounded-full"
+                              onClick={() => handleAddToWishlist(product)}
                             >
-                              <Eye className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+                              <Heart className={`h-5 w-5 ${isInWishlist(product.name) ? 'fill-red-500 text-red-500' : 'text-gray-600 dark:text-gray-300'}`} />
                             </Button>
-                          </QuickView>
-                        </div>
-                      </div>
-                      <div className="p-4">
-                        <div className="flex items-center mb-1">
-                          <span className="text-xs font-medium text-purple-600 dark:text-purple-400">{product.type}</span>
-                        </div>
-                        <Link to={`/products/${product.type.toLowerCase().replace(/\s+/g, "-")}/${product.name.toLowerCase().replace(/\s+/g, "-")}`} className="block">
-                          <h3 className="font-medium text-gray-900 dark:text-white mb-1 hover:text-purple-700 dark:hover:text-purple-400 transition-colors line-clamp-1">
-                            {product.name}
-                          </h3>
-                        </Link>
-                        <div className="flex items-center mb-2">
-                          <div className="flex">
-                            {[...Array(5)].map((_, i) => (
-                              <Star key={i} className={`h-4 w-4 ${i < 4 ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300 dark:text-gray-600'}`} />
-                            ))}
+                            <QuickView product={product}>
+                              <Button 
+                                variant="ghost" 
+                                size="icon"
+                                className="bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 rounded-full"
+                              >
+                                <Eye className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+                              </Button>
+                            </QuickView>
                           </div>
-                          <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">(24)</span>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium text-gray-900 dark:text-white">
-                            ${product.price.toFixed(2)}
-                          </span>
-                          <Button 
-                            size="sm" 
-                            className="h-8"
-                            onClick={() => handleAddToCart(product)}
-                          >
-                            <ShoppingCart className="h-4 w-4 mr-1" />
-                            Add
-                          </Button>
+                        <div className="p-4 flex flex-col flex-grow">
+                          <div className="flex items-center mb-1">
+                            <span className="text-xs font-medium text-purple-600 dark:text-purple-400">{product.type}</span>
+                          </div>
+                          <Link to={`/products/${product.type.toLowerCase().replace(/\s+/g, "-")}/${product.name.toLowerCase().replace(/\s+/g, "-")}`} className="block flex-grow">
+                            <h3 className="font-medium text-gray-900 dark:text-white mb-1 hover:text-purple-700 dark:hover:text-purple-400 transition-colors line-clamp-2">
+                              {product.name}
+                            </h3>
+                          </Link>
+                          <div className="flex items-center mb-2">
+                            <div className="flex">
+                              {[...Array(5)].map((_, i) => (
+                                <Star key={i} className={`h-4 w-4 ${i < 4 ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300 dark:text-gray-600'}`} />
+                              ))}
+                            </div>
+                            <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">(24)</span>
+                          </div>
+                          <div className="flex items-center justify-between mt-auto">
+                            <span className="font-medium text-gray-900 dark:text-white">
+                              ${product.price.toFixed(2)}
+                            </span>
+                            <Button 
+                              size="sm" 
+                              className="h-8"
+                              onClick={() => handleAddToCart(product)}
+                            >
+                              <ShoppingCart className="h-4 w-4 mr-1" />
+                              Add
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+                    </motion.div>
+                  ))}
+                </div>
+                
+                {filteredProducts.length === 0 && (
+                  <div className="text-center py-12">
+                    <p className="text-lg text-gray-600 dark:text-gray-400">No products found matching your filters.</p>
+                    <Button variant="outline" className="mt-4" onClick={clearFilters}>
+                      Clear all filters
+                    </Button>
+                  </div>
+                )}
+              </motion.div>
+            </div>
           </div>
         </div>
       </main>
