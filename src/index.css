@@ -136,11 +136,76 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
+  padding: 0 1rem;
 }
 
 @media (max-width: 768px) {
   .footer-container {
     grid-template-columns: 1fr;
     text-align: center;
+    padding: 0 1rem;
+  }
+  
+  /* Fix for payment options on mobile */
+  .payment-options-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  /* Fix for checkout page on mobile */
+  .checkout-container {
+    padding: 0 0.5rem;
+  }
+  
+  .cart-item-container {
+    flex-direction: column;
+  }
+  
+  .cart-item-details {
+    margin-top: 0.5rem;
+  }
+  
+  /* Fix for address inputs on mobile */
+  .address-inputs {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Fix for mobile payment info alignment */
+@media (max-width: 768px) {
+  .payment-method-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Fix for shipping methods alignment */
+.shipping-method-container {
+  margin-bottom: 1rem;
+}
+
+/* Fix for select dropdowns */
+.city-state-selects {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .city-state-selects {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Fix for checkout order summary */
+.order-summary {
+  position: sticky;
+  top: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .order-summary {
+    position: relative;
+    margin-top: 1rem;
   }
 }
