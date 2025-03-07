@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -13,7 +12,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LocationMap } from "@/components/checkout/LocationMap";
 import { CartItem, getCartCount, getCartTotal } from "@/components/header/CartMenu"; 
-import { calculateShippingCost, estimateDistanceByZipCode, STORE_ZIP_CODE, ShippingTier } from "@/utils/shippingCalculator";
+import { calculateShippingCost, estimateDistanceByZipCode, STORE_ZIP_CODE, ShippingTier, shippingTiers } from "@/utils/shippingCalculator";
 import { Link } from "react-router-dom";
 
 // Mock saved addresses
@@ -821,3 +820,4 @@ const Checkout = () => {
 };
 
 export default Checkout;
+
