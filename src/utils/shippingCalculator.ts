@@ -147,9 +147,9 @@ export const countries: Country[] = [
 export const findLocationByZipCode = (zipCode: string) => {
   for (const country of countries) {
     for (const state of country.states) {
-      for (const city of city.cities) {
-        if (city.zipCodes.includes(zipCode)) {
-          return { country, state, city };
+      for (const cityItem of state.cities) {
+        if (cityItem.zipCodes.includes(zipCode)) {
+          return { country, state, city: cityItem };
         }
       }
     }
