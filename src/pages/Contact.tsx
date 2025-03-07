@@ -81,7 +81,7 @@ const Contact = () => {
                     <div className="flex items-center gap-4">
                       <MapPin className="h-5 w-5 text-gray-600" />
                       <p className="text-gray-600">
-                        123 Store Street, City, State 12345
+                        123 Design Avenue, Suite 100 New York, NY 10001, USA
                       </p>
                     </div>
                   </div>
