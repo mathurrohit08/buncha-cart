@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
@@ -82,7 +81,6 @@ const ProductsPage = () => {
 
   const handleAddToCart = (product: { name: string, image: string, type: string, price: number }) => {
     addToCart({
-      id: Math.random(), // This would normally be a proper ID
       name: product.name,
       price: product.price,
       image: product.image,
