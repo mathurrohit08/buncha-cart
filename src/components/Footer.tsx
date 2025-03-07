@@ -40,7 +40,7 @@ export const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gray-900 text-white overflow-hidden">
+    <footer className="bg-gray-900 text-white w-full">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6">
         {/* Newsletter Section */}
         <div className="py-10 sm:py-12 border-b border-gray-800">
@@ -66,7 +66,7 @@ export const Footer = () => {
         </div>
 
         {/* Main Footer Links */}
-        <div className="py-10 sm:py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="py-10 sm:py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-lg font-bold mb-6 relative inline-block">
               Company
@@ -170,8 +170,8 @@ export const Footer = () => {
               </div>
               <div>
                 <h4 className="font-medium mb-2 text-white">Email Us</h4>
-                <p className="text-gray-400">info@store.com</p>
-                <p className="text-gray-400">support@store.com</p>
+                <p className="text-gray-400">info@designstore.com</p>
+                <p className="text-gray-400">support@designstore.com</p>
               </div>
             </div>
           </div>
@@ -227,7 +227,7 @@ export const Footer = () => {
             <div className="text-center md:text-left">
               <Link to="/" className="flex items-center justify-center md:justify-start gap-2">
                 <img src="/lovable-uploads/d0289308-98a6-4913-b7cd-73b0278e8893.png" alt="Logo" className="h-10" />
-                <span className="text-xl font-bold">Store</span>
+                <span className="text-xl font-bold">DesignStore</span>
               </Link>
             </div>
             <div className="flex gap-6">
@@ -245,7 +245,7 @@ export const Footer = () => {
               ))}
             </div>
             <p className="text-gray-400 text-sm text-center md:text-right">
-              © {new Date().getFullYear()} Store. All rights reserved. <br />
+              © {new Date().getFullYear()} DesignStore. All rights reserved. <br />
               <span className="text-gray-500">Designed and developed with ❤️</span>
             </p>
           </div>

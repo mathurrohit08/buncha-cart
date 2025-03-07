@@ -1,9 +1,9 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
-import { Check, Truck, CreditCard, Info, Plus, Minus, Trash2, PlusCircle } from "lucide-react";
+import { Check, Truck, CreditCard, Info, Plus, Minus, Trash2, PlusCircle, ArrowRight, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,31 +12,9 @@ import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LocationMap } from "@/components/checkout/LocationMap";
-
-// Mock cart data
-const initialCartItems = [
-  {
-    id: 1,
-    name: "Premium Headphones",
-    price: 299.99,
-    quantity: 1,
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
-  },
-  {
-    id: 2,
-    name: "Wireless Speaker",
-    price: 199.99,
-    quantity: 1,
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
-  },
-];
-
-// Shipping options
-const shippingOptions = [
-  { id: "standard", name: "Standard Shipping", price: 5.99, days: "5-7" },
-  { id: "express", name: "Express Shipping", price: 12.99, days: "2-3" },
-  { id: "nextday", name: "Next Day Delivery", price: 19.99, days: "1" },
-];
+import { CartItem, getCartCount, getCartTotal } from "@/components/header/CartMenu"; 
+import { calculateShippingCost, estimateDistanceByZipCode, STORE_ZIP_CODE, ShippingTier } from "@/utils/shippingCalculator";
+import { Link } from "react-router-dom";
 
 // Mock saved addresses
 const savedAddresses = [
@@ -78,6 +56,28 @@ const paymentMethods = [
   { id: "netbanking", name: "Net Banking", icon: "🖥️" },
 ];
 
+// Suggested related products
+const relatedProducts = [
+  {
+    id: 101,
+    name: "Wireless Charger",
+    price: 39.99,
+    image: "https://images.unsplash.com/photo-1608050072262-7c4b66ed7ff8"
+  },
+  {
+    id: 102,
+    name: "Headphone Stand",
+    price: 24.99,
+    image: "https://images.unsplash.com/photo-1612861437562-81302a47eff2"
+  },
+  {
+    id: 103,
+    name: "Cable Organizer",
+    price: 19.99,
+    image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8"
+  }
+];
+
 const Checkout = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
@@ -90,9 +90,8 @@ const Checkout = () => {
     zipCode: "",
     country: "United States",
   });
-  const [shipping, setShipping] = useState(shippingOptions[0]);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [cartItems, setCartItems] = useState(initialCartItems);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [addressMode, setAddressMode] = useState("saved"); // "saved" or "new"
   const [selectedAddressId, setSelectedAddressId] = useState(savedAddresses.find(addr => addr.default)?.id || 1);
   const [paymentMethod, setPaymentMethod] = useState("credit");
@@ -103,17 +102,65 @@ const Checkout = () => {
     cvv: ""
   });
   const [showMap, setShowMap] = useState(false);
+  const [shippingTier, setShippingTier] = useState<ShippingTier | null>(null);
+  const [selectedShippingTier, setSelectedShippingTier] = useState<ShippingTier | null>(null);
+  
+  useEffect(() => {
+    // Get cart items from localStorage on component mount
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+      setCartItems(JSON.parse(savedCart));
+    }
+    
+    // Find selected address
+    const selectedAddress = savedAddresses.find(addr => addr.id === selectedAddressId);
+    if (selectedAddress) {
+      // Calculate shipping tier based on distance
+      const distance = estimateDistanceByZipCode(STORE_ZIP_CODE, selectedAddress.zipCode);
+      const tier = calculateShippingCost(distance);
+      setShippingTier(tier);
+      setSelectedShippingTier(tier);
+    }
+  }, [selectedAddressId]);
+
+  const handleAddToCart = (product: { id: number, name: string, price: number, image: string }) => {
+    const newItem: CartItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      image: product.image
+    };
+    
+    const updatedCart = [...cartItems, newItem];
+    setCartItems(updatedCart);
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
+    
+    toast({
+      title: "Added to cart",
+      description: `${product.name} has been added to your cart.`,
+    });
+  };
 
   const subtotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
   const tax = subtotal * 0.08; // 8% tax
-  const total = subtotal + tax + shipping.price;
+  const shipping = selectedShippingTier?.cost || 0;
+  const total = subtotal + tax + shipping;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    // If zipCode is changed, recalculate shipping costs
+    if (name === 'zipCode') {
+      const distance = estimateDistanceByZipCode(STORE_ZIP_CODE, value);
+      const tier = calculateShippingCost(distance);
+      setShippingTier(tier);
+      setSelectedShippingTier(tier);
+    }
   };
 
   const handleCardDetailsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,25 +168,25 @@ const Checkout = () => {
     setCardDetails((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleShippingChange = (option: typeof shippingOptions[0]) => {
-    setShipping(option);
-  };
-
   const updateQuantity = (id: number, change: number) => {
-    setCartItems(prev => 
-      prev.map(item => 
-        item.id === id 
-          ? { 
-              ...item, 
-              quantity: Math.max(1, item.quantity + change) // Ensure quantity doesn't go below 1
-            } 
-          : item
-      )
+    const updatedCart = cartItems.map(item => 
+      item.id === id 
+        ? { 
+            ...item, 
+            quantity: Math.max(1, item.quantity + change) // Ensure quantity doesn't go below 1
+          } 
+        : item
     );
+    
+    setCartItems(updatedCart);
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
 
   const removeItem = (id: number) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
+    const updatedCart = cartItems.filter(item => item.id !== id);
+    setCartItems(updatedCart);
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
+    
     toast({
       title: "Item removed",
       description: "The item has been removed from your cart",
@@ -178,6 +225,12 @@ const Checkout = () => {
         country: selected.country,
       });
       
+      // Recalculate shipping based on the selected address
+      const distance = estimateDistanceByZipCode(STORE_ZIP_CODE, selected.zipCode);
+      const tier = calculateShippingCost(distance);
+      setShippingTier(tier);
+      setSelectedShippingTier(tier);
+      
       // Show the map after selecting an address
       setShowMap(true);
     }
@@ -185,6 +238,33 @@ const Checkout = () => {
 
   // Find the selected address for the map
   const selectedAddress = savedAddresses.find(addr => addr.id === selectedAddressId);
+
+  // Message for empty cart
+  if (cartItems.length === 0) {
+    return (
+      <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+        <Header />
+        <main className="flex-grow flex items-center justify-center py-16">
+          <div className="text-center p-8 max-w-md mx-auto">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+              <ShoppingBag className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+              <h1 className="text-2xl font-bold mb-2 dark:text-white">Your cart is empty</h1>
+              <p className="text-gray-500 dark:text-gray-400 mb-6">
+                Looks like you haven't added anything to your cart yet.
+              </p>
+              <Link to="/all-products">
+                <Button className="w-full">
+                  <ArrowRight className="mr-2 h-4 w-4" />
+                  Browse Products
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
@@ -378,39 +458,57 @@ const Checkout = () => {
                   )}
 
                   <h3 className="text-lg font-semibold mb-3 dark:text-white">Shipping Method</h3>
-                  <div className="space-y-3 mb-6">
-                    <RadioGroup value={shipping.id} onValueChange={(value) => {
-                      const option = shippingOptions.find(opt => opt.id === value);
-                      if (option) handleShippingChange(option);
-                    }}>
-                      {shippingOptions.map((option) => (
-                        <div
-                          key={option.id}
-                          className={`flex items-center justify-between p-3 border rounded-md cursor-pointer ${
-                            shipping.id === option.id
-                              ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400"
-                              : "border-gray-200 dark:border-gray-700"
-                          }`}
-                          onClick={() => handleShippingChange(option)}
-                        >
-                          <div className="flex items-center">
-                            <RadioGroupItem value={option.id} id={`shipping-${option.id}`} className="mr-3" />
-                            <div>
-                              <p className="font-medium dark:text-white">{option.name}</p>
-                              <p className="text-sm text-gray-500 dark:text-gray-400">
-                                {option.days} business days
-                              </p>
-                            </div>
+                  
+                  {shippingTier && (
+                    <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md border border-blue-200 dark:border-blue-800">
+                      <p className="flex items-center text-blue-700 dark:text-blue-300">
+                        <Truck className="h-5 w-5 mr-2" />
+                        Based on your location, we recommend: <span className="font-medium ml-1">{shippingTier.description}</span>
+                      </p>
+                    </div>
+                  )}
+                  
+                  <RadioGroup 
+                    value={selectedShippingTier?.description || ""} 
+                    onValueChange={(value) => {
+                      const tier = shippingTiers.find(t => t.description === value);
+                      if (tier) setSelectedShippingTier(tier);
+                    }}
+                    className="space-y-3 mb-6"
+                  >
+                    {shippingTiers.map((tier) => (
+                      <div
+                        key={tier.description}
+                        className={`flex items-center justify-between p-3 border rounded-md cursor-pointer ${
+                          selectedShippingTier?.description === tier.description
+                            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400"
+                            : "border-gray-200 dark:border-gray-700"
+                        }`}
+                        onClick={() => setSelectedShippingTier(tier)}
+                      >
+                        <div className="flex items-center">
+                          <RadioGroupItem 
+                            value={tier.description} 
+                            id={`shipping-${tier.minMiles}-${tier.maxMiles}`} 
+                            className="mr-3"
+                          />
+                          <div>
+                            <p className="font-medium dark:text-white">{tier.description}</p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              {tier.minMiles}-{tier.maxMiles === Infinity ? '∞' : tier.maxMiles} miles away
+                            </p>
                           </div>
-                          <p className="font-medium dark:text-white">${option.price.toFixed(2)}</p>
                         </div>
-                      ))}
-                    </RadioGroup>
-                  </div>
+                        <p className="font-medium dark:text-white">
+                          {tier.cost === 0 ? 'FREE' : `$${tier.cost.toFixed(2)}`}
+                        </p>
+                      </div>
+                    ))}
+                  </RadioGroup>
                 </div>
 
                 {/* Payment Section */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
                   <h2 className="text-xl font-semibold mb-4 dark:text-white">Payment Information</h2>
                   
                   <div className="mb-6">
@@ -507,7 +605,7 @@ const Checkout = () => {
                       </p>
                       <div className="mt-2 space-y-1 text-sm">
                         <p className="dark:text-white"><span className="text-gray-500 dark:text-gray-400">Bank: </span>Global Bank</p>
-                        <p className="dark:text-white"><span className="text-gray-500 dark:text-gray-400">Account Name: </span>StoreX Inc.</p>
+                        <p className="dark:text-white"><span className="text-gray-500 dark:text-gray-400">Account Name: </span>DesignStore Inc.</p>
                         <p className="dark:text-white"><span className="text-gray-500 dark:text-gray-400">Account Number: </span>XXXX-XXXX-XXXX-XXXX</p>
                         <p className="dark:text-white"><span className="text-gray-500 dark:text-gray-400">Routing Number: </span>XXXXXXXX</p>
                       </div>
@@ -548,7 +646,7 @@ const Checkout = () => {
                   <Button
                     type="submit"
                     className="w-full"
-                    disabled={isProcessing}
+                    disabled={isProcessing || cartItems.length === 0}
                     onClick={handleSubmit}
                   >
                     {isProcessing ? (
@@ -583,56 +681,89 @@ const Checkout = () => {
                     )}
                   </Button>
                 </div>
+                
+                {/* Related Products Section */}
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                  <h2 className="text-xl font-semibold mb-4 dark:text-white">You May Also Like</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {relatedProducts.map((product) => (
+                      <div key={product.id} className="border rounded-md p-3 flex flex-col items-center">
+                        <img 
+                          src={product.image} 
+                          alt={product.name} 
+                          className="w-24 h-24 object-cover rounded mb-2"
+                        />
+                        <h3 className="font-medium text-sm mb-1 dark:text-white">{product.name}</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">${product.price.toFixed(2)}</p>
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="w-full"
+                          onClick={() => handleAddToCart(product)}
+                        >
+                          Add to Cart
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               {/* Right column - Order summary */}
               <div>
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 sticky top-24">
                   <h2 className="text-xl font-semibold mb-4 dark:text-white">Order Summary</h2>
-                  <div className="space-y-4 mb-6">
-                    {cartItems.map((item) => (
-                      <div key={item.id} className="flex gap-4">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-20 h-20 object-cover rounded-md"
-                        />
-                        <div className="flex-1">
-                          <h3 className="font-medium dark:text-white">{item.name}</h3>
-                          <p className="text-gray-500 dark:text-gray-400 flex items-center gap-2 mt-1">
-                            <Button 
-                              variant="outline" 
-                              size="icon" 
-                              className="h-6 w-6"
-                              onClick={() => updateQuantity(item.id, -1)}
-                            >
-                              <Minus className="h-3 w-3" />
-                            </Button>
-                            <span>{item.quantity}</span>
-                            <Button 
-                              variant="outline" 
-                              size="icon" 
-                              className="h-6 w-6"
-                              onClick={() => updateQuantity(item.id, 1)}
-                            >
-                              <Plus className="h-3 w-3" />
-                            </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className="h-6 w-6 ml-auto text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30"
-                              onClick={() => removeItem(item.id)}
-                            >
-                              <Trash2 className="h-3 w-3" />
-                            </Button>
-                          </p>
-                          <p className="font-medium dark:text-white mt-1">
-                            ${(item.price * item.quantity).toFixed(2)}
-                          </p>
+                  
+                  {cartItems.length > 0 ? (
+                    <div className="space-y-4 mb-6">
+                      {cartItems.map((item) => (
+                        <div key={item.id} className="flex gap-4">
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="w-20 h-20 object-cover rounded-md"
+                          />
+                          <div className="flex-1">
+                            <h3 className="font-medium dark:text-white">{item.name}</h3>
+                            <p className="text-gray-500 dark:text-gray-400 flex items-center gap-2 mt-1">
+                              <Button 
+                                variant="outline" 
+                                size="icon" 
+                                className="h-6 w-6"
+                                onClick={() => updateQuantity(item.id, -1)}
+                              >
+                                <Minus className="h-3 w-3" />
+                              </Button>
+                              <span>{item.quantity}</span>
+                              <Button 
+                                variant="outline" 
+                                size="icon" 
+                                className="h-6 w-6"
+                                onClick={() => updateQuantity(item.id, 1)}
+                              >
+                                <Plus className="h-3 w-3" />
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                className="h-6 w-6 ml-auto text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30"
+                                onClick={() => removeItem(item.id)}
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </p>
+                            <p className="font-medium dark:text-white mt-1">
+                              ${(item.price * item.quantity).toFixed(2)}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-center text-gray-500 dark:text-gray-400 py-6">
+                      Your cart is empty
+                    </p>
+                  )}
 
                   <Separator className="my-4" />
 
@@ -646,7 +777,7 @@ const Checkout = () => {
                     <div className="flex justify-between">
                       <span className="text-gray-600 dark:text-gray-400">Shipping</span>
                       <span className="font-medium dark:text-white">
-                        ${shipping.price.toFixed(2)}
+                        {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -664,11 +795,19 @@ const Checkout = () => {
                     <span className="dark:text-white">${total.toFixed(2)}</span>
                   </div>
 
-                  <div className="mt-6 flex items-center text-sm text-gray-600 dark:text-gray-400">
-                    <Truck className="h-4 w-4 mr-2" />
-                    <span>
-                      Estimated delivery: {shipping.days} business days
-                    </span>
+                  {selectedShippingTier && (
+                    <div className="mt-6 flex items-center text-sm text-gray-600 dark:text-gray-400">
+                      <Truck className="h-4 w-4 mr-2" />
+                      <span>
+                        {selectedShippingTier.description}
+                      </span>
+                    </div>
+                  )}
+                  
+                  <div className="mt-6">
+                    <Link to="/all-products" className="text-blue-600 hover:underline text-sm flex items-center">
+                      <ArrowRight className="h-4 w-4 mr-1" /> Continue Shopping
+                    </Link>
                   </div>
                 </div>
               </div>

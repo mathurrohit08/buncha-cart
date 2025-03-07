@@ -23,12 +23,12 @@ export const categories = [
   {
     id: 4,
     name: "Sports & Outdoors",
-    image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211",
+    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
   },
   {
     id: 5,
     name: "Books & Media",
-    image: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d",
+    image: "https://images.unsplash.com/photo-1495446815901-a6a2a5aee158",
   },
   {
     id: 6,
@@ -55,6 +55,36 @@ export const categories = [
     name: "Smart Home",
     image: "https://images.unsplash.com/photo-1558002038-1055e2dae1d7",
   },
+  {
+    id: 11,
+    name: "Office Supplies",
+    image: "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc",
+  },
+  {
+    id: 12,
+    name: "Automotive",
+    image: "https://images.unsplash.com/photo-1550355291-bbee04a92027",
+  },
+  {
+    id: 13,
+    name: "Jewelry",
+    image: "https://images.unsplash.com/photo-1617038220319-276d3cfab638",
+  },
+  {
+    id: 14,
+    name: "Tools & Home Improvement",
+    image: "https://images.unsplash.com/photo-1581244277943-fe4995638beb",
+  },
+  {
+    id: 15,
+    name: "Outdoor Living",
+    image: "https://images.unsplash.com/photo-1600210492493-0946911123ea",
+  },
+  {
+    id: 16,
+    name: "Tech Accessories",
+    image: "https://images.unsplash.com/photo-1625895197185-efcec01cffe0",
+  }
 ];
 
 export const Categories = () => {
@@ -79,13 +109,13 @@ export const Categories = () => {
         </button>
         <div
           ref={containerRef}
-          className="flex gap-6 overflow-x-auto scrollbar-none scroll-smooth snap-x snap-mandatory pb-4"
+          className="flex gap-6 overflow-x-auto scrollbar-none scroll-smooth snap-x snap-mandatory pb-6"
         >
           {categories.map((category) => (
             <Link
               to={`/category/${category.name.toLowerCase().replace(/\s+/g, "-")}`}
               key={category.id}
-              className="flex-none w-72 snap-start"
+              className="flex-none w-60 lg:w-72 snap-start"
             >
               <motion.div
                 whileHover={{ scale: 1.05 }}
@@ -112,6 +142,17 @@ export const Categories = () => {
         >
           <ChevronRight className="h-6 w-6" />
         </button>
+      </div>
+      
+      {/* View All Categories Button */}
+      <div className="text-center mt-8">
+        <Link 
+          to="/all-products" 
+          className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-base font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+        >
+          View All Categories
+          <ChevronRight className="ml-2 h-5 w-5" />
+        </Link>
       </div>
     </div>
   );
