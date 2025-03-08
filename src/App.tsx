@@ -24,6 +24,18 @@ import TermsOfService from "./pages/TermsOfService";
 import Returns from "./pages/Returns";
 import Careers from "./pages/Careers";
 import HomeImprovementProducts from "./pages/HomeImprovementProducts";
+import BooksMediaPage from "./pages/categories/BooksMediaPage";
+import BeautyPersonalCarePage from "./pages/categories/BeautyPersonalCarePage";
+import KitchenDiningPage from "./pages/categories/KitchenDiningPage";
+import ToysGamesPage from "./pages/categories/ToysGamesPage";
+import HealthWellnessPage from "./pages/categories/HealthWellnessPage";
+import SmartHomePage from "./pages/categories/SmartHomePage";
+import OfficeSuppliesPage from "./pages/categories/OfficeSuppliesPage";
+import AutomotivePage from "./pages/categories/AutomotivePage";
+import JewelryPage from "./pages/categories/JewelryPage";
+import ToolsHomeImprovementPage from "./pages/categories/ToolsHomeImprovementPage";
+import OutdoorLivingPage from "./pages/categories/OutdoorLivingPage";
+import TechAccessoriesPage from "./pages/categories/TechAccessoriesPage";
 
 import "./App.css";
 
@@ -56,6 +68,18 @@ function App() {
               <Route path="/returns" element={<Returns />} />
               <Route path="/careers" element={<Careers />} />
               <Route path="/home-improvement" element={<HomeImprovementProducts />} />
+              <Route path="/books-media" element={<BooksMediaPage />} />
+              <Route path="/beauty-personal-care" element={<BeautyPersonalCarePage />} />
+              <Route path="/kitchen-dining" element={<KitchenDiningPage />} />
+              <Route path="/toys-games" element={<ToysGamesPage />} />
+              <Route path="/health-wellness" element={<HealthWellnessPage />} />
+              <Route path="/smart-home" element={<SmartHomePage />} />
+              <Route path="/office-supplies" element={<OfficeSuppliesPage />} />
+              <Route path="/automotive" element={<AutomotivePage />} />
+              <Route path="/jewelry" element={<JewelryPage />} />
+              <Route path="/tools-home-improvement" element={<ToolsHomeImprovementPage />} />
+              <Route path="/outdoor-living" element={<OutdoorLivingPage />} />
+              <Route path="/tech-accessories" element={<TechAccessoriesPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />

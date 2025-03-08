@@ -9,81 +9,97 @@ export const categories = [
     id: 1,
     name: "Electronics",
     image: "https://images.unsplash.com/photo-1498049794561-7780e7231661",
+    path: "/category/electronics"
   },
   {
     id: 2,
     name: "Fashion",
     image: "https://images.unsplash.com/photo-1445205170230-053b83016050",
+    path: "/category/fashion"
   },
   {
     id: 3,
     name: "Home & Living",
     image: "https://images.unsplash.com/photo-1484154218962-a197022b5858",
+    path: "/category/home-living"
   },
   {
     id: 4,
     name: "Sports & Outdoors",
     image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
+    path: "/category/sports-outdoors"
   },
   {
     id: 5,
     name: "Books & Media",
     image: "https://images.unsplash.com/photo-1495446815901-a6a2a5aee158",
+    path: "/books-media"
   },
   {
     id: 6,
     name: "Beauty & Personal Care",
     image: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b",
+    path: "/beauty-personal-care"
   },
   {
     id: 7,
     name: "Kitchen & Dining",
     image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f",
+    path: "/kitchen-dining"
   },
   {
     id: 8,
     name: "Toys & Games",
     image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088",
+    path: "/toys-games"
   },
   {
     id: 9,
     name: "Health & Wellness",
     image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b",
+    path: "/health-wellness"
   },
   {
     id: 10,
     name: "Smart Home",
     image: "https://images.unsplash.com/photo-1558002038-1055e2dae1d7",
+    path: "/smart-home"
   },
   {
     id: 11,
     name: "Office Supplies",
     image: "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc",
+    path: "/office-supplies"
   },
   {
     id: 12,
     name: "Automotive",
     image: "https://images.unsplash.com/photo-1550355291-bbee04a92027",
+    path: "/automotive"
   },
   {
     id: 13,
     name: "Jewelry",
     image: "https://images.unsplash.com/photo-1617038220319-276d3cfab638",
+    path: "/jewelry"
   },
   {
     id: 14,
     name: "Tools & Home Improvement",
     image: "https://images.unsplash.com/photo-1581244277943-fe4995638beb",
+    path: "/tools-home-improvement"
   },
   {
     id: 15,
     name: "Outdoor Living",
     image: "https://images.unsplash.com/photo-1600210492493-0946911123ea",
+    path: "/outdoor-living"
   },
   {
     id: 16,
     name: "Tech Accessories",
     image: "https://images.unsplash.com/photo-1625895197185-efcec01cffe0",
+    path: "/tech-accessories"
   }
 ];
 
@@ -113,7 +129,7 @@ export const Categories = () => {
         >
           {categories.map((category) => (
             <Link
-              to={`/category/${category.name.toLowerCase().replace(/\s+/g, "-")}`}
+              to={category.path}
               key={category.id}
               className="flex-none w-60 lg:w-72 snap-start"
             >
@@ -126,6 +142,9 @@ export const Categories = () => {
                     src={category.image}
                     alt={category.name}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=500&h=350";
+                    }}
                   />
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                     <h3 className="text-white text-xl font-bold">{category.name}</h3>
