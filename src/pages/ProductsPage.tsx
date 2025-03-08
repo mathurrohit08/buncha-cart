@@ -62,6 +62,16 @@ const ProductsPage = () => {
     return true;
   });
 
+  // Add the missing clearFilters function
+  const clearFilters = () => {
+    setFilterOptions({
+      priceRange: [minPrice, maxPrice],
+      categories: [],
+      productTypes: [],
+      viewMode: filterOptions.viewMode
+    });
+  };
+
   // Determine grid columns based on selected view mode
   const getGridCols = () => {
     if (isMobile) {
