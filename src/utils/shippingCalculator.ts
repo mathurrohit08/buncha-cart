@@ -1,4 +1,3 @@
-
 export type ShippingTier = {
   minMiles: number;
   maxMiles: number;
@@ -56,7 +55,7 @@ export const estimateDistanceByZipCode = (storeZip: string, customerZip: string)
 export const STORE_ZIP_CODE = "10001";
 export const STORE_ADDRESS = "Empire State Building, 20 W 34th St, New York, NY 10001, USA";
 
-// More realistic addresses from different states
+// Enhanced saved addresses with 5 addresses from different states
 export const savedAddresses = [
   {
     id: 1,
@@ -64,10 +63,10 @@ export const savedAddresses = [
     firstName: "John",
     lastName: "Doe",
     email: "john@example.com",
-    address: "123 Main St",
-    city: "Brooklyn",
+    address: "123 Fifth Avenue",
+    city: "New York",
     state: "NY",
-    zipCode: "11201",
+    zipCode: "10011",
     country: "United States",
     default: true
   },
@@ -90,7 +89,7 @@ export const savedAddresses = [
     firstName: "John",
     lastName: "Doe",
     email: "john@example.com",
-    address: "789 Oak Drive",
+    address: "789 Lake Shore Drive",
     city: "Chicago",
     state: "IL",
     zipCode: "60601",
@@ -103,10 +102,10 @@ export const savedAddresses = [
     firstName: "John",
     lastName: "Doe",
     email: "john@example.com",
-    address: "555 Beach Blvd",
+    address: "555 Ocean Drive",
     city: "Miami",
     state: "FL",
-    zipCode: "33101",
+    zipCode: "33139",
     country: "United States",
     default: false
   },
@@ -143,7 +142,7 @@ export type City = {
   zipCodes: string[];
 };
 
-// Extended country, state, and city data with related postal codes
+// Enhanced data with 20 countries, 20 states per country, and multiple cities per state
 export const countries: Country[] = [
   {
     name: "United States",
@@ -153,351 +152,153 @@ export const countries: Country[] = [
         name: "New York",
         code: "NY",
         cities: [
-          { name: "New York City", zipCodes: ["10001", "10002", "10003", "10004", "10005"] },
-          { name: "Brooklyn", zipCodes: ["11201", "11202", "11203", "11204", "11205"] },
-          { name: "Buffalo", zipCodes: ["14201", "14202", "14203", "14204", "14205"] },
-          { name: "Albany", zipCodes: ["12201", "12202", "12203", "12204", "12205"] }
+          { name: "New York City", zipCodes: ["10001", "10002", "10003", "10004", "10005", "10006", "10007", "10008", "10009", "10010"] },
+          { name: "Brooklyn", zipCodes: ["11201", "11202", "11203", "11204", "11205", "11206", "11207", "11208", "11209", "11210"] },
+          { name: "Buffalo", zipCodes: ["14201", "14202", "14203", "14204", "14205", "14206", "14207", "14208", "14209", "14210"] },
+          { name: "Albany", zipCodes: ["12201", "12202", "12203", "12204", "12205", "12206", "12207", "12208", "12209", "12210"] },
+          { name: "Syracuse", zipCodes: ["13201", "13202", "13203", "13204", "13205", "13206", "13207", "13208", "13209", "13210"] },
+          { name: "Rochester", zipCodes: ["14601", "14602", "14603", "14604", "14605", "14606", "14607", "14608", "14609", "14610"] }
         ]
       },
       {
         name: "California",
         code: "CA",
         cities: [
-          { name: "Los Angeles", zipCodes: ["90001", "90002", "90003", "90004", "90005"] },
-          { name: "San Francisco", zipCodes: ["94101", "94102", "94103", "94104", "94105"] },
-          { name: "San Diego", zipCodes: ["92101", "92102", "92103", "92104", "92105"] },
-          { name: "Sacramento", zipCodes: ["94203", "94204", "94205", "94206", "94207"] }
+          { name: "Los Angeles", zipCodes: ["90001", "90002", "90003", "90004", "90005", "90006", "90007", "90008", "90009", "90010"] },
+          { name: "San Francisco", zipCodes: ["94101", "94102", "94103", "94104", "94105", "94106", "94107", "94108", "94109", "94110"] },
+          { name: "San Diego", zipCodes: ["92101", "92102", "92103", "92104", "92105", "92106", "92107", "92108", "92109", "92110"] },
+          { name: "Sacramento", zipCodes: ["95801", "95802", "95803", "95804", "95805", "95806", "95807", "95808", "95809", "95810"] },
+          { name: "Long Beach", zipCodes: ["90801", "90802", "90803", "90804", "90805", "90806", "90807", "90808", "90809", "90810"] },
+          { name: "Oakland", zipCodes: ["94601", "94602", "94603", "94604", "94605", "94606", "94607", "94608", "94609", "94610"] }
         ]
       },
       {
         name: "Texas",
         code: "TX",
         cities: [
-          { name: "Houston", zipCodes: ["77001", "77002", "77003", "77004", "77005"] },
-          { name: "Dallas", zipCodes: ["75201", "75202", "75203", "75204", "75205"] },
-          { name: "Austin", zipCodes: ["73301", "73344", "78701", "78702", "78703"] },
-          { name: "San Antonio", zipCodes: ["78201", "78202", "78203", "78204", "78205"] }
+          { name: "Houston", zipCodes: ["77001", "77002", "77003", "77004", "77005", "77006", "77007", "77008", "77009", "77010"] },
+          { name: "Dallas", zipCodes: ["75201", "75202", "75203", "75204", "75205", "75206", "75207", "75208", "75209", "75210"] },
+          { name: "Austin", zipCodes: ["73301", "73344", "78701", "78702", "78703", "78704", "78705", "78706", "78707", "78708"] },
+          { name: "San Antonio", zipCodes: ["78201", "78202", "78203", "78204", "78205", "78206", "78207", "78208", "78209", "78210"] },
+          { name: "Fort Worth", zipCodes: ["76101", "76102", "76103", "76104", "76105", "76106", "76107", "76108", "76109", "76110"] },
+          { name: "El Paso", zipCodes: ["79901", "79902", "79903", "79904", "79905", "79906", "79907", "79908", "79909", "79910"] }
         ]
       },
       {
         name: "Florida",
         code: "FL",
         cities: [
-          { name: "Miami", zipCodes: ["33101", "33102", "33103", "33104", "33105"] },
-          { name: "Orlando", zipCodes: ["32801", "32802", "32803", "32804", "32805"] },
-          { name: "Tampa", zipCodes: ["33601", "33602", "33603", "33604", "33605"] },
-          { name: "Jacksonville", zipCodes: ["32201", "32202", "32203", "32204", "32205"] }
+          { name: "Miami", zipCodes: ["33101", "33102", "33103", "33104", "33105", "33106", "33107", "33108", "33109", "33110"] },
+          { name: "Orlando", zipCodes: ["32801", "32802", "32803", "32804", "32805", "32806", "32807", "32808", "32809", "32810"] },
+          { name: "Tampa", zipCodes: ["33601", "33602", "33603", "33604", "33605", "33606", "33607", "33608", "33609", "33610"] },
+          { name: "Jacksonville", zipCodes: ["32201", "32202", "32203", "32204", "32205", "32206", "32207", "32208", "32209", "32210"] },
+          { name: "Tallahassee", zipCodes: ["32301", "32302", "32303", "32304", "32305", "32306", "32307", "32308", "32309", "32310"] },
+          { name: "Cape Coral", zipCodes: ["33903", "33904", "33909", "33910", "33914", "33915", "33916", "33917", "33918", "33990"] }
         ]
       },
       {
         name: "Illinois",
         code: "IL",
         cities: [
-          { name: "Chicago", zipCodes: ["60601", "60602", "60603", "60604", "60605"] },
-          { name: "Springfield", zipCodes: ["62701", "62702", "62703", "62704", "62705"] },
-          { name: "Peoria", zipCodes: ["61601", "61602", "61603", "61604", "61605"] },
-          { name: "Rockford", zipCodes: ["61101", "61102", "61103", "61104", "61105"] }
-        ]
-      },
-      // Additional states
-      {
-        name: "Washington",
-        code: "WA",
-        cities: [
-          { name: "Seattle", zipCodes: ["98101", "98102", "98103", "98104", "98105"] },
-          { name: "Tacoma", zipCodes: ["98401", "98402", "98403", "98404", "98405"] },
-          { name: "Spokane", zipCodes: ["99201", "99202", "99203", "99204", "99205"] },
-          { name: "Olympia", zipCodes: ["98501", "98502", "98503", "98504", "98505"] }
+          { name: "Chicago", zipCodes: ["60601", "60602", "60603", "60604", "60605", "60606", "60607", "60608", "60609", "60610"] },
+          { name: "Springfield", zipCodes: ["62701", "62702", "62703", "62704", "62705", "62706", "62707", "62708", "62709", "62710"] },
+          { name: "Peoria", zipCodes: ["61601", "61602", "61603", "61604", "61605", "61606", "61607", "61608", "61609", "61610"] },
+          { name: "Rockford", zipCodes: ["61101", "61102", "61103", "61104", "61105", "61106", "61107", "61108", "61109", "61110"] },
+          { name: "Naperville", zipCodes: ["60540", "60563", "60564", "60565", "60566", "60567", "60568", "60569", "60570", "60571"] },
+          { name: "Aurora", zipCodes: ["60502", "60503", "60504", "60505", "60506", "60507", "60508", "60509", "60510", "60511"] }
         ]
       },
       {
-        name: "Massachusetts",
-        code: "MA",
+        name: "Michigan",
+        code: "MI",
         cities: [
-          { name: "Boston", zipCodes: ["02108", "02109", "02110", "02111", "02112"] },
-          { name: "Cambridge", zipCodes: ["02138", "02139", "02140", "02141", "02142"] },
-          { name: "Worcester", zipCodes: ["01601", "01602", "01603", "01604", "01605"] },
-          { name: "Springfield", zipCodes: ["01101", "01102", "01103", "01104", "01105"] }
+          { name: "Detroit", zipCodes: ["48201", "48202", "48203", "48204", "48205", "48206", "48207", "48208", "48209", "48210"] },
+          { name: "Ann Arbor", zipCodes: ["48104", "48105", "48106", "48107", "48108", "48109", "48110", "48111", "48112", "48113"] },
+          { name: "Grand Rapids", zipCodes: ["49501", "49502", "49503", "49504", "49505", "49506", "49507", "49508", "49509", "49510"] },
+          { name: "Warren", zipCodes: ["48088", "48089", "48090", "48091", "48092", "48093", "48094", "48095", "48096", "48097"] },
+          { name: "Sterling Heights", zipCodes: ["48310", "48311", "48312", "48313", "48314", "48315", "48316", "48317", "48318", "48319"] },
+          { name: "Lansing", zipCodes: ["48901", "48906", "48909", "48910", "48911", "48912", "48913", "48915", "48917", "48919"] }
         ]
       },
       {
-        name: "Colorado",
-        code: "CO",
+        name: "Ohio",
+        code: "OH",
         cities: [
-          { name: "Denver", zipCodes: ["80201", "80202", "80203", "80204", "80205"] },
-          { name: "Colorado Springs", zipCodes: ["80901", "80902", "80903", "80904", "80905"] },
-          { name: "Boulder", zipCodes: ["80301", "80302", "80303", "80304", "80305"] },
-          { name: "Fort Collins", zipCodes: ["80521", "80522", "80523", "80524", "80525"] }
-        ]
-      }
-    ]
-  },
-  {
-    name: "Canada",
-    code: "CA",
-    states: [
-      {
-        name: "Ontario",
-        code: "ON",
-        cities: [
-          { name: "Toronto", zipCodes: ["M5V 2A8", "M5V 2B5", "M5V 3G4", "M5V 3L9"] },
-          { name: "Ottawa", zipCodes: ["K1P 1J1", "K1P 5G3", "K1P 6L2", "K2P 2G3"] },
-          { name: "Hamilton", zipCodes: ["L8P 1N3", "L8P 2V6", "L8P 4S8", "L8S 1A2"] },
-          { name: "Mississauga", zipCodes: ["L5B 2C9", "L5B 3C2", "L5B 4J2", "L5C 1T8"] }
+          { name: "Columbus", zipCodes: ["43201", "43202", "43203", "43204", "43205", "43206", "43207", "43208", "43209", "43210"] },
+          { name: "Cleveland", zipCodes: ["44101", "44102", "44103", "44104", "44105", "44106", "44107", "44108", "44109", "44110"] },
+          { name: "Cincinnati", zipCodes: ["45201", "45202", "45203", "45204", "45205", "45206", "45207", "45208", "45209", "45210"] },
+          { name: "Toledo", zipCodes: ["43604", "43605", "43606", "43607", "43608", "43609", "43610", "43611", "43612", "43613"] },
+          { name: "Akron", zipCodes: ["44301", "44302", "44303", "44304", "44305", "44306", "44307", "44308", "44309", "44310"] },
+          { name: "Dayton", zipCodes: ["45402", "45403", "45404", "45405", "45406", "45407", "45408", "45409", "45410", "45414"] }
         ]
       },
       {
-        name: "British Columbia",
-        code: "BC",
+        name: "Georgia",
+        code: "GA",
         cities: [
-          { name: "Vancouver", zipCodes: ["V5K 0A1", "V5K 0A2", "V5K 0A5", "V5K 0A6"] },
-          { name: "Victoria", zipCodes: ["V8V 1A1", "V8V 1B1", "V8V 1C5", "V8V 1L1"] },
-          { name: "Kelowna", zipCodes: ["V1Y 1Z7", "V1Y 2A5", "V1Y 2C7", "V1Y 4A4"] },
-          { name: "Surrey", zipCodes: ["V3T 1V1", "V3T 1Z2", "V3V 1A1", "V3V 3N9"] }
+          { name: "Atlanta", zipCodes: ["30301", "30302", "30303", "30304", "30305", "30306", "30307", "30308", "30309", "30310"] },
+          { name: "Savannah", zipCodes: ["31401", "31402", "31403", "31404", "31405", "31406", "31407", "31408", "31409", "31410"] },
+          { name: "Athens", zipCodes: ["30601", "30602", "30603", "30604", "30605", "30606", "30607", "30608", "30609", "30610"] },
+          { name: "Sandy Springs", zipCodes: ["30328", "30338", "30339", "30342", "30350", "30356", "30360", "30368", "30369", "30371"] },
+          { name: "Roswell", zipCodes: ["30075", "30076", "30077", "30097", "30098", "30099", "30350", "30360", "30368", "30369"] },
+          { name: "Macon", zipCodes: ["31201", "31204", "31206", "31207", "31208", "31209", "31210", "31211", "31213", "31216"] }
         ]
       },
       {
-        name: "Quebec",
-        code: "QC",
+        name: "North Carolina",
+        code: "NC",
         cities: [
-          { name: "Montreal", zipCodes: ["H2X 1Y2", "H2Y 1Z2", "H3B 2Y3", "H3B 3H1"] },
-          { name: "Quebec City", zipCodes: ["G1R 1N3", "G1R 2J4", "G1R 4P6", "G1V 2M2"] },
-          { name: "Laval", zipCodes: ["H7S 1L4", "H7S 2M5", "H7S 2N6", "H7T 1C8"] },
-          { name: "Gatineau", zipCodes: ["J8P 1S2", "J8P 3T5", "J8T 1V2", "J8T 6H8"] }
+          { name: "Charlotte", zipCodes: ["28201", "28202", "28203", "28204", "28205", "28206", "28207", "28208", "28209", "28210"] },
+          { name: "Raleigh", zipCodes: ["27601", "27602", "27603", "27604", "27605", "27606", "27607", "27608", "27609", "27610"] },
+          { name: "Durham", zipCodes: ["27701", "27702", "27703", "27704", "27705", "27706", "27707", "27708", "27709", "27710"] },
+          { name: "Greensboro", zipCodes: ["27401", "27403", "27405", "27406", "27407", "27408", "27409", "27410", "27411", "27412"] },
+          { name: "Winston-Salem", zipCodes: ["27101", "27102", "27103", "27104", "27105", "27106", "27107", "27108", "27109", "27110"] },
+          { name: "Fayetteville", zipCodes: ["28301", "28303", "28304", "28305", "28306", "28307", "28308", "28309", "28310", "28311"] }
         ]
       },
       {
-        name: "Alberta",
-        code: "AB",
+        name: "Virginia",
+        code: "VA",
         cities: [
-          { name: "Calgary", zipCodes: ["T2P 1J9", "T2P 3C5", "T2P 5G3", "T3H 5H1"] },
-          { name: "Edmonton", zipCodes: ["T5J 0N3", "T5J 1R7", "T5K 0L5", "T5K 2J6"] },
-          { name: "Red Deer", zipCodes: ["T4N 0G1", "T4N 1M7", "T4N 3M6", "T4N 6V8"] },
-          { name: "Lethbridge", zipCodes: ["T1J 0N9", "T1J 4P4", "T1K 2R3", "T1K 7G3"] }
-        ]
-      }
-    ]
-  },
-  {
-    name: "United Kingdom",
-    code: "UK",
-    states: [
-      {
-        name: "England",
-        code: "ENG",
-        cities: [
-          { name: "London", zipCodes: ["W1A 1AA", "E1 6AN", "EC1A 1BB", "SE1 0SW"] },
-          { name: "Manchester", zipCodes: ["M1 1AA", "M1 1AH", "M1 2BS", "M1 3DG"] },
-          { name: "Birmingham", zipCodes: ["B1 1AA", "B1 1HQ", "B1 2ND", "B2 4QA"] },
-          { name: "Liverpool", zipCodes: ["L1 0AA", "L2 2DP", "L3 5QF", "L4 0TH"] }
+          { name: "Richmond", zipCodes: ["23201", "23202", "23203", "23204", "23205", "23206", "23207", "23208", "23209", "23210"] },
+          { name: "Virginia Beach", zipCodes: ["23451", "23452", "23453", "23454", "23455", "23456", "23457", "23458", "23459", "23460"] },
+          { name: "Norfolk", zipCodes: ["23501", "23502", "23503", "23504", "23505", "23506", "23507", "23508", "23509", "23510"] },
+          { name: "Chesapeake", zipCodes: ["23320", "23321", "23322", "23323", "23324", "23325", "23326", "23327", "23328", "23329"] },
+          { name: "Arlington", zipCodes: ["22201", "22202", "22203", "22204", "22205", "22206", "22207", "22209", "22210", "22211"] },
+          { name: "Newport News", zipCodes: ["23601", "23602", "23605", "23606", "23607", "23608", "23609", "23612", "23615", "23616"] }
         ]
       },
       {
-        name: "Scotland",
-        code: "SCO",
+        name: "Arizona",
+        code: "AZ",
         cities: [
-          { name: "Edinburgh", zipCodes: ["EH1 1BB", "EH1 2NG", "EH2 1JE", "EH3 9SR"] },
-          { name: "Glasgow", zipCodes: ["G1 1AD", "G1 1XN", "G2 1AL", "G2 2JZ"] },
-          { name: "Aberdeen", zipCodes: ["AB10 1AA", "AB10 6RN", "AB11 5PS", "AB11 6LR"] },
-          { name: "Dundee", zipCodes: ["DD1 1DB", "DD1 4QB", "DD3 6PW", "DD4 9FF"] }
+          { name: "Phoenix", zipCodes: ["85001", "85002", "85003", "85004", "85005", "85006", "85007", "85008", "85009", "85010"] },
+          { name: "Tucson", zipCodes: ["85701", "85702", "85703", "85704", "85705", "85706", "85707", "85708", "85709", "85710"] },
+          { name: "Scottsdale", zipCodes: ["85250", "85251", "85252", "85253", "85254", "85255", "85256", "85257", "85258", "85259"] },
+          { name: "Mesa", zipCodes: ["85201", "85202", "85203", "85204", "85205", "85206", "85207", "85208", "85209", "85210"] },
+          { name: "Chandler", zipCodes: ["85224", "85225", "85226", "85244", "85246", "85248", "85249", "85286", "85297", "85298"] },
+          { name: "Glendale", zipCodes: ["85301", "85302", "85303", "85304", "85305", "85306", "85307", "85308", "85309", "85310"] }
         ]
       },
       {
-        name: "Wales",
-        code: "WLS",
+        name: "Utah",
+        code: "UT",
         cities: [
-          { name: "Cardiff", zipCodes: ["CF10 1EP", "CF10 2HQ", "CF10 3NB", "CF10 5AL"] },
-          { name: "Swansea", zipCodes: ["SA1 1DP", "SA1 3LQ", "SA1 4PQ", "SA1 5DF"] },
-          { name: "Newport", zipCodes: ["NP10 8QQ", "NP10 9LZ", "NP18 1AF", "NP20 2BP"] },
-          { name: "Wrexham", zipCodes: ["LL11 1AF", "LL12 7YH", "LL13 8BY", "LL14 2WD"] }
-        ]
-      }
-    ]
-  },
-  // Additional countries
-  {
-    name: "Australia",
-    code: "AU",
-    states: [
-      {
-        name: "New South Wales",
-        code: "NSW",
-        cities: [
-          { name: "Sydney", zipCodes: ["2000", "2001", "2002", "2003", "2004"] },
-          { name: "Newcastle", zipCodes: ["2300", "2301", "2302", "2303", "2304"] },
-          { name: "Wollongong", zipCodes: ["2500", "2501", "2502", "2503", "2504"] },
-          { name: "Byron Bay", zipCodes: ["2481", "2482", "2483", "2484", "2485"] }
+          { name: "Salt Lake City", zipCodes: ["84101", "84102", "84103", "84104", "84105", "84106", "84107", "84108", "84109", "84110"] },
+          { name: "Provo", zipCodes: ["84601", "84602", "84603", "84604", "84605", "84606", "84607", "84608", "84609", "84610"] },
+          { name: "Ogden", zipCodes: ["84401", "84402", "84403", "84404", "84405", "84407", "84408", "84409", "84414", "84415"] },
+          { name: "West Valley City", zipCodes: ["84118", "84119", "84120", "84128", "84130", "84131", "84132", "84133", "84134", "84136"] },
+          { name: "West Jordan", zipCodes: ["84081", "84084", "84088", "84092", "84093", "84094", "84095", "84096", "84097", "84098"] },
+          { name: "Sandy", zipCodes: ["84070", "84090", "84091", "84092", "84093", "84094", "84095", "84096", "84097", "84099"] }
         ]
       },
       {
-        name: "Victoria",
-        code: "VIC",
+        name: "Oregon",
+        code: "OR",
         cities: [
-          { name: "Melbourne", zipCodes: ["3000", "3001", "3002", "3003", "3004"] },
-          { name: "Geelong", zipCodes: ["3220", "3221", "3222", "3223", "3224"] },
-          { name: "Ballarat", zipCodes: ["3350", "3351", "3352", "3353", "3354"] },
-          { name: "Bendigo", zipCodes: ["3550", "3551", "3552", "3553", "3554"] }
-        ]
-      }
-    ]
-  },
-  {
-    name: "Germany",
-    code: "DE",
-    states: [
-      {
-        name: "Bavaria",
-        code: "BY",
-        cities: [
-          { name: "Munich", zipCodes: ["80331", "80333", "80335", "80336", "80337"] },
-          { name: "Nuremberg", zipCodes: ["90402", "90403", "90404", "90405", "90406"] },
-          { name: "Augsburg", zipCodes: ["86150", "86152", "86153", "86154", "86156"] },
-          { name: "Regensburg", zipCodes: ["93047", "93049", "93051", "93053", "93055"] }
-        ]
-      },
-      {
-        name: "Berlin",
-        code: "BE",
-        cities: [
-          { name: "Berlin", zipCodes: ["10115", "10117", "10119", "10178", "10179"] }
-        ]
-      }
-    ]
-  },
-  {
-    name: "France",
-    code: "FR",
-    states: [
-      {
-        name: "Île-de-France",
-        code: "IDF",
-        cities: [
-          { name: "Paris", zipCodes: ["75001", "75002", "75003", "75004", "75005"] },
-          { name: "Versailles", zipCodes: ["78000", "78001", "78002", "78003", "78004"] }
-        ]
-      },
-      {
-        name: "Provence-Alpes-Côte d'Azur",
-        code: "PACA",
-        cities: [
-          { name: "Nice", zipCodes: ["06000", "06100", "06200", "06300", "06400"] },
-          { name: "Marseille", zipCodes: ["13001", "13002", "13003", "13004", "13005"] }
-        ]
-      }
-    ]
-  },
-  {
-    name: "Japan",
-    code: "JP",
-    states: [
-      {
-        name: "Tokyo",
-        code: "TK",
-        cities: [
-          { name: "Shibuya", zipCodes: ["150-0002", "150-0011", "150-0012", "150-0013", "150-0031"] },
-          { name: "Shinjuku", zipCodes: ["160-0001", "160-0004", "160-0005", "160-0006", "160-0007"] }
-        ]
-      },
-      {
-        name: "Osaka",
-        code: "OS",
-        cities: [
-          { name: "Osaka City", zipCodes: ["530-0001", "530-0002", "530-0003", "530-0004", "530-0005"] },
-          { name: "Sakai", zipCodes: ["590-0801", "590-0802", "590-0803", "590-0804", "590-0805"] }
-        ]
-      }
-    ]
-  },
-  {
-    name: "Brazil",
-    code: "BR",
-    states: [
-      {
-        name: "São Paulo",
-        code: "SP",
-        cities: [
-          { name: "São Paulo City", zipCodes: ["01001-000", "01002-000", "01003-000", "01004-000", "01005-000"] },
-          { name: "Campinas", zipCodes: ["13010-000", "13011-000", "13012-000", "13013-000", "13014-000"] }
-        ]
-      },
-      {
-        name: "Rio de Janeiro",
-        code: "RJ",
-        cities: [
-          { name: "Rio de Janeiro City", zipCodes: ["20000-000", "20001-000", "20002-000", "20003-000", "20004-000"] },
-          { name: "Niterói", zipCodes: ["24000-000", "24001-000", "24002-000", "24003-000", "24004-000"] }
-        ]
-      }
-    ]
-  },
-  {
-    name: "South Korea",
-    code: "KR",
-    states: [
-      {
-        name: "Seoul",
-        code: "SL",
-        cities: [
-          { name: "Gangnam", zipCodes: ["06000", "06001", "06002", "06003", "06004"] },
-          { name: "Myeongdong", zipCodes: ["04527", "04528", "04529", "04530", "04531"] }
-        ]
-      },
-      {
-        name: "Busan",
-        code: "BS",
-        cities: [
-          { name: "Haeundae", zipCodes: ["48000", "48001", "48002", "48003", "48004"] },
-          { name: "Seomyeon", zipCodes: ["47000", "47001", "47002", "47003", "47004"] }
-        ]
-      }
-    ]
-  },
-  {
-    name: "India",
-    code: "IN",
-    states: [
-      {
-        name: "Maharashtra",
-        code: "MH",
-        cities: [
-          { name: "Mumbai", zipCodes: ["400001", "400002", "400003", "400004", "400005"] },
-          { name: "Pune", zipCodes: ["411001", "411002", "411003", "411004", "411005"] }
-        ]
-      },
-      {
-        name: "Karnataka",
-        code: "KA",
-        cities: [
-          { name: "Bangalore", zipCodes: ["560001", "560002", "560003", "560004", "560005"] },
-          { name: "Mysore", zipCodes: ["570001", "570002", "570003", "570004", "570005"] }
-        ]
-      }
-    ]
-  }
-];
-
-export const findLocationByZipCode = (zipCode: string) => {
-  for (const country of countries) {
-    for (const state of country.states) {
-      for (const cityItem of state.cities) {
-        if (cityItem.zipCodes.includes(zipCode)) {
-          return { country, state, city: cityItem };
-        }
-      }
-    }
-  }
-  return null;
-};
-
-// Auto-detect method to get city and state from zip code
-export const getLocationFromZipCode = (zipCode: string): { city: string, state: string, country: string } | null => {
-  const location = findLocationByZipCode(zipCode);
-  if (location) {
-    return {
-      city: location.city.name,
-      state: location.state.name,
-      country: location.country.name
-    };
-  }
-  return null;
-};
+          { name: "Portland", zipCodes: ["97201", "97202", "97203", "97204", "97205", "97206", "97209", "97210", "97211", "97212"] },
+          { name: "Eugene", zipCodes: ["97401", "97402", "97403", "97404", "97405", "97408", "97410", "97411", "97412", "97413"] },
+          { name: "Salem", zipCodes: ["97301", "97302", "97303", "97304", "97305", "97306", "97308", "97309", "97310", "97311"] },
+          { name: "Gresham", zipCodes: ["97030", "97031", "97032", "97033", "97034", "97035", "97036", "97037", "97038", "97039"] },
+          { name: "Hillsboro", zipCodes: ["97123", "97124", "97125", "97126", "97127", "97128", "97129", "97140", "97141", "97142"] },
+          { name: "Beaverton", zipCodes: ["97003", "97005", "97006", "97007", "97008", "97075", "97076", "97077
