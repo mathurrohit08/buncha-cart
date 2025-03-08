@@ -1,14 +1,11 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
-import { ShoppingCart, Heart, Star, Filter, ChevronDown, X, Check } from "lucide-react";
+import { Filter, ChevronDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Slider } from "@/components/ui/slider";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Sheet,
   SheetContent,
@@ -17,11 +14,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { addToCart } from "@/components/header/CartMenu";
-import { addToWishlist, isInWishlist } from "@/components/header/WishlistButton";
 import { useToast } from "@/hooks/use-toast";
 import { CategoryProduct } from "@/utils/categoryProductsData";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { ProductCard } from "./ProductCard";
+import { ViewOptionsMenu } from "./ViewOptionsMenu";
+import { SortOptionsMenu } from "./SortOptionsMenu";
+import { ProductFiltersSidebar } from "./ProductFiltersSidebar";
+import { useProductImage } from "@/hooks/use-product-image";
 
 export interface CategoryPageProps {
   categoryName: string;
@@ -29,143 +29,10 @@ export interface CategoryPageProps {
   bannerImage: string;
 }
 
-const ProductCard = ({ product }: { product: CategoryProduct }) => {
-  const { toast } = useToast();
-
-  const handleAddToCart = () => {
-    addToCart({
-      name: product.name,
-      price: product.price,
-      image: product.image,
-      quantity: 1
-    });
-    
-    toast({
-      title: "Added to cart",
-      description: `${product.name} has been added to your cart.`,
-    });
-  };
-
-  const handleAddToWishlist = () => {
-    addToWishlist({
-      name: product.name,
-      price: `$${product.price.toFixed(2)}`,
-      image: product.image
-    });
-    
-    toast({
-      title: "Added to wishlist",
-      description: `${product.name} has been added to your wishlist.`,
-    });
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="group bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-    >
-      <div className="relative h-48 sm:h-64">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=500&h=350";
-          }}
-        />
-        {product.bestSeller && (
-          <Badge className="absolute top-2 left-2 bg-amber-500">Best Seller</Badge>
-        )}
-        {product.new && (
-          <Badge className="absolute top-2 left-2 bg-blue-500">New</Badge>
-        )}
-        {product.sale && (
-          <Badge className="absolute top-2 left-2 bg-red-500">Sale {product.discount}%</Badge>
-        )}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-2 right-2 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 rounded-full"
-          onClick={handleAddToWishlist}
-        >
-          <Heart
-            className={`h-5 w-5 ${
-              isInWishlist(product.name) ? 'fill-red-500 text-red-500' : 'text-gray-600 dark:text-gray-300'
-            }`}
-          />
-        </Button>
-      </div>
-      <div className="p-4">
-        <Link to={`#`} className="block">
-          <h3 className="font-medium text-lg text-gray-900 dark:text-white mb-1 hover:text-purple-700 dark:hover:text-purple-400 transition-colors line-clamp-2">
-            {product.name}
-          </h3>
-        </Link>
-        <p className="text-gray-600 dark:text-gray-300 text-sm mt-1 line-clamp-2">
-          {product.description}
-        </p>
-        <div className="flex items-center my-2">
-          <div className="flex">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`h-4 w-4 ${
-                  i < Math.floor(product.rating)
-                    ? 'fill-yellow-400 text-yellow-400'
-                    : i < product.rating
-                    ? 'fill-yellow-400 text-yellow-400 fill-[50%]'
-                    : 'text-gray-300 dark:text-gray-600'
-                }`}
-              />
-            ))}
-          </div>
-          <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
-            ({product.reviews})
-          </span>
-        </div>
-        <div className="flex flex-col mt-2 space-y-2">
-          <div className="flex items-center justify-between">
-            {product.sale ? (
-              <div className="flex items-center space-x-2">
-                <span className="font-medium text-lg text-gray-900 dark:text-white">
-                  ${(product.price * (1 - product.discount! / 100)).toFixed(2)}
-                </span>
-                <span className="text-sm text-gray-500 line-through">
-                  ${product.price.toFixed(2)}
-                </span>
-              </div>
-            ) : (
-              <span className="font-medium text-lg text-gray-900 dark:text-white">
-                ${product.price.toFixed(2)}
-              </span>
-            )}
-            {product.inStock ? (
-              <span className="text-xs text-green-600 dark:text-green-400 flex items-center">
-                <Check className="h-3 w-3 mr-1" /> In Stock
-              </span>
-            ) : (
-              <span className="text-xs text-red-600 dark:text-red-400">Out of Stock</span>
-            )}
-          </div>
-          <Button
-            onClick={handleAddToCart}
-            className="w-full"
-            size="sm"
-            disabled={!product.inStock}
-          >
-            <ShoppingCart className="h-4 w-4 mr-1" /> Add to Cart
-          </Button>
-        </div>
-      </div>
-    </motion.div>
-  );
-};
-
 export const CategoryPageTemplate = ({ categoryName, products, bannerImage }: CategoryPageProps) => {
   const { toast } = useToast();
   const isMobile = useIsMobile();
+  const { imgSrc: bannerSrc } = useProductImage(bannerImage);
   
   // Filter state
   const [filteredProducts, setFilteredProducts] = useState(products);
@@ -173,10 +40,19 @@ export const CategoryPageTemplate = ({ categoryName, products, bannerImage }: Ca
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [showInStock, setShowInStock] = useState(false);
   const [showOnSale, setShowOnSale] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showBestSellers, setShowBestSellers] = useState(false);
   const [sortOption, setSortOption] = useState("featured");
+  const [viewMode, setViewMode] = useState(isMobile ? 2 : 4);
 
   // Calculate max price for slider
   const maxPrice = Math.max(...products.map(p => p.price)) + 50;
+  
+  useEffect(() => {
+    if (products.length > 0) {
+      setPriceRange([0, maxPrice]);
+    }
+  }, [products, maxPrice]);
   
   const applyFilters = () => {
     let result = [...products];
@@ -199,6 +75,16 @@ export const CategoryPageTemplate = ({ categoryName, products, bannerImage }: Ca
     // Filter by sale
     if (showOnSale) {
       result = result.filter((product) => product.sale);
+    }
+    
+    // Filter by new
+    if (showNew) {
+      result = result.filter((product) => product.new);
+    }
+    
+    // Filter by best sellers
+    if (showBestSellers) {
+      result = result.filter((product) => product.bestSeller);
     }
     
     // Apply sorting
@@ -241,6 +127,8 @@ export const CategoryPageTemplate = ({ categoryName, products, bannerImage }: Ca
     setSelectedRating(null);
     setShowInStock(false);
     setShowOnSale(false);
+    setShowNew(false);
+    setShowBestSellers(false);
     setSortOption("featured");
     setFilteredProducts(products);
     
@@ -250,79 +138,21 @@ export const CategoryPageTemplate = ({ categoryName, products, bannerImage }: Ca
     });
   };
 
-  const FilterPanel = () => (
-    <div className="space-y-6">
-      <div>
-        <h3 className="font-medium mb-3">Price Range</h3>
-        <div className="px-2">
-          <Slider
-            defaultValue={priceRange}
-            max={maxPrice}
-            step={10}
-            value={priceRange}
-            onValueChange={setPriceRange}
-            className="mb-2"
-          />
-          <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-            <span>${priceRange[0]}</span>
-            <span>${priceRange[1]}</span>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="font-medium mb-3">Rating</h3>
-        <div className="space-y-1">
-          {[4, 3, 2, 1].map((rating) => (
-            <div 
-              key={rating} 
-              className={`flex items-center p-2 rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                selectedRating === rating ? 'bg-gray-100 dark:bg-gray-700' : ''
-              }`}
-              onClick={() => setSelectedRating(selectedRating === rating ? null : rating)}
-            >
-              <div className="flex mr-2">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`h-4 w-4 ${
-                      i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300 dark:text-gray-600'
-                    }`}
-                  />
-                ))}
-              </div>
-              <span className="text-sm">{rating}+ stars</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <h3 className="font-medium mb-3">Availability</h3>
-        <div className="flex items-center space-x-2">
-          <Checkbox 
-            id="in-stock" 
-            checked={showInStock} 
-            onCheckedChange={(checked) => setShowInStock(checked as boolean)} 
-          />
-          <label htmlFor="in-stock" className="text-sm cursor-pointer">In Stock Only</label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Checkbox 
-            id="on-sale" 
-            checked={showOnSale} 
-            onCheckedChange={(checked) => setShowOnSale(checked as boolean)} 
-          />
-          <label htmlFor="on-sale" className="text-sm cursor-pointer">On Sale</label>
-        </div>
-      </div>
-
-      <div className="pt-4 space-y-2">
-        <Button onClick={applyFilters} className="w-full">Apply Filters</Button>
-        <Button variant="outline" onClick={resetFilters} className="w-full">Reset</Button>
-      </div>
-    </div>
-  );
+  // Function to determine grid columns based on view mode
+  const getGridCols = () => {
+    if (isMobile) {
+      return viewMode === 1 ? "grid-cols-1" : "grid-cols-2";
+    }
+    
+    switch (viewMode) {
+      case 1: return "grid-cols-1";
+      case 2: return "sm:grid-cols-2";
+      case 3: return "sm:grid-cols-2 lg:grid-cols-3";
+      case 4: return "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
+      case 5: return "sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5";
+      default: return "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -331,12 +161,9 @@ export const CategoryPageTemplate = ({ categoryName, products, bannerImage }: Ca
         {/* Banner */}
         <div className="relative h-[200px] md:h-[300px]">
           <img
-            src={bannerImage}
+            src={bannerSrc}
             alt={categoryName}
             className="w-full h-full object-cover"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=500&h=350";
-            }}
           />
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
             <div className="text-center">
@@ -374,31 +201,34 @@ export const CategoryPageTemplate = ({ categoryName, products, bannerImage }: Ca
                       </SheetDescription>
                     </SheetHeader>
                     <div className="py-4">
-                      <FilterPanel />
+                      <ProductFiltersSidebar
+                        priceRange={priceRange}
+                        setPriceRange={setPriceRange}
+                        maxPrice={maxPrice}
+                        selectedRating={selectedRating}
+                        setSelectedRating={setSelectedRating}
+                        showInStock={showInStock}
+                        setShowInStock={setShowInStock}
+                        showOnSale={showOnSale}
+                        setShowOnSale={setShowOnSale}
+                        showNew={showNew}
+                        setShowNew={setShowNew}
+                        showBestSellers={showBestSellers}
+                        setShowBestSellers={setShowBestSellers}
+                        applyFilters={applyFilters}
+                        resetFilters={resetFilters}
+                      />
                     </div>
                   </SheetContent>
                 </Sheet>
               )}
               
-              <div className="relative">
-                <select
-                  value={sortOption}
-                  onChange={(e) => {
-                    setSortOption(e.target.value);
-                    // Apply filter automatically when sort changes
-                    setTimeout(() => applyFilters(), 10);
-                  }}
-                  className="appearance-none pl-3 pr-8 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-sm"
-                >
-                  <option value="featured">Featured</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="newest">Newest First</option>
-                  <option value="rating">Highest Rated</option>
-                  <option value="bestselling">Best Selling</option>
-                </select>
-                <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
-              </div>
+              <ViewOptionsMenu viewMode={viewMode} setViewMode={setViewMode} />
+              <SortOptionsMenu sortOption={sortOption} setSortOption={(option) => {
+                setSortOption(option);
+                // Apply filter automatically when sort changes
+                setTimeout(() => applyFilters(), 10);
+              }} />
             </div>
           </div>
 
@@ -408,7 +238,23 @@ export const CategoryPageTemplate = ({ categoryName, products, bannerImage }: Ca
               <div className="w-full md:w-64 flex-shrink-0">
                 <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm sticky top-24">
                   <h2 className="text-lg font-semibold mb-4">Filters</h2>
-                  <FilterPanel />
+                  <ProductFiltersSidebar
+                    priceRange={priceRange}
+                    setPriceRange={setPriceRange}
+                    maxPrice={maxPrice}
+                    selectedRating={selectedRating}
+                    setSelectedRating={setSelectedRating}
+                    showInStock={showInStock}
+                    setShowInStock={setShowInStock}
+                    showOnSale={showOnSale}
+                    setShowOnSale={setShowOnSale}
+                    showNew={showNew}
+                    setShowNew={setShowNew}
+                    showBestSellers={showBestSellers}
+                    setShowBestSellers={setShowBestSellers}
+                    applyFilters={applyFilters}
+                    resetFilters={resetFilters}
+                  />
                 </div>
               </div>
             )}
@@ -416,7 +262,7 @@ export const CategoryPageTemplate = ({ categoryName, products, bannerImage }: Ca
             {/* Products grid */}
             <div className="flex-grow">
               {filteredProducts.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className={`grid ${getGridCols()} gap-6`}>
                   {filteredProducts.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}

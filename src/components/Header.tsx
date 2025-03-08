@@ -12,6 +12,7 @@ import { WishlistButton } from "./header/WishlistButton";
 import { CartMenu } from "./header/CartMenu";
 import { CompareButton } from "./header/CompareButton";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { NewArrivalsSubMenu, BestSellersSubMenu, DealsSubMenu } from "./header/NavSubMenus";
 
 export const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -62,15 +63,9 @@ export const Header = () => {
           <nav className="hidden lg:flex items-center space-x-8">
             <ProductMenu />
             <CategoryMenu />
-            <Link to="/new-arrivals" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
-              New Arrivals
-            </Link>
-            <Link to="/best-sellers" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
-              Best Sellers
-            </Link>
-            <Link to="/deals" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
-              Deals
-            </Link>
+            <NewArrivalsSubMenu />
+            <BestSellersSubMenu />
+            <DealsSubMenu />
           </nav>
 
           <div className="flex items-center">
@@ -171,9 +166,6 @@ export const Header = () => {
                           src={category.image} 
                           alt={category.name}
                           className="w-full h-full object-cover"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
-                          }}
                         />
                       </div>
                       <span className="text-sm font-medium">{category.name}</span>
