@@ -17,6 +17,7 @@ export type WishlistItem = {
   name: string;
   price: number | string;
   image: string;
+  type?: string; // Make type optional
 };
 
 const defaultWishlistItems: WishlistItem[] = [
@@ -42,6 +43,7 @@ export const addToWishlist = (product: {
   name: string;
   price: number | string;
   image: string;
+  type?: string; // Make type optional
 }) => {
   const existingItem = globalWishlistItems.find(item => item.name === product.name);
   
@@ -50,7 +52,8 @@ export const addToWishlist = (product: {
       id: Date.now(),
       name: product.name,
       price: product.price,
-      image: product.image
+      image: product.image,
+      type: product.type
     };
     globalWishlistItems = [...globalWishlistItems, newItem];
     

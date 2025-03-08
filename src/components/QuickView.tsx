@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { X, ShoppingCart, Star, Heart, Package, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -78,7 +77,8 @@ export const QuickView = ({ product, children }: QuickViewProps) => {
     addToWishlist({
       name: product.name,
       price: productPrice,
-      image: product.image
+      image: product.image,
+      type: product.type
     });
     
     toast({

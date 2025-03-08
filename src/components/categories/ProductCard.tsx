@@ -16,6 +16,12 @@ export const ProductCard = ({ product }: { product: CategoryProduct }) => {
   const { imgSrc } = useProductImage(product.image);
   const [isHovered, setIsHovered] = useState(false);
 
+  // Helper to extract product type from name
+  const getProductType = () => {
+    const parts = product.name.split(' ');
+    return parts.length > 1 ? parts[1] : 'Product';
+  };
+
   const handleAddToCart = () => {
     addToCart({
       name: product.name,
@@ -34,8 +40,7 @@ export const ProductCard = ({ product }: { product: CategoryProduct }) => {
     addToWishlist({
       name: product.name,
       price: `$${product.price.toFixed(2)}`,
-      image: product.image,
-      type: product.name.split(' ')[1] || 'Product' // Extract product type from name as fallback
+      image: product.image
     });
     
     toast({
@@ -80,7 +85,11 @@ export const ProductCard = ({ product }: { product: CategoryProduct }) => {
               }`}
             />
           </Button>
-          <QuickView product={product}>
+          <QuickView product={{
+            name: product.name,
+            image: product.image,
+            type: getProductType()
+          }}>
             <Button
               variant="ghost"
               size="icon"
