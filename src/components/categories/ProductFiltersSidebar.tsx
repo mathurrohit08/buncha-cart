@@ -9,7 +9,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Star } from "lucide-react";
+import { Star, ChevronDown } from "lucide-react";
 
 interface ProductFiltersSidebarProps {
   priceRange: [number, number];
@@ -59,6 +59,23 @@ export const ProductFiltersSidebar = ({
   selectedFeatures = [],
   setSelectedFeatures = () => {},
 }: ProductFiltersSidebarProps) => {
+  const [priceValues, setPriceValues] = useState<[number, number]>(priceRange);
+
+  // Handle price change with smoother update
+  const handlePriceChange = (value: number[]) => {
+    // Ensure we always have exactly two values
+    const newPriceRange: [number, number] = [
+      value[0] ?? priceValues[0], 
+      value[1] ?? priceValues[1]
+    ];
+    setPriceValues(newPriceRange);
+  };
+
+  // Only update the parent state when slider interaction ends
+  const handlePriceChangeEnd = () => {
+    setPriceRange(priceValues);
+  };
+
   return (
     <div className="space-y-6">
       <Accordion type="multiple" className="w-full" defaultValue={["price", "rating"]}>
@@ -70,13 +87,14 @@ export const ProductFiltersSidebar = ({
                 defaultValue={priceRange}
                 max={maxPrice}
                 step={10}
-                value={priceRange}
-                onValueChange={(value) => setPriceRange(value as [number, number])}
-                className="mb-2"
+                value={priceValues}
+                onValueChange={handlePriceChange}
+                onValueCommit={handlePriceChangeEnd}
+                className="mb-4"
               />
               <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-                <span>${priceRange[0]}</span>
-                <span>${priceRange[1]}</span>
+                <span>${priceValues[0]}</span>
+                <span>${priceValues[1]}</span>
               </div>
             </div>
           </AccordionContent>
@@ -155,7 +173,7 @@ export const ProductFiltersSidebar = ({
           <AccordionItem value="brands">
             <AccordionTrigger className="text-base font-medium">Brands</AccordionTrigger>
             <AccordionContent>
-              <div className="space-y-2 max-h-48 overflow-y-auto pr-2">
+              <div className="space-y-2 max-h-48 overflow-y-auto pr-2 scrollbar-thin">
                 {brands.map((brand) => (
                   <div key={brand} className="flex items-center space-x-2">
                     <Checkbox 
@@ -181,7 +199,7 @@ export const ProductFiltersSidebar = ({
           <AccordionItem value="features">
             <AccordionTrigger className="text-base font-medium">Features</AccordionTrigger>
             <AccordionContent>
-              <div className="space-y-2 max-h-48 overflow-y-auto pr-2">
+              <div className="space-y-2 max-h-48 overflow-y-auto pr-2 scrollbar-thin">
                 {features.map((feature) => (
                   <div key={feature} className="flex items-center space-x-2">
                     <Checkbox 

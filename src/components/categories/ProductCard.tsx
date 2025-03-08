@@ -49,6 +49,11 @@ export const ProductCard = ({ product }: { product: CategoryProduct }) => {
     });
   };
 
+  // Calculate actual sale price if product is on sale
+  const actualPrice = product.sale 
+    ? product.price * (1 - (product.discount || 0) / 100) 
+    : product.price;
+
   return (
     <div
       className="group bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow h-full flex flex-col"
@@ -60,6 +65,9 @@ export const ProductCard = ({ product }: { product: CategoryProduct }) => {
           src={imgSrc}
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = `https://source.unsplash.com/500x500/?${encodeURIComponent(product.name.split(' ')[0])}`;
+          }}
         />
         <div className="absolute top-2 left-2 flex flex-col gap-1">
           {product.bestSeller && (
@@ -133,7 +141,7 @@ export const ProductCard = ({ product }: { product: CategoryProduct }) => {
             {product.sale ? (
               <div className="flex items-center space-x-2">
                 <span className="font-medium text-lg text-gray-900 dark:text-white">
-                  ${(product.price * (1 - product.discount! / 100)).toFixed(2)}
+                  ${actualPrice.toFixed(2)}
                 </span>
                 <span className="text-sm text-gray-500 line-through">
                   ${product.price.toFixed(2)}

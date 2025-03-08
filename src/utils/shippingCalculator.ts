@@ -52,10 +52,11 @@ export const estimateDistanceByZipCode = (storeZip: string, customerZip: string)
   return Math.max(distance * 5, 800);
 };
 
-// Store zip code (New York)
+// Store zip code (Empire State Building, NY)
 export const STORE_ZIP_CODE = "10001";
+export const STORE_ADDRESS = "Empire State Building, 20 W 34th St, New York, NY 10001, USA";
 
-// More realistic addresses
+// More realistic addresses from different states
 export const savedAddresses = [
   {
     id: 1,
@@ -142,7 +143,7 @@ export type City = {
   zipCodes: string[];
 };
 
-// Mock country, state, and city data with related postal codes
+// Extended country, state, and city data with related postal codes
 export const countries: Country[] = [
   {
     name: "United States",
@@ -197,6 +198,37 @@ export const countries: Country[] = [
           { name: "Peoria", zipCodes: ["61601", "61602", "61603", "61604", "61605"] },
           { name: "Rockford", zipCodes: ["61101", "61102", "61103", "61104", "61105"] }
         ]
+      },
+      // Additional states
+      {
+        name: "Washington",
+        code: "WA",
+        cities: [
+          { name: "Seattle", zipCodes: ["98101", "98102", "98103", "98104", "98105"] },
+          { name: "Tacoma", zipCodes: ["98401", "98402", "98403", "98404", "98405"] },
+          { name: "Spokane", zipCodes: ["99201", "99202", "99203", "99204", "99205"] },
+          { name: "Olympia", zipCodes: ["98501", "98502", "98503", "98504", "98505"] }
+        ]
+      },
+      {
+        name: "Massachusetts",
+        code: "MA",
+        cities: [
+          { name: "Boston", zipCodes: ["02108", "02109", "02110", "02111", "02112"] },
+          { name: "Cambridge", zipCodes: ["02138", "02139", "02140", "02141", "02142"] },
+          { name: "Worcester", zipCodes: ["01601", "01602", "01603", "01604", "01605"] },
+          { name: "Springfield", zipCodes: ["01101", "01102", "01103", "01104", "01105"] }
+        ]
+      },
+      {
+        name: "Colorado",
+        code: "CO",
+        cities: [
+          { name: "Denver", zipCodes: ["80201", "80202", "80203", "80204", "80205"] },
+          { name: "Colorado Springs", zipCodes: ["80901", "80902", "80903", "80904", "80905"] },
+          { name: "Boulder", zipCodes: ["80301", "80302", "80303", "80304", "80305"] },
+          { name: "Fort Collins", zipCodes: ["80521", "80522", "80523", "80524", "80525"] }
+        ]
       }
     ]
   },
@@ -233,6 +265,16 @@ export const countries: Country[] = [
           { name: "Laval", zipCodes: ["H7S 1L4", "H7S 2M5", "H7S 2N6", "H7T 1C8"] },
           { name: "Gatineau", zipCodes: ["J8P 1S2", "J8P 3T5", "J8T 1V2", "J8T 6H8"] }
         ]
+      },
+      {
+        name: "Alberta",
+        code: "AB",
+        cities: [
+          { name: "Calgary", zipCodes: ["T2P 1J9", "T2P 3C5", "T2P 5G3", "T3H 5H1"] },
+          { name: "Edmonton", zipCodes: ["T5J 0N3", "T5J 1R7", "T5K 0L5", "T5K 2J6"] },
+          { name: "Red Deer", zipCodes: ["T4N 0G1", "T4N 1M7", "T4N 3M6", "T4N 6V8"] },
+          { name: "Lethbridge", zipCodes: ["T1J 0N9", "T1J 4P4", "T1K 2R3", "T1K 7G3"] }
+        ]
       }
     ]
   },
@@ -268,6 +310,166 @@ export const countries: Country[] = [
           { name: "Swansea", zipCodes: ["SA1 1DP", "SA1 3LQ", "SA1 4PQ", "SA1 5DF"] },
           { name: "Newport", zipCodes: ["NP10 8QQ", "NP10 9LZ", "NP18 1AF", "NP20 2BP"] },
           { name: "Wrexham", zipCodes: ["LL11 1AF", "LL12 7YH", "LL13 8BY", "LL14 2WD"] }
+        ]
+      }
+    ]
+  },
+  // Additional countries
+  {
+    name: "Australia",
+    code: "AU",
+    states: [
+      {
+        name: "New South Wales",
+        code: "NSW",
+        cities: [
+          { name: "Sydney", zipCodes: ["2000", "2001", "2002", "2003", "2004"] },
+          { name: "Newcastle", zipCodes: ["2300", "2301", "2302", "2303", "2304"] },
+          { name: "Wollongong", zipCodes: ["2500", "2501", "2502", "2503", "2504"] },
+          { name: "Byron Bay", zipCodes: ["2481", "2482", "2483", "2484", "2485"] }
+        ]
+      },
+      {
+        name: "Victoria",
+        code: "VIC",
+        cities: [
+          { name: "Melbourne", zipCodes: ["3000", "3001", "3002", "3003", "3004"] },
+          { name: "Geelong", zipCodes: ["3220", "3221", "3222", "3223", "3224"] },
+          { name: "Ballarat", zipCodes: ["3350", "3351", "3352", "3353", "3354"] },
+          { name: "Bendigo", zipCodes: ["3550", "3551", "3552", "3553", "3554"] }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Germany",
+    code: "DE",
+    states: [
+      {
+        name: "Bavaria",
+        code: "BY",
+        cities: [
+          { name: "Munich", zipCodes: ["80331", "80333", "80335", "80336", "80337"] },
+          { name: "Nuremberg", zipCodes: ["90402", "90403", "90404", "90405", "90406"] },
+          { name: "Augsburg", zipCodes: ["86150", "86152", "86153", "86154", "86156"] },
+          { name: "Regensburg", zipCodes: ["93047", "93049", "93051", "93053", "93055"] }
+        ]
+      },
+      {
+        name: "Berlin",
+        code: "BE",
+        cities: [
+          { name: "Berlin", zipCodes: ["10115", "10117", "10119", "10178", "10179"] }
+        ]
+      }
+    ]
+  },
+  {
+    name: "France",
+    code: "FR",
+    states: [
+      {
+        name: "Île-de-France",
+        code: "IDF",
+        cities: [
+          { name: "Paris", zipCodes: ["75001", "75002", "75003", "75004", "75005"] },
+          { name: "Versailles", zipCodes: ["78000", "78001", "78002", "78003", "78004"] }
+        ]
+      },
+      {
+        name: "Provence-Alpes-Côte d'Azur",
+        code: "PACA",
+        cities: [
+          { name: "Nice", zipCodes: ["06000", "06100", "06200", "06300", "06400"] },
+          { name: "Marseille", zipCodes: ["13001", "13002", "13003", "13004", "13005"] }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Japan",
+    code: "JP",
+    states: [
+      {
+        name: "Tokyo",
+        code: "TK",
+        cities: [
+          { name: "Shibuya", zipCodes: ["150-0002", "150-0011", "150-0012", "150-0013", "150-0031"] },
+          { name: "Shinjuku", zipCodes: ["160-0001", "160-0004", "160-0005", "160-0006", "160-0007"] }
+        ]
+      },
+      {
+        name: "Osaka",
+        code: "OS",
+        cities: [
+          { name: "Osaka City", zipCodes: ["530-0001", "530-0002", "530-0003", "530-0004", "530-0005"] },
+          { name: "Sakai", zipCodes: ["590-0801", "590-0802", "590-0803", "590-0804", "590-0805"] }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Brazil",
+    code: "BR",
+    states: [
+      {
+        name: "São Paulo",
+        code: "SP",
+        cities: [
+          { name: "São Paulo City", zipCodes: ["01001-000", "01002-000", "01003-000", "01004-000", "01005-000"] },
+          { name: "Campinas", zipCodes: ["13010-000", "13011-000", "13012-000", "13013-000", "13014-000"] }
+        ]
+      },
+      {
+        name: "Rio de Janeiro",
+        code: "RJ",
+        cities: [
+          { name: "Rio de Janeiro City", zipCodes: ["20000-000", "20001-000", "20002-000", "20003-000", "20004-000"] },
+          { name: "Niterói", zipCodes: ["24000-000", "24001-000", "24002-000", "24003-000", "24004-000"] }
+        ]
+      }
+    ]
+  },
+  {
+    name: "South Korea",
+    code: "KR",
+    states: [
+      {
+        name: "Seoul",
+        code: "SL",
+        cities: [
+          { name: "Gangnam", zipCodes: ["06000", "06001", "06002", "06003", "06004"] },
+          { name: "Myeongdong", zipCodes: ["04527", "04528", "04529", "04530", "04531"] }
+        ]
+      },
+      {
+        name: "Busan",
+        code: "BS",
+        cities: [
+          { name: "Haeundae", zipCodes: ["48000", "48001", "48002", "48003", "48004"] },
+          { name: "Seomyeon", zipCodes: ["47000", "47001", "47002", "47003", "47004"] }
+        ]
+      }
+    ]
+  },
+  {
+    name: "India",
+    code: "IN",
+    states: [
+      {
+        name: "Maharashtra",
+        code: "MH",
+        cities: [
+          { name: "Mumbai", zipCodes: ["400001", "400002", "400003", "400004", "400005"] },
+          { name: "Pune", zipCodes: ["411001", "411002", "411003", "411004", "411005"] }
+        ]
+      },
+      {
+        name: "Karnataka",
+        code: "KA",
+        cities: [
+          { name: "Bangalore", zipCodes: ["560001", "560002", "560003", "560004", "560005"] },
+          { name: "Mysore", zipCodes: ["570001", "570002", "570003", "570004", "570005"] }
         ]
       }
     ]

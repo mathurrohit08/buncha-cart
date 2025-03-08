@@ -1,7 +1,7 @@
 
 import React from "react";
 
-// Industry logos array
+// Industry logos array with unique company names
 const industryLogos = [
   {
     name: "TechGiant",
@@ -24,21 +24,34 @@ const industryLogos = [
     logo: "https://images.unsplash.com/photo-1516876437184-593fda40c7ce?w=150&h=150&fit=crop&auto=format",
   },
   {
-    name: "NextLevel",
+    name: "NextWave",
     logo: "https://images.unsplash.com/photo-1572044162444-ad60f128bdea?w=150&h=150&fit=crop&auto=format",
   },
   {
-    name: "MegaCorp",
+    name: "AlphaInnovation",
     logo: "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=150&h=150&fit=crop&auto=format",
   },
   {
     name: "EliteInc",
     logo: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=150&h=150&fit=crop&auto=format",
   },
+  {
+    name: "VisionaryTech",
+    logo: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=150&h=150&fit=crop&auto=format",
+  },
+  {
+    name: "OmegaSystems",
+    logo: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=150&h=150&fit=crop&auto=format",
+  },
+  {
+    name: "QuantumWorks",
+    logo: "https://images.unsplash.com/photo-1560472355-536de3962603?w=150&h=150&fit=crop&auto=format",
+  },
+  {
+    name: "ApexDigital",
+    logo: "https://images.unsplash.com/photo-1581287053822-fd7bf4f4bfec?w=150&h=150&fit=crop&auto=format",
+  },
 ];
-
-// Duplicate logos to create a seamless scrolling effect
-const duplicatedLogos = [...industryLogos, ...industryLogos];
 
 export const IndustryTrust: React.FC = () => {
   return (
@@ -52,7 +65,7 @@ export const IndustryTrust: React.FC = () => {
           {/* First row scrolling left */}
           <div className="industry-trust-scroll">
             <div className="industry-trust-scroll-inner flex">
-              {duplicatedLogos.map((company, index) => (
+              {industryLogos.map((company, index) => (
                 <div key={`${company.name}-${index}`} className="mx-8 flex-shrink-0">
                   <div className="h-20 w-20 rounded-full bg-white p-2 shadow-sm mx-auto">
                     <img
@@ -70,10 +83,10 @@ export const IndustryTrust: React.FC = () => {
             </div>
           </div>
           
-          {/* Second row scrolling right with different logos */}
+          {/* Second row scrolling right with different order */}
           <div className="industry-trust-scroll mt-10">
             <div className="industry-trust-scroll-inner flex animate-[scroll_35s_linear_infinite_reverse]">
-              {[...duplicatedLogos].reverse().map((company, index) => (
+              {[...industryLogos].reverse().map((company, index) => (
                 <div key={`${company.name}-rev-${index}`} className="mx-8 flex-shrink-0">
                   <div className="h-20 w-20 rounded-full bg-white p-2 shadow-sm mx-auto">
                     <img
