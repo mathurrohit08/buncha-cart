@@ -36,7 +36,7 @@ export const CategoryPageTemplate = ({ categoryName, products, bannerImage }: Ca
   
   // Filter state
   const [filteredProducts, setFilteredProducts] = useState(products);
-  const [priceRange, setPriceRange] = useState([0, 500]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [showInStock, setShowInStock] = useState(false);
   const [showOnSale, setShowOnSale] = useState(false);

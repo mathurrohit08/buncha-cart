@@ -34,7 +34,8 @@ export const ProductCard = ({ product }: { product: CategoryProduct }) => {
     addToWishlist({
       name: product.name,
       price: `$${product.price.toFixed(2)}`,
-      image: product.image
+      image: product.image,
+      type: product.name.split(' ')[1] || 'Product' // Extract product type from name as fallback
     });
     
     toast({

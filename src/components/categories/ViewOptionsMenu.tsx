@@ -4,7 +4,7 @@ import {
   List,
   Grid2X2,
   Grid3X3,
-  Grid4X4,
+  LayoutGrid as Grid4X4,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
