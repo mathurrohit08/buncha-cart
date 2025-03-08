@@ -1,6 +1,5 @@
 
 import React from "react";
-import { motion } from "framer-motion";
 
 // Industry logos array
 const industryLogos = [
@@ -43,7 +42,7 @@ const duplicatedLogos = [...industryLogos, ...industryLogos];
 
 export const IndustryTrust: React.FC = () => {
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 py-12 overflow-hidden">
+    <div className="bg-gray-50 dark:bg-gray-900 py-10 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl font-bold text-center mb-8 dark:text-white">
           Trusted by Industry Leaders
@@ -51,87 +50,45 @@ export const IndustryTrust: React.FC = () => {
         
         <div className="relative">
           {/* First row scrolling left */}
-          <div className="overflow-hidden relative">
-            <motion.div
-              initial={{ x: 0 }}
-              animate={{ x: "-50%" }}
-              transition={{
-                duration: 40,
-                repeat: Infinity,
-                ease: "linear",
-                repeatType: "loop"
-              }}
-              className="flex absolute whitespace-nowrap"
-            >
+          <div className="industry-trust-scroll">
+            <div className="industry-trust-scroll-inner flex">
               {duplicatedLogos.map((company, index) => (
                 <div key={`${company.name}-${index}`} className="mx-8 flex-shrink-0">
-                  <img
-                    src={company.logo}
-                    alt={company.name}
-                    className="h-20 w-20 object-contain rounded-full bg-white p-2 shadow-sm"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
-                    }}
-                  />
+                  <div className="h-20 w-20 rounded-full bg-white p-2 shadow-sm mx-auto">
+                    <img
+                      src={company.logo}
+                      alt={company.name}
+                      className="h-full w-full object-contain rounded-full"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
+                      }}
+                    />
+                  </div>
                   <p className="text-center text-sm mt-2 dark:text-gray-300">{company.name}</p>
                 </div>
               ))}
-              {duplicatedLogos.map((company, index) => (
-                <div key={`${company.name}-repeat-${index}`} className="mx-8 flex-shrink-0">
-                  <img
-                    src={company.logo}
-                    alt={company.name}
-                    className="h-20 w-20 object-contain rounded-full bg-white p-2 shadow-sm"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
-                    }}
-                  />
-                  <p className="text-center text-sm mt-2 dark:text-gray-300">{company.name}</p>
-                </div>
-              ))}
-            </motion.div>
+            </div>
           </div>
           
           {/* Second row scrolling right with different logos */}
-          <div className="overflow-hidden mt-12 relative h-32">
-            <motion.div
-              initial={{ x: "-50%" }}
-              animate={{ x: "0%" }}
-              transition={{
-                duration: 40,
-                repeat: Infinity,
-                ease: "linear",
-                repeatType: "loop"
-              }}
-              className="flex absolute whitespace-nowrap"
-            >
+          <div className="industry-trust-scroll mt-10">
+            <div className="industry-trust-scroll-inner flex animate-[scroll_35s_linear_infinite_reverse]">
               {[...duplicatedLogos].reverse().map((company, index) => (
                 <div key={`${company.name}-rev-${index}`} className="mx-8 flex-shrink-0">
-                  <img
-                    src={company.logo}
-                    alt={company.name}
-                    className="h-20 w-20 object-contain rounded-full bg-white p-2 shadow-sm"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
-                    }}
-                  />
+                  <div className="h-20 w-20 rounded-full bg-white p-2 shadow-sm mx-auto">
+                    <img
+                      src={company.logo}
+                      alt={company.name}
+                      className="h-full w-full object-contain rounded-full"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
+                      }}
+                    />
+                  </div>
                   <p className="text-center text-sm mt-2 dark:text-gray-300">{company.name}</p>
                 </div>
               ))}
-              {[...duplicatedLogos].reverse().map((company, index) => (
-                <div key={`${company.name}-rev-repeat-${index}`} className="mx-8 flex-shrink-0">
-                  <img
-                    src={company.logo}
-                    alt={company.name}
-                    className="h-20 w-20 object-contain rounded-full bg-white p-2 shadow-sm"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
-                    }}
-                  />
-                  <p className="text-center text-sm mt-2 dark:text-gray-300">{company.name}</p>
-                </div>
-              ))}
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

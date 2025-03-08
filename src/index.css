@@ -248,13 +248,14 @@
   @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6;
 }
 
-/* Fix for industry trust section scrolling */
+/* Industry trust section scrolling */
 .industry-trust-scroll {
-  @apply overflow-hidden flex whitespace-nowrap;
+  @apply overflow-hidden w-full;
 }
 
 .industry-trust-scroll-inner {
-  @apply animate-[scroll_30s_linear_infinite];
+  @apply inline-flex animate-[scroll_30s_linear_infinite];
+  min-width: 100%;
 }
 
 @keyframes scroll {
@@ -305,4 +306,40 @@
 
 .view-mode-button {
   @apply h-8 w-8 p-0 flex items-center justify-center;
+}
+
+/* Mobile responsive menu fixes */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    width: 94vw !important;
+    left: 3vw !important;
+  }
+  
+  .menu-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .product-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* Fix for hover delays on menus */
+.hover-trigger {
+  position: relative;
+}
+
+.hover-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.hover-trigger:hover .hover-content {
+  opacity: 1;
+  visibility: visible;
 }

@@ -157,36 +157,28 @@ export const Header = () => {
               </div>
               
               <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-medium mb-2">Categories</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  <Link 
-                    to="/category/furniture" 
-                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Furniture
-                  </Link>
-                  <Link 
-                    to="/category/electronics" 
-                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Electronics
-                  </Link>
-                  <Link 
-                    to="/category/kitchen" 
-                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Kitchen
-                  </Link>
-                  <Link 
-                    to="/category/bathroom" 
-                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Bathroom
-                  </Link>
+                <h3 className="text-lg font-medium mb-4">Categories</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {categories.map((category) => (
+                    <Link 
+                      key={category.name}
+                      to={category.path} 
+                      className="p-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg flex flex-col items-center text-center"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 mb-2 overflow-hidden">
+                        <img 
+                          src={category.image} 
+                          alt={category.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
+                          }}
+                        />
+                      </div>
+                      <span className="text-sm font-medium">{category.name}</span>
+                    </Link>
+                  ))}
                 </div>
               </div>
 
@@ -204,3 +196,6 @@ export const Header = () => {
     </header>
   );
 };
+
+// Import categories for the mobile menu
+import { categories } from "./header/CategoryMenu";

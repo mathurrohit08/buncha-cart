@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import {
@@ -104,76 +104,137 @@ export const categories = [
 
 export const CategoryMenu = () => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Use this to prevent menu from closing immediately when moving to submenu
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setIsOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setIsOpen(false);
+    }, 300); // Delay closing to prevent accidental close
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
-    <HoverCard openDelay={0} closeDelay={100}>
-      <HoverCardTrigger className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+    <div 
+      className="relative"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <button className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
         Categories
-      </HoverCardTrigger>
-      <HoverCardContent 
-        className="w-[calc(100vw-2rem)] sm:w-[500px] p-0 border dark:border-gray-700 bg-white dark:bg-gray-800 z-50" 
-        align="start"
-        sideOffset={8}
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-3 h-[400px] max-h-[70vh]">
-          <div className="sm:col-span-1 bg-gray-50 dark:bg-gray-900 p-4 overflow-y-auto">
-            {categories.map((category) => (
-              <div
-                key={category.name}
-                className="group"
-                onMouseEnter={() => setHoveredCategory(category.name)}
-                onClick={() => setHoveredCategory(category.name)}
-              >
-                <div className="flex items-center justify-between p-2 rounded-lg hover:bg-white dark:hover:bg-gray-800 transition-colors cursor-pointer">
-                  <span className="dark:text-gray-300 text-sm">{category.name}</span>
-                  <ChevronRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="sm:col-span-2 p-4 overflow-y-auto">
-            {hoveredCategory && (
-              <motion.div
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2 }}
-                className="space-y-3"
-              >
-                <h3 className="font-medium dark:text-white text-sm mb-2">{hoveredCategory}</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {categories
-                    .find((c) => c.name === hoveredCategory)
-                    ?.subcategories.map((sub) => (
-                      <Link
-                        key={sub}
-                        to={`/category/${hoveredCategory.toLowerCase().replace(/\s+/g, "-")}/${sub.toLowerCase().replace(/\s+/g, "-")}`}
-                        className="block p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors dark:text-gray-300 text-sm"
-                      >
-                        {sub}
-                      </Link>
-                    ))}
-                </div>
-                
-                <Link
-                  to={categories.find((c) => c.name === hoveredCategory)?.path || "#"}
-                  className="block mt-4"
-                >
-                  <img
-                    src={
-                      categories.find((c) => c.name === hoveredCategory)?.image
-                    }
-                    alt={hoveredCategory}
-                    className="w-full h-36 object-cover rounded-lg"
-                  />
-                  <div className="mt-2 text-sm text-center text-purple-600 dark:text-purple-400 font-medium">
-                    View All {hoveredCategory} Products
+      </button>
+      
+      {isOpen && (
+        <div 
+          className="absolute top-full left-0 w-[calc(100vw-2rem)] sm:w-[800px] p-0 border dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 mt-2"
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-5 h-[450px] max-h-[70vh] overflow-hidden">
+            {/* Categories Column */}
+            <div className="sm:col-span-1 bg-gray-50 dark:bg-gray-900 p-4 overflow-y-auto h-full">
+              <h3 className="font-medium mb-3 text-gray-900 dark:text-white">Browse Categories</h3>
+              <div className="space-y-1">
+                {categories.map((category) => (
+                  <div
+                    key={category.name}
+                    className={`group cursor-pointer rounded-lg ${
+                      hoveredCategory === category.name 
+                        ? "bg-white dark:bg-gray-800" 
+                        : "hover:bg-white/80 dark:hover:bg-gray-800/80"
+                    }`}
+                    onMouseEnter={() => setHoveredCategory(category.name)}
+                    onClick={() => setHoveredCategory(category.name)}
+                  >
+                    <div className="flex items-center justify-between p-2 rounded-lg transition-colors">
+                      <span className={`text-sm ${
+                        hoveredCategory === category.name 
+                          ? "text-purple-600 dark:text-purple-400 font-medium" 
+                          : "dark:text-gray-300"
+                      }`}>{category.name}</span>
+                      <ChevronRight className={`h-4 w-4 ${
+                        hoveredCategory === category.name 
+                          ? "text-purple-600 dark:text-purple-400" 
+                          : "opacity-0 group-hover:opacity-100 transition-opacity"
+                      }`} />
+                    </div>
                   </div>
-                </Link>
-              </motion.div>
-            )}
+                ))}
+              </div>
+            </div>
+            
+            {/* Subcategories and Image Column */}
+            <div className="sm:col-span-4 grid grid-cols-1 sm:grid-cols-5 p-4 h-full overflow-hidden">
+              {hoveredCategory && (
+                <>
+                  {/* Subcategories Section */}
+                  <div className="sm:col-span-3 space-y-3 overflow-y-auto h-full pr-4">
+                    <h3 className="font-medium text-lg dark:text-white mb-4">{hoveredCategory}</h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      {categories
+                        .find((c) => c.name === hoveredCategory)
+                        ?.subcategories.map((sub) => (
+                          <Link
+                            key={sub}
+                            to={`/category/${hoveredCategory.toLowerCase().replace(/\s+/g, "-")}/${sub.toLowerCase().replace(/\s+/g, "-")}`}
+                            className="block p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors dark:text-gray-300 text-sm"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            {sub}
+                          </Link>
+                        ))}
+                    </div>
+                    
+                    <Link
+                      to={categories.find((c) => c.name === hoveredCategory)?.path || "#"}
+                      className="inline-block mt-4 text-purple-600 dark:text-purple-400 hover:underline text-sm font-medium"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      View All {hoveredCategory} Products
+                    </Link>
+                  </div>
+                  
+                  {/* Image Section */}
+                  <div className="sm:col-span-2 overflow-hidden">
+                    <div className="aspect-[4/3] overflow-hidden rounded-lg">
+                      <Link
+                        to={categories.find((c) => c.name === hoveredCategory)?.path || "#"}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <img
+                          src={categories.find((c) => c.name === hoveredCategory)?.image || ""}
+                          alt={hoveredCategory}
+                          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                        />
+                      </Link>
+                    </div>
+                    <div className="mt-3 bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                      <h4 className="font-medium text-sm mb-1 dark:text-white">Featured Products</h4>
+                      <p className="text-xs text-gray-600 dark:text-gray-300">
+                        Explore our selection of top {hoveredCategory} products at great prices.
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
-      </HoverCardContent>
-    </HoverCard>
+      )}
+    </div>
   );
 };

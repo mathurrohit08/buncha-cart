@@ -12,6 +12,7 @@ import { productTypes } from "@/components/header/ProductMenu";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { addToCart } from "@/components/header/CartMenu";
+import { IndustryTrust } from "@/components/IndustryTrust";
 
 const featuredProducts = [
   {
@@ -71,11 +72,12 @@ const Index = () => {
       <main className="pt-16">
         <Banner />
         <Categories />
+        <IndustryTrust />
         
         {/* Featured Collections Section */}
-        <div className="max-w-[1600px] mx-auto py-12 px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">Featured Collections</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="max-w-[1600px] mx-auto py-8 sm:py-12 px-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-4 sm:mb-8">Featured Collections</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {featuredCollections.map((collection) => (
               <motion.div
                 key={collection.name}
@@ -87,11 +89,14 @@ const Index = () => {
                     <img 
                       src={collection.image} 
                       alt={collection.name} 
-                      className="w-full h-48 object-cover"
+                      className="w-full h-40 sm:h-48 object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=500&h=350";
+                      }}
                     />
                     <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-4">
-                      <h3 className="text-xl font-bold text-white mb-2">{collection.name}</h3>
-                      <p className="text-white text-sm mb-3">Discover our {collection.name.toLowerCase()} collection</p>
+                      <h3 className="text-lg sm:text-xl font-bold text-white mb-2">{collection.name}</h3>
+                      <p className="text-white text-xs sm:text-sm mb-3">Discover our {collection.name.toLowerCase()} collection</p>
                       <Button size="sm" variant="outline" className="text-white border-white hover:bg-white/20">
                         Shop Now
                       </Button>
@@ -101,7 +106,7 @@ const Index = () => {
               </motion.div>
             ))}
           </div>
-          <div className="text-center mt-8">
+          <div className="text-center mt-6 sm:mt-8">
             <Link to="/all-products">
               <Button variant="outline" className="gap-2">
                 View All Collections <ArrowRight className="h-4 w-4" />
@@ -111,11 +116,11 @@ const Index = () => {
         </div>
         
         {/* Featured Products Section */}
-        <div className="max-w-[1600px] mx-auto py-12 px-4 bg-gray-50 dark:bg-gray-900/50">
-          <h2 className="text-3xl font-bold text-center mb-2">Featured Products</h2>
-          <p className="text-gray-600 dark:text-gray-400 text-center mb-8">Discover our most popular items selected just for you</p>
+        <div className="max-w-[1600px] mx-auto py-8 sm:py-12 px-4 bg-gray-50 dark:bg-gray-900/50">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2">Featured Products</h2>
+          <p className="text-gray-600 dark:text-gray-400 text-center text-sm sm:text-base mb-6 sm:mb-8">Discover our most popular items selected just for you</p>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {featuredProducts.map((product) => (
               <motion.div
                 key={product.id}
@@ -129,8 +134,11 @@ const Index = () => {
                     <img 
                       src={product.image} 
                       alt={product.name} 
-                      className="w-full h-56 object-cover transition-transform duration-300 ease-in-out"
+                      className="w-full h-48 sm:h-56 object-cover transition-transform duration-300 ease-in-out"
                       style={{transform: hoveredProductId === product.id ? 'scale(1.05)' : 'scale(1)'}}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=500&h=350";
+                      }}
                     />
                   </Link>
                   <div 
@@ -169,7 +177,7 @@ const Index = () => {
             ))}
           </div>
           
-          <div className="text-center mt-8">
+          <div className="text-center mt-6 sm:mt-8">
             <Link to="/all-products">
               <Button className="gap-2">
                 Explore All Products <ArrowRight className="h-4 w-4" />
@@ -179,48 +187,54 @@ const Index = () => {
         </div>
         
         {/* Home Improvement Section */}
-        <div className="max-w-[1600px] mx-auto py-12 px-4">
+        <div className="max-w-[1600px] mx-auto py-8 sm:py-12 px-4">
           <div className="relative overflow-hidden rounded-lg">
             <img 
               src="https://images.unsplash.com/photo-1556909114-44e3e9399a2c" 
               alt="Home Improvement" 
-              className="w-full h-[300px] md:h-[400px] object-cover"
+              className="w-full h-[250px] sm:h-[300px] md:h-[400px] object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=1000&h=400";
+              }}
             />
-            <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-6">
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Browse Our Home Improvement Products</h2>
-              <p className="text-white mb-6 max-w-2xl">
+            <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-4 sm:p-6">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 sm:mb-4">Browse Our Home Improvement Products</h2>
+              <p className="text-white text-sm sm:text-base mb-4 sm:mb-6 max-w-2xl">
                 Explore our extensive collection of tiles, flooring, cabinets, sinks, vanities, 
                 and more for your renovation projects.
               </p>
               <Link to="/home-improvement">
-                <Button size="lg" className="px-8 py-6 text-base font-medium">Shop Home Improvement</Button>
+                <Button size="sm" className="px-4 sm:px-8 sm:py-6 text-sm sm:text-base font-medium">Shop Home Improvement</Button>
               </Link>
             </div>
           </div>
         </div>
 
         {/* Smart Home Section */}
-        <div className="max-w-[1600px] mx-auto py-12 px-4">
+        <div className="max-w-[1600px] mx-auto py-8 sm:py-12 px-4">
           <div className="relative overflow-hidden rounded-lg">
             <img 
               src="https://images.unsplash.com/photo-1558002038-1055e2dae1d7" 
               alt="Smart Home" 
-              className="w-full h-[300px] md:h-[400px] object-cover"
+              className="w-full h-[250px] sm:h-[300px] md:h-[400px] object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=1000&h=400";
+              }}
             />
-            <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-6">
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Transform Your Home with Smart Technology</h2>
-              <p className="text-white mb-6 max-w-2xl">
+            <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-4 sm:p-6">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 sm:mb-4">Transform Your Home with Smart Technology</h2>
+              <p className="text-white text-sm sm:text-base mb-4 sm:mb-6 max-w-2xl">
                 Discover our collection of smart home devices that make your life easier, safer, and more comfortable.
               </p>
               <Link to="/products/smart-home">
-                <Button size="lg" className="px-8 py-6 text-base font-medium">Shop Smart Home</Button>
+                <Button size="sm" className="px-4 sm:px-8 sm:py-6 text-sm sm:text-base font-medium">Shop Smart Home</Button>
               </Link>
             </div>
           </div>
         </div>
         
         {/* New Arrivals & Best Sellers Section */}
-        <div className="max-w-[1600px] mx-auto py-12 px-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="max-w-[1600px] mx-auto py-8 sm:py-12 px-4 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/* New Arrivals */}
           <div className="rounded-lg overflow-hidden shadow-md">
             <Link to="/new-arrivals">
@@ -228,11 +242,14 @@ const Index = () => {
                 <img 
                   src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" 
                   alt="New Arrivals" 
-                  className="w-full h-64 object-cover"
+                  className="w-full h-56 sm:h-64 object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=500&h=350";
+                  }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-tr from-purple-900/70 to-transparent flex flex-col justify-end p-6">
-                  <h3 className="text-2xl font-bold text-white mb-2">New Arrivals</h3>
-                  <p className="text-white text-sm mb-4">Check out our latest products and be the first to get them</p>
+                <div className="absolute inset-0 bg-gradient-to-tr from-purple-900/70 to-transparent flex flex-col justify-end p-4 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-1 sm:mb-2">New Arrivals</h3>
+                  <p className="text-white text-xs sm:text-sm mb-3 sm:mb-4">Check out our latest products and be the first to get them</p>
                   <Button size="sm" variant="secondary" className="self-start">
                     View New Arrivals
                   </Button>
@@ -248,11 +265,14 @@ const Index = () => {
                 <img 
                   src="https://images.unsplash.com/photo-1560769629-975ec94e6a86" 
                   alt="Best Sellers" 
-                  className="w-full h-64 object-cover"
+                  className="w-full h-56 sm:h-64 object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=500&h=350";
+                  }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-tr from-amber-900/70 to-transparent flex flex-col justify-end p-6">
-                  <h3 className="text-2xl font-bold text-white mb-2">Best Sellers</h3>
-                  <p className="text-white text-sm mb-4">Discover our most popular products that customers love</p>
+                <div className="absolute inset-0 bg-gradient-to-tr from-amber-900/70 to-transparent flex flex-col justify-end p-4 sm:p-6">
+                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-1 sm:mb-2">Best Sellers</h3>
+                  <p className="text-white text-xs sm:text-sm mb-3 sm:mb-4">Discover our most popular products that customers love</p>
                   <Button size="sm" variant="secondary" className="self-start">
                     View Best Sellers
                   </Button>
