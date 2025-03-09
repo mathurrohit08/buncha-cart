@@ -60,12 +60,15 @@ export const Header = () => {
             <Logo />
           </div>
 
-          <nav className="hidden lg:flex items-center justify-center space-x-8 flex-1">
-            <ProductMenu />
-            <CategoryMenu />
-            <NewArrivalsSubMenu />
-            <BestSellersSubMenu />
-            <DealsSubMenu />
+          {/* Improved centered navigation with fixed width */}
+          <nav className="hidden lg:flex items-center justify-center space-x-8 max-w-3xl w-full mx-auto">
+            <div className="flex items-center justify-center space-x-8 w-full">
+              <ProductMenu />
+              <CategoryMenu />
+              <NewArrivalsSubMenu />
+              <BestSellersSubMenu />
+              <DealsSubMenu />
+            </div>
           </nav>
 
           <div className="flex items-center">
@@ -123,28 +126,28 @@ export const Header = () => {
               <div className="grid grid-cols-2 gap-4">
                 <Link 
                   to="/all-products"
-                  className="flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-800 rounded-lg"
+                  className="flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <span className="text-lg font-medium">All Products</span>
                 </Link>
                 <Link 
                   to="/new-arrivals"
-                  className="flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-800 rounded-lg"
+                  className="flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <span className="text-lg font-medium">New Arrivals</span>
                 </Link>
                 <Link 
                   to="/best-sellers"
-                  className="flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-800 rounded-lg"
+                  className="flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <span className="text-lg font-medium">Best Sellers</span>
                 </Link>
                 <Link 
                   to="/deals"
-                  className="flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-800 rounded-lg"
+                  className="flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <span className="text-lg font-medium">Deals</span>
@@ -158,7 +161,7 @@ export const Header = () => {
                     <Link 
                       key={category.name}
                       to={category.path} 
-                      className="p-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg flex flex-col items-center text-center"
+                      className="p-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg flex flex-col items-center text-center transition-colors"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 mb-2 overflow-hidden">
@@ -166,6 +169,9 @@ export const Header = () => {
                           src={category.image} 
                           alt={category.name}
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
+                          }}
                         />
                       </div>
                       <span className="text-sm font-medium">{category.name}</span>

@@ -1,5 +1,6 @@
 
 import { FilterPanel } from "@/components/FilterPanel";
+import { Badge } from "@/components/ui/badge";
 
 interface ProductFiltersSidebarProps {
   priceRange: [number, number];
@@ -24,8 +25,36 @@ interface ProductFiltersSidebarProps {
   features?: string[];
   selectedFeatures?: string[];
   setSelectedFeatures?: (features: string[]) => void;
+  title?: string;
+  activeFiltersCount?: number;
 }
 
 export const ProductFiltersSidebar = (props: ProductFiltersSidebarProps) => {
-  return <FilterPanel {...props} />;
+  // Calculate the number of active filters
+  const activeFiltersCount = 
+    (props.selectedRating !== null ? 1 : 0) +
+    (props.showInStock ? 1 : 0) +
+    (props.showOnSale ? 1 : 0) +
+    (props.showNew ? 1 : 0) +
+    (props.showBestSellers ? 1 : 0) +
+    (props.selectedBrands?.length || 0) +
+    (props.selectedFeatures?.length || 0) +
+    (props.priceRange[0] > 0 || props.priceRange[1] < props.maxPrice ? 1 : 0);
+
+  return (
+    <div className="relative">
+      {activeFiltersCount > 0 && (
+        <Badge 
+          className="absolute -top-2 -right-2 bg-purple-600 z-10"
+          variant="secondary"
+        >
+          {activeFiltersCount}
+        </Badge>
+      )}
+      <FilterPanel 
+        {...props} 
+        title={props.title || "Filters"}
+      />
+    </div>
+  );
 };

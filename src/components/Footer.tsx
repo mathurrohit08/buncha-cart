@@ -40,19 +40,22 @@ export const Footer = () => {
     { icon: Youtube, href: "#", label: "Youtube" },
   ];
 
-  // FAQ content
+  // FAQ content with reliable images
   const faqItems = [
     {
       question: "How do shipping costs work?",
-      answer: "Shipping costs are calculated based on distance from our warehouse. We offer free shipping for orders within 50 miles, and tiered pricing for further distances."
+      answer: "Shipping costs are calculated based on distance from our warehouse. We offer free shipping for orders within 50 miles, and tiered pricing for further distances.",
+      image: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=300&h=200"
     },
     {
       question: "What is your return policy?",
-      answer: "We offer a 30-day money-back guarantee on all products. Items must be returned in their original packaging for a full refund."
+      answer: "We offer a 30-day money-back guarantee on all products. Items must be returned in their original packaging for a full refund.",
+      image: "https://images.unsplash.com/photo-1580745294621-58c9c5d2a4e5?auto=format&fit=crop&w=300&h=200"
     },
     {
       question: "Do you ship internationally?",
-      answer: "Yes, we ship worldwide! International shipping costs vary by country and are calculated at checkout."
+      answer: "Yes, we ship worldwide! International shipping costs vary by country and are calculated at checkout.",
+      image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=300&h=200"
     }
   ];
 
@@ -82,12 +85,22 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* FAQ Section (New) */}
+        {/* Enhanced FAQ Section */}
         <div className="py-10 border-b border-gray-800">
           <h3 className="text-xl sm:text-2xl font-bold mb-6 text-center">Frequently Asked Questions</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {faqItems.map((item, index) => (
-              <Card key={index} className="bg-gray-800 border-gray-700">
+              <Card key={index} className="bg-gray-800 border-gray-700 overflow-hidden">
+                <div className="h-40 overflow-hidden">
+                  <img 
+                    src={item.image} 
+                    alt={item.question}
+                    className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=300&h=200";
+                    }}
+                  />
+                </div>
                 <CardHeader>
                   <CardTitle className="text-white">{item.question}</CardTitle>
                 </CardHeader>
@@ -181,7 +194,7 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Contact Info Section - With Images */}
+        {/* Contact Info Section - With Reliable Images */}
         <div className="py-8 border-t border-gray-800">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="flex items-start gap-4">
@@ -192,7 +205,14 @@ export const Footer = () => {
                 <h4 className="font-medium mb-2 text-white">Our Location</h4>
                 <p className="text-gray-400">123 Design Avenue, Suite 100</p>
                 <p className="text-gray-400">New York, NY 10001, USA</p>
-                <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6" alt="Store location" className="mt-2 rounded-lg h-24 w-full object-cover" />
+                <img 
+                  src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=300&h=200" 
+                  alt="Store location" 
+                  className="mt-2 rounded-lg h-24 w-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=300&h=200";
+                  }}
+                />
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -203,7 +223,14 @@ export const Footer = () => {
                 <h4 className="font-medium mb-2 text-white">Call Us</h4>
                 <p className="text-gray-400">+1 (800) 123-4567</p>
                 <p className="text-gray-400">Mon-Fri: 9am - 6pm EST</p>
-                <img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" alt="Customer support" className="mt-2 rounded-lg h-24 w-full object-cover" />
+                <img 
+                  src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=300&h=200" 
+                  alt="Customer support" 
+                  className="mt-2 rounded-lg h-24 w-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=300&h=200";
+                  }}
+                />
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -214,7 +241,14 @@ export const Footer = () => {
                 <h4 className="font-medium mb-2 text-white">Email Us</h4>
                 <p className="text-gray-400">info@designstore.com</p>
                 <p className="text-gray-400">support@designstore.com</p>
-                <img src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7" alt="Contact us" className="mt-2 rounded-lg h-24 w-full object-cover" />
+                <img 
+                  src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=300&h=200" 
+                  alt="Contact us" 
+                  className="mt-2 rounded-lg h-24 w-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=300&h=200";
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -269,7 +303,14 @@ export const Footer = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-center md:text-left">
               <Link to="/" className="flex items-center justify-center md:justify-start gap-2">
-                <img src="/lovable-uploads/d0289308-98a6-4913-b7cd-73b0278e8893.png" alt="Logo" className="h-10" />
+                <img 
+                  src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=40&h=40" 
+                  alt="Logo" 
+                  className="h-10 w-10 rounded-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=40&h=40";
+                  }}
+                />
                 <span className="text-xl font-bold">DesignStore</span>
               </Link>
             </div>
