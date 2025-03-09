@@ -1,5 +1,5 @@
 
-import { FilterPanel } from "@/components/FilterPanel";
+import { FilterPanel } from "@/components/filters/FilterPanel";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 
