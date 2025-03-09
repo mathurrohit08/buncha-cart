@@ -29,32 +29,6 @@ export const savedAddresses = [
   },
   {
     id: 3,
-    name: "Parents",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john@example.com",
-    address: "789 Lake Shore Drive",
-    city: "Chicago",
-    state: "IL",
-    zipCode: "60601",
-    country: "United States",
-    default: false
-  },
-  {
-    id: 4,
-    name: "Vacation Home",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john@example.com",
-    address: "555 Ocean Drive",
-    city: "Miami",
-    state: "FL",
-    zipCode: "33139",
-    country: "United States",
-    default: false
-  },
-  {
-    id: 5,
     name: "London Flat",
     firstName: "John",
     lastName: "Doe",
@@ -67,7 +41,7 @@ export const savedAddresses = [
     default: false
   },
   {
-    id: 6,
+    id: 4,
     name: "Paris Apartment",
     firstName: "John",
     lastName: "Doe",
@@ -80,7 +54,7 @@ export const savedAddresses = [
     default: false
   },
   {
-    id: 7,
+    id: 5,
     name: "Tokyo Office",
     firstName: "John",
     lastName: "Doe",
@@ -93,7 +67,7 @@ export const savedAddresses = [
     default: false
   },
   {
-    id: 8,
+    id: 6,
     name: "Sydney Beach House",
     firstName: "John",
     lastName: "Doe",
@@ -106,7 +80,7 @@ export const savedAddresses = [
     default: false
   },
   {
-    id: 9,
+    id: 7,
     name: "Berlin Loft",
     firstName: "John",
     lastName: "Doe",
@@ -119,7 +93,7 @@ export const savedAddresses = [
     default: false
   },
   {
-    id: 10,
+    id: 8,
     name: "Toronto Condo",
     firstName: "John",
     lastName: "Doe",
@@ -129,6 +103,32 @@ export const savedAddresses = [
     state: "Ontario",
     zipCode: "M5V 2T6",
     country: "Canada",
+    default: false
+  },
+  {
+    id: 9,
+    name: "Dubai Residence",
+    firstName: "John",
+    lastName: "Doe",
+    email: "john@example.com",
+    address: "Sheikh Zayed Road",
+    city: "Dubai",
+    state: "Dubai",
+    zipCode: "12345",
+    country: "United Arab Emirates",
+    default: false
+  },
+  {
+    id: 10,
+    name: "Singapore Apartment",
+    firstName: "John",
+    lastName: "Doe",
+    email: "john@example.com",
+    address: "88 Orchard Road",
+    city: "Singapore",
+    state: "Central Region",
+    zipCode: "238839",
+    country: "Singapore",
     default: false
   }
 ];
