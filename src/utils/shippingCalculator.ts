@@ -1,3 +1,4 @@
+
 export type ShippingTier = {
   minMiles: number;
   maxMiles: number;
@@ -301,4 +302,28 @@ export const countries: Country[] = [
           { name: "Salem", zipCodes: ["97301", "97302", "97303", "97304", "97305", "97306", "97308", "97309", "97310", "97311"] },
           { name: "Gresham", zipCodes: ["97030", "97031", "97032", "97033", "97034", "97035", "97036", "97037", "97038", "97039"] },
           { name: "Hillsboro", zipCodes: ["97123", "97124", "97125", "97126", "97127", "97128", "97129", "97140", "97141", "97142"] },
-          { name: "Beaverton", zipCodes: ["97003", "97005", "97006", "97007", "97008", "97075", "97076", "97077
+          { name: "Beaverton", zipCodes: ["97003", "97005", "97006", "97007", "97008", "97075", "97076", "97077", "97078", "97079"] }
+        ]
+      }
+    ]
+  }
+];
+
+// Function to get location details from a zip code
+export const getLocationFromZipCode = (zipCode: string) => {
+  // Implementation for getting city/state from zip code
+  for (const country of countries) {
+    for (const state of country.states) {
+      for (const city of state.cities) {
+        if (city.zipCodes.includes(zipCode)) {
+          return {
+            city: city.name,
+            state: state.name,
+            country: country.name
+          };
+        }
+      }
+    }
+  }
+  return null;
+};
