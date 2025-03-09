@@ -61,8 +61,8 @@ export const Header = () => {
           </div>
 
           {/* Improved centered navigation with fixed width */}
-          <nav className="hidden lg:flex items-center justify-center space-x-8 max-w-3xl w-full mx-auto">
-            <div className="flex items-center justify-center space-x-8 w-full">
+          <nav className="hidden lg:flex items-center justify-center mx-auto">
+            <div className="flex items-center justify-center space-x-8 w-[600px]">
               <ProductMenu />
               <CategoryMenu />
               <NewArrivalsSubMenu />

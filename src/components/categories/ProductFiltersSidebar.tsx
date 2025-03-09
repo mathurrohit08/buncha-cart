@@ -1,6 +1,7 @@
 
 import { FilterPanel } from "@/components/FilterPanel";
 import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
 
 interface ProductFiltersSidebarProps {
   priceRange: [number, number];
@@ -42,19 +43,28 @@ export const ProductFiltersSidebar = (props: ProductFiltersSidebarProps) => {
     (props.priceRange[0] > 0 || props.priceRange[1] < props.maxPrice ? 1 : 0);
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       {activeFiltersCount > 0 && (
-        <Badge 
-          className="absolute -top-2 -right-2 bg-purple-600 z-10"
-          variant="secondary"
+        <motion.div 
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.2 }}
+          className="absolute -top-2 -right-2 z-10"
         >
-          {activeFiltersCount}
-        </Badge>
+          <Badge 
+            className="bg-purple-600 text-white font-medium"
+            variant="secondary"
+          >
+            {activeFiltersCount} active {activeFiltersCount === 1 ? 'filter' : 'filters'}
+          </Badge>
+        </motion.div>
       )}
-      <FilterPanel 
-        {...props} 
-        title={props.title || "Filters"}
-      />
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden border border-gray-200 dark:border-gray-700">
+        <FilterPanel 
+          {...props} 
+          title={props.title || "Refine Results"}
+        />
+      </div>
     </div>
   );
 };
