@@ -46,7 +46,7 @@ export const Header = () => {
         scrolled ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm" : "bg-white dark:bg-gray-900"
       }`}
     >
-      <div className="max-w-[1600px] mx-auto px-4">
+      <div className="max-w-[1400px] mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Button
@@ -60,7 +60,7 @@ export const Header = () => {
             <Logo />
           </div>
 
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center justify-center space-x-8 flex-1">
             <ProductMenu />
             <CategoryMenu />
             <NewArrivalsSubMenu />
@@ -107,7 +107,7 @@ export const Header = () => {
 
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 bg-white dark:bg-gray-900 overflow-y-auto">
-          <div className="max-w-[1600px] mx-auto px-4 py-4">
+          <div className="max-w-[1400px] mx-auto px-4 py-4">
             <div className="flex items-center justify-between mb-6">
               <Logo />
               <Button
