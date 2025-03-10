@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Youtube, MapPin, Mail, Phone, CreditCard, Users, Package, Heart } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
@@ -40,7 +39,6 @@ export const Footer = () => {
     { icon: Youtube, href: "#", label: "Youtube" },
   ];
 
-  // FAQ content with reliable images
   const faqItems = [
     {
       question: "How do shipping costs work?",
@@ -62,7 +60,6 @@ export const Footer = () => {
   return (
     <footer className="bg-gray-900 text-white w-full">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
-        {/* Newsletter Section */}
         <div className="py-10 sm:py-12 border-b border-gray-800">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
@@ -85,7 +82,6 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Enhanced FAQ Section */}
         <div className="py-10 border-b border-gray-800">
           <h3 className="text-xl sm:text-2xl font-bold mb-6 text-center">Frequently Asked Questions</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -118,7 +114,6 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Main Footer Links */}
         <div className="py-10 sm:py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-lg font-bold mb-6 relative inline-block">
@@ -194,7 +189,6 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Contact Info Section - With Reliable Images */}
         <div className="py-8 border-t border-gray-800">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="flex items-start gap-4">
@@ -254,7 +248,6 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Features Section - Better responsive design */}
         <div className="py-8 border-t border-gray-800">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="flex items-center gap-4 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800 transition-colors">
@@ -298,7 +291,6 @@ export const Footer = () => {
 
         <Separator className="bg-gray-800" />
 
-        {/* Social & Copyright Footer */}
         <div className="py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-center md:text-left">
