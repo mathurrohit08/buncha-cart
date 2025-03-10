@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Youtube, MapPin, Mail, Phone, CreditCard, Users, Package, Heart } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
@@ -64,7 +65,7 @@ export const Footer = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
               <h3 className="text-xl sm:text-2xl font-bold mb-2">Subscribe to our newsletter</h3>
-              <p className="text-gray-400 mb-4">
+              <p className="text-gray-300 mb-4">
                 Get the latest updates, exclusive offers, and design tips straight to your inbox.
               </p>
             </div>
@@ -116,7 +117,7 @@ export const Footer = () => {
 
         <div className="py-10 sm:py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-lg font-bold mb-6 relative inline-block">
+            <h3 className="text-lg font-bold mb-6 relative inline-block text-white">
               Company
               <span className="absolute -bottom-2 left-0 w-16 h-1 bg-indigo-600"></span>
             </h3>
@@ -125,7 +126,7 @@ export const Footer = () => {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-gray-400 hover:text-white transition-colors"
+                    className="text-gray-300 hover:text-white transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -134,7 +135,7 @@ export const Footer = () => {
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-bold mb-6 relative inline-block">
+            <h3 className="text-lg font-bold mb-6 relative inline-block text-white">
               Support
               <span className="absolute -bottom-2 left-0 w-16 h-1 bg-indigo-600"></span>
             </h3>
@@ -143,7 +144,7 @@ export const Footer = () => {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-gray-400 hover:text-white transition-colors"
+                    className="text-gray-300 hover:text-white transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -152,7 +153,7 @@ export const Footer = () => {
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-bold mb-6 relative inline-block">
+            <h3 className="text-lg font-bold mb-6 relative inline-block text-white">
               Programs
               <span className="absolute -bottom-2 left-0 w-16 h-1 bg-indigo-600"></span>
             </h3>
@@ -161,7 +162,7 @@ export const Footer = () => {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-gray-400 hover:text-white transition-colors"
+                    className="text-gray-300 hover:text-white transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -170,7 +171,7 @@ export const Footer = () => {
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-bold mb-6 relative inline-block">
+            <h3 className="text-lg font-bold mb-6 relative inline-block text-white">
               Legal
               <span className="absolute -bottom-2 left-0 w-16 h-1 bg-indigo-600"></span>
             </h3>
@@ -179,7 +180,7 @@ export const Footer = () => {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="text-gray-400 hover:text-white transition-colors"
+                    className="text-gray-300 hover:text-white transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -197,8 +198,8 @@ export const Footer = () => {
               </div>
               <div>
                 <h4 className="font-medium mb-2 text-white">Our Location</h4>
-                <p className="text-gray-400">123 Design Avenue, Suite 100</p>
-                <p className="text-gray-400">New York, NY 10001, USA</p>
+                <p className="text-gray-300">123 Design Avenue, Suite 100</p>
+                <p className="text-gray-300">New York, NY 10001, USA</p>
                 <img 
                   src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=300&h=200" 
                   alt="Store location" 
@@ -215,8 +216,8 @@ export const Footer = () => {
               </div>
               <div>
                 <h4 className="font-medium mb-2 text-white">Call Us</h4>
-                <p className="text-gray-400">+1 (800) 123-4567</p>
-                <p className="text-gray-400">Mon-Fri: 9am - 6pm EST</p>
+                <p className="text-gray-300">+1 (800) 123-4567</p>
+                <p className="text-gray-300">Mon-Fri: 9am - 6pm EST</p>
                 <img 
                   src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=300&h=200" 
                   alt="Customer support" 
@@ -233,8 +234,8 @@ export const Footer = () => {
               </div>
               <div>
                 <h4 className="font-medium mb-2 text-white">Email Us</h4>
-                <p className="text-gray-400">info@designstore.com</p>
-                <p className="text-gray-400">support@designstore.com</p>
+                <p className="text-gray-300">info@designstore.com</p>
+                <p className="text-gray-300">support@designstore.com</p>
                 <img 
                   src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=300&h=200" 
                   alt="Contact us" 
@@ -255,8 +256,8 @@ export const Footer = () => {
                 <Package className="h-6 w-6 text-indigo-400" />
               </div>
               <div>
-                <h4 className="font-medium">Free Shipping</h4>
-                <p className="text-sm text-gray-400">On orders over $50</p>
+                <h4 className="font-medium text-white">Free Shipping</h4>
+                <p className="text-sm text-gray-300">On orders over $50</p>
               </div>
             </div>
             <div className="flex items-center gap-4 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800 transition-colors">
@@ -264,8 +265,8 @@ export const Footer = () => {
                 <CreditCard className="h-6 w-6 text-indigo-400" />
               </div>
               <div>
-                <h4 className="font-medium">Secure Payment</h4>
-                <p className="text-sm text-gray-400">100% secure checkout</p>
+                <h4 className="font-medium text-white">Secure Payment</h4>
+                <p className="text-sm text-gray-300">100% secure checkout</p>
               </div>
             </div>
             <div className="flex items-center gap-4 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800 transition-colors">
@@ -273,8 +274,8 @@ export const Footer = () => {
                 <Users className="h-6 w-6 text-indigo-400" />
               </div>
               <div>
-                <h4 className="font-medium">24/7 Support</h4>
-                <p className="text-sm text-gray-400">Dedicated assistance</p>
+                <h4 className="font-medium text-white">24/7 Support</h4>
+                <p className="text-sm text-gray-300">Dedicated assistance</p>
               </div>
             </div>
             <div className="flex items-center gap-4 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800 transition-colors">
@@ -282,8 +283,8 @@ export const Footer = () => {
                 <Heart className="h-6 w-6 text-indigo-400" />
               </div>
               <div>
-                <h4 className="font-medium">Satisfaction Guarantee</h4>
-                <p className="text-sm text-gray-400">30-day money back</p>
+                <h4 className="font-medium text-white">Satisfaction Guarantee</h4>
+                <p className="text-sm text-gray-300">30-day money back</p>
               </div>
             </div>
           </div>
@@ -303,7 +304,7 @@ export const Footer = () => {
                     (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=40&h=40";
                   }}
                 />
-                <span className="text-xl font-bold">DesignStore</span>
+                <span className="text-xl font-bold text-white">DesignStore</span>
               </Link>
             </div>
             <div className="flex gap-6">
@@ -320,9 +321,9 @@ export const Footer = () => {
                 </a>
               ))}
             </div>
-            <p className="text-gray-400 text-sm text-center md:text-right">
+            <p className="text-gray-300 text-sm text-center md:text-right">
               © {new Date().getFullYear()} DesignStore. All rights reserved. <br />
-              <span className="text-gray-500">Designed and developed with ❤️</span>
+              <span className="text-gray-400">Designed and developed with ❤️</span>
             </p>
           </div>
         </div>

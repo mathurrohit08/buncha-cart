@@ -128,7 +128,7 @@ export const Header = () => {
         )}
       </div>
 
-      {/* Mobile Menu with animation */}
+      {/* Mobile Menu with improved animation */}
       <div 
         ref={menuRef}
         className={`fixed inset-0 z-50 bg-white dark:bg-gray-900 transform transition-transform duration-300 ease-in-out ${
