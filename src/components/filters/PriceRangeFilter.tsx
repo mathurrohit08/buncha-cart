@@ -2,6 +2,7 @@
 import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Slider } from "@/components/ui/slider";
 import { usePriceRangeSlider } from "./filterUtils";
+import { DollarSign } from "lucide-react";
 
 interface PriceRangeFilterProps {
   priceRange: [number, number];
@@ -21,7 +22,12 @@ export const PriceRangeFilter = ({
 
   return (
     <AccordionItem value="price">
-      <AccordionTrigger className="text-base font-medium">Price Range</AccordionTrigger>
+      <AccordionTrigger className="text-base font-medium">
+        <div className="flex items-center">
+          <DollarSign className="h-4 w-4 mr-2 text-purple-600 dark:text-purple-400" />
+          Price Range
+        </div>
+      </AccordionTrigger>
       <AccordionContent>
         <div className="px-2 pt-2">
           <Slider
@@ -33,9 +39,13 @@ export const PriceRangeFilter = ({
             onValueCommit={handlePriceChangeEnd}
             className="mb-4"
           />
-          <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-            <span>${priceValues[0]}</span>
-            <span>${priceValues[1]}</span>
+          <div className="flex justify-between">
+            <div className="flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded px-2 py-1 text-sm text-gray-700 dark:text-gray-300">
+              <span>${priceValues[0]}</span>
+            </div>
+            <div className="flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded px-2 py-1 text-sm text-gray-700 dark:text-gray-300">
+              <span>${priceValues[1]}</span>
+            </div>
           </div>
         </div>
       </AccordionContent>

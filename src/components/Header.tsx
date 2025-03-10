@@ -60,9 +60,9 @@ export const Header = () => {
             <Logo />
           </div>
 
-          {/* Improved centered navigation with fixed width */}
-          <nav className="hidden lg:flex items-center justify-center mx-auto">
-            <div className="flex items-center justify-center space-x-8 w-[600px]">
+          {/* Improved centered navigation with fixed width and better centering */}
+          <nav className="hidden lg:flex items-center justify-center">
+            <div className="flex items-center justify-center space-x-8 w-[650px] mx-auto">
               <ProductMenu />
               <CategoryMenu />
               <NewArrivalsSubMenu />

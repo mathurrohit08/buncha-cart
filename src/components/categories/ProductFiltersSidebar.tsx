@@ -2,6 +2,7 @@
 import { FilterPanel } from "@/components/filters/FilterPanel";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
+import { Filter } from "lucide-react";
 
 interface ProductFiltersSidebarProps {
   priceRange: [number, number];
@@ -60,9 +61,12 @@ export const ProductFiltersSidebar = (props: ProductFiltersSidebarProps) => {
         </motion.div>
       )}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden border border-gray-200 dark:border-gray-700">
+        <div className="p-3 border-b border-gray-200 dark:border-gray-700 flex items-center">
+          <Filter className="h-4 w-4 mr-2 text-purple-600 dark:text-purple-400" />
+          <h2 className="text-base font-medium">{props.title || "Refine Results"}</h2>
+        </div>
         <FilterPanel 
-          {...props} 
-          title={props.title || "Refine Results"}
+          {...props}
         />
       </div>
     </div>
