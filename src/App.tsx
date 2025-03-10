@@ -37,6 +37,22 @@ import ToolsHomeImprovementPage from "./pages/categories/ToolsHomeImprovementPag
 import OutdoorLivingPage from "./pages/categories/OutdoorLivingPage";
 import TechAccessoriesPage from "./pages/categories/TechAccessoriesPage";
 
+// Import new missing pages
+import ApplyForCredit from "./pages/ApplyForCredit";
+import BulkSale from "./pages/BulkSale";
+import DistributorRegistration from "./pages/DistributorRegistration";
+import AffiliateProgram from "./pages/AffiliateProgram";
+import Accessibility from "./pages/Accessibility";
+import Blog from "./pages/Blog";
+import Warranty from "./pages/Warranty";
+
+// Import account pages
+import Profile from "./pages/account/Profile";
+import Orders from "./pages/account/Orders";
+import Wishlist from "./pages/account/Wishlist";
+import Settings from "./pages/account/Settings";
+import AccountLayout from "./pages/account/AccountLayout";
+
 import "./App.css";
 
 const queryClient = new QueryClient();
@@ -80,6 +96,25 @@ function App() {
               <Route path="/tools-home-improvement" element={<ToolsHomeImprovementPage />} />
               <Route path="/outdoor-living" element={<OutdoorLivingPage />} />
               <Route path="/tech-accessories" element={<TechAccessoriesPage />} />
+              
+              {/* Add missing footer page routes */}
+              <Route path="/apply-for-credit" element={<ApplyForCredit />} />
+              <Route path="/bulk-sale" element={<BulkSale />} />
+              <Route path="/distributor-registration" element={<DistributorRegistration />} />
+              <Route path="/affiliate-program" element={<AffiliateProgram />} />
+              <Route path="/accessibility" element={<Accessibility />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/warranty" element={<Warranty />} />
+              
+              {/* Account pages */}
+              <Route path="/account" element={<AccountLayout />}>
+                <Route index element={<Profile />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="orders" element={<Orders />} />
+                <Route path="wishlist" element={<Wishlist />} />
+                <Route path="settings" element={<Settings />} />
+              </Route>
+              
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />

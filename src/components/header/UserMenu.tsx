@@ -1,44 +1,48 @@
 
 import { useState } from "react";
-import { User, Settings, LogOut, Package, Heart, ShoppingBag, LogIn } from "lucide-react";
-import { Link } from "react-router-dom";
+import { User, ShoppingCart, LogOut, LogIn, Heart, Package, Settings } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuTrigger,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-
-// Mock user data - in a real app, this would come from your auth system
-const mockUser = {
-  id: "1",
-  name: "John Doe",
-  email: "john@example.com",
-  avatar: null,
-  isLoggedIn: true,
-};
+import { Link, useNavigate } from "react-router-dom";
 
 export const UserMenu = () => {
-  const [user, setUser] = useState(mockUser);
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") === "true");
   const { toast } = useToast();
-
+  const navigate = useNavigate();
+  
   const handleLogin = () => {
-    setUser({ ...mockUser, isLoggedIn: true });
+    // For demo purposes, we'll just set isLoggedIn to true
+    localStorage.setItem("isLoggedIn", "true");
+    setIsLoggedIn(true);
+    
     toast({
       title: "Logged in successfully",
-      description: "Welcome back, John Doe!",
+      description: "Welcome back!",
     });
   };
-
+  
   const handleLogout = () => {
-    setUser({ ...mockUser, isLoggedIn: false });
+    localStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+    
     toast({
       title: "Logged out successfully",
-      description: "You have been logged out of your account.",
+      description: "You have been logged out of your account",
     });
+    
+    // Redirect to home if on an account page
+    if (window.location.pathname.startsWith("/account")) {
+      navigate("/");
+    }
   };
 
   return (
@@ -46,74 +50,64 @@ export const UserMenu = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="relative">
           <User className="h-5 w-5" />
-          <span className="sr-only">User menu</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
-        {user.isLoggedIn ? (
+      <DropdownMenuContent className="w-56" align="end" forceMount>
+        {isLoggedIn ? (
           <>
-            <div className="flex items-center gap-2 p-2">
-              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                <User className="h-4 w-4" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-sm font-medium">{user.name}</span>
-                <span className="text-xs text-gray-500">{user.email}</span>
-              </div>
-            </div>
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <Link to="/profile">
-              <DropdownMenuItem className="cursor-pointer">
-                <User className="h-4 w-4 mr-2" />
-                Profile
+            <DropdownMenuGroup>
+              <DropdownMenuItem asChild>
+                <Link to="/account/profile" className="w-full cursor-pointer">
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </Link>
               </DropdownMenuItem>
-            </Link>
-            <Link to="/orders">
-              <DropdownMenuItem className="cursor-pointer">
-                <Package className="h-4 w-4 mr-2" />
-                Orders
+              <DropdownMenuItem asChild>
+                <Link to="/account/orders" className="w-full cursor-pointer">
+                  <Package className="mr-2 h-4 w-4" />
+                  <span>Orders</span>
+                </Link>
               </DropdownMenuItem>
-            </Link>
-            <Link to="/wishlist">
-              <DropdownMenuItem className="cursor-pointer">
-                <Heart className="h-4 w-4 mr-2" />
-                Wishlist
+              <DropdownMenuItem asChild>
+                <Link to="/account/wishlist" className="w-full cursor-pointer">
+                  <Heart className="mr-2 h-4 w-4" />
+                  <span>Wishlist</span>
+                </Link>
               </DropdownMenuItem>
-            </Link>
-            <Link to="/cart">
-              <DropdownMenuItem className="cursor-pointer">
-                <ShoppingBag className="h-4 w-4 mr-2" />
-                Cart
+              <DropdownMenuItem asChild>
+                <Link to="/checkout" className="w-full cursor-pointer">
+                  <ShoppingCart className="mr-2 h-4 w-4" />
+                  <span>Cart</span>
+                </Link>
               </DropdownMenuItem>
-            </Link>
-            <Link to="/settings">
-              <DropdownMenuItem className="cursor-pointer">
-                <Settings className="h-4 w-4 mr-2" />
-                Settings
-              </DropdownMenuItem>
-            </Link>
+            </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
+            <DropdownMenuItem asChild>
+              <Link to="/account/settings" className="w-full cursor-pointer">
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogout} className="text-red-500 focus:text-red-500 cursor-pointer">
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Log out</span>
             </DropdownMenuItem>
           </>
         ) : (
           <>
-            <div className="p-3 text-center">
-              <h3 className="font-medium mb-1">Welcome</h3>
-              <p className="text-xs text-gray-500 mb-3">Sign in to access your account</p>
-              <Button onClick={handleLogin} className="w-full mb-2" size="sm">
-                <LogIn className="h-4 w-4 mr-2" />
-                Sign In
-              </Button>
-              <div className="text-xs mt-2">
-                <span className="text-gray-500">Don't have an account? </span>
-                <Link to="/register" className="text-primary hover:underline">
-                  Register
-                </Link>
-              </div>
-            </div>
+            <DropdownMenuLabel>Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogin} className="cursor-pointer">
+              <LogIn className="mr-2 h-4 w-4" />
+              <span>Log in</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogin} className="cursor-pointer">
+              <User className="mr-2 h-4 w-4" />
+              <span>Sign up</span>
+            </DropdownMenuItem>
           </>
         )}
       </DropdownMenuContent>
