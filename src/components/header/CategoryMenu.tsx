@@ -5,8 +5,6 @@ import { CategoryMenuItem } from "./CategoryMenuItem";
 import { CategoryContent } from "./CategoryContent";
 import { categories } from "./data/categoriesData";
 
-export { categories } from "./data/categoriesData";
-
 export const CategoryMenu = () => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);

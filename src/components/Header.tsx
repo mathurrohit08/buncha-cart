@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Menu, Search, X } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -6,13 +5,14 @@ import { Logo } from "./header/Logo";
 import { ThemeToggle } from "./theme/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { ProductMenu } from "./header/ProductMenu";
-import { CategoryMenu, categories } from "./header/CategoryMenu";
+import { CategoryMenu } from "./header/CategoryMenu";
 import { UserMenu } from "./header/UserMenu";
 import { WishlistButton } from "./header/WishlistButton";
 import { CartMenu } from "./header/CartMenu";
 import { CompareButton } from "./header/CompareButton";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { NewArrivalsSubMenu, BestSellersSubMenu, DealsSubMenu } from "./header/NavSubMenus";
+import { categories } from "./header/data/categoriesData";
 
 export const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -219,6 +219,3 @@ export const Header = () => {
     </header>
   );
 };
-
-// Import categories for the mobile menu
-import { categories } from "./header/CategoryMenu";
