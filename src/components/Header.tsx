@@ -6,7 +6,7 @@ import { Logo } from "./header/Logo";
 import { ThemeToggle } from "./theme/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { ProductMenu } from "./header/ProductMenu";
-import { CategoryMenu } from "./header/CategoryMenu";
+import { CategoryMenu, categories } from "./header/CategoryMenu";
 import { UserMenu } from "./header/UserMenu";
 import { WishlistButton } from "./header/WishlistButton";
 import { CartMenu } from "./header/CartMenu";
