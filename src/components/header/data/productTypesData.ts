@@ -79,3 +79,13 @@ export const productTypes = [
     ]
   },
 ];
+
+// Export a type for the product types to improve type safety
+export type ProductType = {
+  name: string;
+  image: string;
+  products: Array<{
+    name: string;
+    image: string;
+  }>;
+};
