@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-interface SortOptionsMenuProps {
+export interface SortOptionsMenuProps {
   sortOption: string;
   setSortOption: (option: string) => void;
 }

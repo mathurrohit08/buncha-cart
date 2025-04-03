@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,13 +8,15 @@ import { ProductCard } from './ProductCard';
 import { SortOptionsMenu } from './SortOptionsMenu';
 import { ViewOptionsMenu } from './ViewOptionsMenu';
 
-interface Product {
+// Define the Product interface that includes all required properties
+export interface Product {
   id: string;
   name: string;
   price: number;
   compareAtPrice?: number;
   rating: number;
   reviewCount: number;
+  reviews?: number; // For compatibility with CategoryProduct
   image: string;
   category: string;
   tags: string[];
@@ -22,6 +24,14 @@ interface Product {
   isNew?: boolean;
   isHot?: boolean;
   isSale?: boolean;
+  inStock?: boolean;
+  discount?: number;
+  description?: string;
+  features?: string[];
+  longDescription?: string;
+  bestSeller?: boolean;
+  sale?: boolean;
+  new?: boolean;
 }
 
 interface CategoryPageTemplateProps {
@@ -32,11 +42,54 @@ interface CategoryPageTemplateProps {
 
 export function CategoryPageTemplate({ categoryName, products, bannerImage }: CategoryPageTemplateProps) {
   const navigate = useNavigate();
-  const [viewMode, setViewMode] = React.useState<'grid' | 'list'>('grid');
-  const [sortOption, setSortOption] = React.useState<string>('featured');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortOption, setSortOption] = useState<string>('featured');
+  
+  // State for filters
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  const [selectedRating, setSelectedRating] = useState<number | null>(null);
+  const [showInStock, setShowInStock] = useState<boolean>(false);
+  const [showOnSale, setShowOnSale] = useState<boolean>(false);
+  const [showNew, setShowNew] = useState<boolean>(false);
+  const [showBestSellers, setShowBestSellers] = useState<boolean>(false);
+  
+  // Optional filter states
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+  
+  // Get max price from products
+  const maxPrice = Math.max(...products.map(product => product.price), 1000);
+  
+  // Apply filters function
+  const applyFilters = () => {
+    // This would filter the products based on the selected filters
+    console.log("Applying filters", { priceRange, selectedRating, showInStock, showOnSale, showNew, showBestSellers });
+  };
+  
+  // Reset filters function
+  const resetFilters = () => {
+    setPriceRange([0, maxPrice]);
+    setSelectedRating(null);
+    setShowInStock(false);
+    setShowOnSale(false);
+    setShowNew(false);
+    setShowBestSellers(false);
+    setSelectedBrands([]);
+    setSelectedFeatures([]);
+  };
 
   // Fallback image for banner if it fails to load
   const defaultBannerImage = "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1200&h=300";
+
+  // Extract unique brands from products
+  const brands = Array.from(new Set(products.map(product => product.brand))).filter(Boolean);
+  
+  // Extract unique features from products (if they have features)
+  const features = Array.from(new Set(
+    products
+      .filter(product => product.features)
+      .flatMap(product => product.features || [])
+  )).filter(Boolean);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -69,7 +122,29 @@ export function CategoryPageTemplate({ categoryName, products, bannerImage }: Ca
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Filters Sidebar */}
         <div className="lg:col-span-1">
-          <ProductFiltersSidebar />
+          <ProductFiltersSidebar 
+            priceRange={priceRange}
+            setPriceRange={setPriceRange}
+            maxPrice={maxPrice}
+            selectedRating={selectedRating}
+            setSelectedRating={setSelectedRating}
+            showInStock={showInStock}
+            setShowInStock={setShowInStock}
+            showOnSale={showOnSale}
+            setShowOnSale={setShowOnSale}
+            showNew={showNew}
+            setShowNew={setShowNew}
+            showBestSellers={showBestSellers}
+            setShowBestSellers={setShowBestSellers}
+            applyFilters={applyFilters}
+            resetFilters={resetFilters}
+            brands={brands}
+            selectedBrands={selectedBrands}
+            setSelectedBrands={setSelectedBrands}
+            features={features}
+            selectedFeatures={selectedFeatures}
+            setSelectedFeatures={setSelectedFeatures}
+          />
         </div>
 
         {/* Products Grid */}
@@ -79,12 +154,12 @@ export function CategoryPageTemplate({ categoryName, products, bannerImage }: Ca
             <h2 className="text-xl font-semibold">{categoryName} Products</h2>
             <div className="flex items-center space-x-2">
               <SortOptionsMenu 
-                value={sortOption}
-                onValueChange={setSortOption}
+                sortOption={sortOption}
+                setSortOption={setSortOption}
               />
               <ViewOptionsMenu 
-                value={viewMode}
-                onValueChange={setViewMode as (value: string) => void}
+                viewMode={viewMode}
+                setViewMode={setViewMode}
               />
             </div>
           </div>

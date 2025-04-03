@@ -1,6 +1,8 @@
 // Utility to generate random products for category pages
+import { Product } from "@/components/categories/CategoryPageTemplate";
+
 export type CategoryProduct = {
-  id: number;
+  id: string;
   name: string;
   price: number;
   description: string;
@@ -9,11 +11,15 @@ export type CategoryProduct = {
   image: string;
   rating: number;
   reviews: number;
+  reviewCount?: number; // Added for compatibility
   inStock: boolean;
   bestSeller?: boolean;
   new?: boolean;
   sale?: boolean;
   discount?: number;
+  category?: string; // Added for compatibility
+  tags?: string[]; // Added for compatibility
+  brand?: string; // Added for compatibility
 };
 
 // Array of high-quality product descriptions to use randomly
@@ -333,13 +339,13 @@ const productTypes = {
   ]
 };
 
-export const getCategoryProducts = (categoryName: string): { products: CategoryProduct[], bannerImage: string } => {
+export const getCategoryProducts = (categoryName: string): { products: Product[], bannerImage: string } => {
   const category = categoryNameToProducts[categoryName];
   if (!category) {
     return { products: [], bannerImage: "" };
   }
   
-  const products: CategoryProduct[] = [];
+  const products: Product[] = [];
   const productSubtypes = productTypes[categoryName] || [];
   const categoryFeatures = productFeatures[categoryName] || [];
   const images = categoryImages[categoryName] || [];
@@ -365,21 +371,38 @@ export const getCategoryProducts = (categoryName: string): { products: CategoryP
     const isSale = i % 6 === 0;
     const discount = isSale ? Math.floor(Math.random() * 30) + 10 : 0;
     
+    // Generate random tags based on category and features
+    const tags = [
+      categoryName,
+      randomSubtype,
+      isNew ? "New Arrival" : "",
+      isBestSeller ? "Best Seller" : "",
+      isSale ? "On Sale" : "",
+    ].filter(Boolean);
+    
     products.push({
-      id: i,
+      id: i.toString(),
       name: `${category.prefix} ${randomSubtype} ${i}`,
       price: parseFloat(price.toFixed(2)),
+      compareAtPrice: isSale ? price * (1 + discount/100) : undefined,
       description: randomDescription,
       features: randomFeatures,
       longDescription: randomLongDescription,
       image: randomImage,
       rating: parseFloat(rating),
-      reviews: reviews,
+      reviewCount: reviews,
+      reviews: reviews, // For compatibility with old code
       inStock: Math.random() > 0.1, // 90% chance of being in stock
       bestSeller: isBestSeller,
       new: isNew,
       sale: isSale,
-      discount: discount
+      isNew: isNew,
+      isHot: isBestSeller, 
+      isSale: isSale,
+      discount: discount,
+      category: categoryName,
+      tags: tags,
+      brand: `${category.prefix} Brand ${Math.floor(i/3) + 1}`,
     });
   }
   
