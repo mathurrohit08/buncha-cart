@@ -89,6 +89,7 @@ export const ProductMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeType, setActiveType] = useState(productTypes[0].name);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   
   const handleMouseEnter = () => {
     if (timeoutRef.current) {
@@ -104,6 +105,20 @@ export const ProductMenu = () => {
     }, 300); // Delay closing to prevent accidental close
   };
 
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node) && isOpen) {
+        setIsOpen(false);
+      }
+    };
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
@@ -115,6 +130,7 @@ export const ProductMenu = () => {
   return (
     <div 
       className="relative"
+      ref={menuRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -129,7 +145,8 @@ export const ProductMenu = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-full left-0 w-[calc(100vw-2rem)] sm:w-[800px] border dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 mt-2"
+            className="fixed left-1/2 transform -translate-x-1/2 w-[800px] border dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 mt-2"
+            style={{ maxHeight: '80vh', overflow: 'auto' }}
           >
             <div className="grid grid-cols-1 sm:grid-cols-4 h-[450px] max-h-[70vh]">
               {/* Product Types Column */}
@@ -228,7 +245,7 @@ export const ProductMenu = () => {
                       </div>
                       <Link 
                         to={`/products/${activeType.toLowerCase().replace(/\s+/g, "-")}`}
-                        className="text-sm text-purple-600 dark:text-purple-400 hover:underline font-medium"
+                        className="text-sm bg-purple-600 hover:bg-purple-700 text-white dark:text-white px-3 py-1 rounded-md font-medium transition-colors"
                         onClick={() => setIsOpen(false)}
                       >
                         Shop Now

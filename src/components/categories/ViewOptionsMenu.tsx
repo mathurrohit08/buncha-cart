@@ -28,7 +28,7 @@ export const ViewOptionsMenu = ({ viewMode, setViewMode }: ViewOptionsMenuProps)
           View
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700">
+      <DropdownMenuContent align="end" className="w-32 bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-50">
         <DropdownMenuItem onClick={() => setViewMode('list')} className="flex items-center cursor-pointer">
           <List className="h-4 w-4 mr-2" />
           <span>List View</span>

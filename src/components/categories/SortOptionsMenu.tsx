@@ -64,7 +64,7 @@ export const SortOptionsMenu = ({ sortOption, setSortOption }: SortOptionsMenuPr
           <span className="ml-2">{getSortLabel(sortOption)}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48 bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700">
+      <DropdownMenuContent align="end" className="w-48 bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-50">
         <DropdownMenuItem onClick={() => setSortOption("featured")} className="flex items-center cursor-pointer">
           <Sparkles className="h-4 w-4 mr-2" />
           <span>Featured</span>

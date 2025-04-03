@@ -9,6 +9,7 @@ export const CategoryMenu = () => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   
   // Use this to prevent menu from closing immediately when moving to submenu
   const handleMouseEnter = () => {
@@ -38,9 +39,24 @@ export const CategoryMenu = () => {
     };
   }, [isOpen, hoveredCategory]);
 
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node) && isOpen) {
+        setIsOpen(false);
+      }
+    };
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
     <div 
       className="relative"
+      ref={menuRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -55,8 +71,8 @@ export const CategoryMenu = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-full left-0 w-[calc(100vw-2rem)] sm:w-[800px] border dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 mt-2"
-            style={{ maxHeight: '500px', overflow: 'hidden' }}
+            className="fixed left-1/2 transform -translate-x-1/2 w-[800px] border dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 mt-2"
+            style={{ maxHeight: '80vh', overflow: 'auto' }}
           >
             <div className="grid grid-cols-1 sm:grid-cols-5 h-[450px]">
               {/* Categories Column */}
