@@ -1,0 +1,31 @@
+
+/* Fix for footer alignment */
+.footer-container {
+  @apply w-full grid gap-8;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 0 1rem;
+  }
+}
+
+/* Responsive fixes for mobile */
+@media (max-width: 640px) {
+  .payment-methods-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer-responsive {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .footer-responsive > div {
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+}

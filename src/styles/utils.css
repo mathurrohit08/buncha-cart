@@ -1,0 +1,48 @@
+
+/* Fix for 404 page styling */
+.not-found-container {
+  @apply min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4;
+}
+
+.suggestion-card {
+  @apply p-4 bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg flex flex-col text-left transition-colors shadow-sm;
+}
+
+/* Fix z-index for all dropdowns */
+.dropdown-content,
+.dropdown-menu-content,
+.menubar-content {
+  @apply z-50 !important;
+}
+
+/* Dark mode improvements */
+.dark .glass-effect {
+  @apply bg-gray-900/80 backdrop-blur-sm border border-gray-700/50;
+}
+
+.glass-effect {
+  @apply bg-white/80 backdrop-blur-sm border border-gray-200/50;
+}
+
+/* Ensure buttons in dark mode are visible */
+.dark .button-primary {
+  @apply bg-purple-600 hover:bg-purple-700 text-white;
+}
+
+.button-primary {
+  @apply bg-purple-600 hover:bg-purple-700 text-white;
+}
+
+/* Featured collection button fix */
+.featured-collection-button {
+  @apply bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded transition-colors;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

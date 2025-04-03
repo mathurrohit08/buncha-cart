@@ -1,0 +1,67 @@
+
+/* Improved Menu Styling */
+.menu-container {
+  @apply w-[600px] mx-auto;
+}
+
+.menu-item {
+  @apply relative transition-all duration-200 hover:text-purple-600 dark:hover:text-purple-400;
+}
+
+.menu-item:after {
+  @apply content-[''] absolute bottom-0 left-0 w-0 h-0.5 bg-purple-600 dark:bg-purple-400 transition-all duration-300 ease-in-out;
+}
+
+.menu-item:hover:after {
+  @apply w-full;
+}
+
+/* Fix for menu dropdown positioning */
+.menu-dropdown {
+  @apply left-1/2 -translate-x-1/2 !important;
+}
+
+/* Mobile responsive menu fixes */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    width: 94vw !important;
+    left: 3vw !important;
+  }
+  
+  .menu-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Fix hover delays on menus */
+.hover-trigger {
+  position: relative;
+}
+
+.hover-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.hover-trigger:hover .hover-content {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Menu positioning fixes */
+.dropdown-menu-fixed {
+  @apply fixed left-1/2 transform -translate-x-1/2 z-50;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Make all menus have consistent sizing */
+.mega-menu {
+  width: 800px;
+  max-width: calc(100vw - 2rem);
+}
