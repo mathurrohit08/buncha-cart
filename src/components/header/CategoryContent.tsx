@@ -1,5 +1,6 @@
 
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 interface CategoryContentProps {
   categoryName: string;
@@ -29,7 +30,13 @@ export const CategoryContent = ({
               className="block p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors dark:text-gray-300 text-sm"
               onClick={onCloseMenu}
             >
-              {sub}
+              <motion.span
+                initial={{ x: -5, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.2 }}
+              >
+                {sub}
+              </motion.span>
             </Link>
           ))}
         </div>
@@ -54,6 +61,9 @@ export const CategoryContent = ({
               src={image}
               alt={categoryName}
               className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=400&h=300";
+              }}
             />
           </Link>
         </div>

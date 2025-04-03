@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const productTypes = [
   {
@@ -121,106 +122,125 @@ export const ProductMenu = () => {
         Products
       </button>
       
-      {isOpen && (
-        <div className="absolute top-full left-0 w-[calc(100vw-2rem)] sm:w-[800px] p-0 border dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 mt-2">
-          <div className="grid grid-cols-1 sm:grid-cols-4 h-[450px] max-h-[70vh]">
-            {/* Product Types Column */}
-            <div className="sm:col-span-1 bg-gray-50 dark:bg-gray-900 p-4 overflow-y-auto h-full">
-              <h3 className="font-medium mb-3 text-gray-900 dark:text-white">Browse Products</h3>
-              <div className="space-y-1">
-                <Link
-                  to="/all-products"
-                  className="flex items-center justify-between p-2 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 rounded-lg transition-colors mb-2"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <span className="font-medium text-sm text-purple-800 dark:text-purple-300">All Products</span>
-                  <ChevronRight className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                </Link>
-                
-                {productTypes.map((type) => (
-                  <div
-                    key={type.name}
-                    className={`cursor-pointer rounded-lg ${
-                      activeType === type.name 
-                        ? "bg-white dark:bg-gray-800" 
-                        : "hover:bg-white/80 dark:hover:bg-gray-800/80"
-                    }`}
-                    onMouseEnter={() => setActiveType(type.name)}
-                  >
-                    <div className="flex items-center justify-between p-2 rounded-lg transition-colors">
-                      <span className={`text-sm ${
-                        activeType === type.name 
-                          ? "text-purple-600 dark:text-purple-400 font-medium" 
-                          : "dark:text-gray-300"
-                      }`}>{type.name}</span>
-                      <ChevronRight className={`h-4 w-4 ${
-                        activeType === type.name 
-                          ? "text-purple-600 dark:text-purple-400" 
-                          : "opacity-0 group-hover:opacity-100 transition-opacity"
-                      }`} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            {/* Products Grid */}
-            <div className="sm:col-span-3 p-4 h-full overflow-y-auto">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-medium text-lg dark:text-white">{activeType}</h3>
-                  <Link 
-                    to={`/products/${activeType.toLowerCase().replace(/\s+/g, "-")}`}
-                    className="text-sm text-purple-600 dark:text-purple-400 hover:underline"
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.2 }}
+            className="absolute top-full left-0 w-[calc(100vw-2rem)] sm:w-[800px] border dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 mt-2"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-4 h-[450px] max-h-[70vh]">
+              {/* Product Types Column */}
+              <div className="sm:col-span-1 bg-gray-50 dark:bg-gray-900 p-4 overflow-y-auto h-full">
+                <h3 className="font-medium mb-3 text-gray-900 dark:text-white">Browse Products</h3>
+                <div className="space-y-1">
+                  <Link
+                    to="/all-products"
+                    className="flex items-center justify-between p-2 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 rounded-lg transition-colors mb-2"
                     onClick={() => setIsOpen(false)}
                   >
-                    View All
+                    <span className="font-medium text-sm text-purple-800 dark:text-purple-300">All Products</span>
+                    <ChevronRight className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                   </Link>
-                </div>
-                
-                <div className="grid grid-cols-3 gap-4">
-                  {productTypes
-                    .find((type) => type.name === activeType)
-                    ?.products.slice(0, 6).map((product, index) => (
-                    <Link
-                      key={index}
-                      to={`/products/${activeType.toLowerCase().replace(/\s+/g, "-")}/${product.name.toLowerCase().replace(/\s+/g, "-")}`}
-                      className="group"
-                      onClick={() => setIsOpen(false)}
+                  
+                  {productTypes.map((type) => (
+                    <motion.div
+                      key={type.name}
+                      className={`cursor-pointer rounded-lg ${
+                        activeType === type.name 
+                          ? "bg-white dark:bg-gray-800" 
+                          : "hover:bg-white/80 dark:hover:bg-gray-800/80"
+                      }`}
+                      onMouseEnter={() => setActiveType(type.name)}
+                      whileHover={{ x: 3 }}
+                      transition={{ duration: 0.2 }}
                     >
-                      <div className="aspect-square overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700">
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
-                          }}
-                        />
+                      <div className="flex items-center justify-between p-2 rounded-lg transition-colors">
+                        <span className={`text-sm ${
+                          activeType === type.name 
+                            ? "text-purple-600 dark:text-purple-400 font-medium" 
+                            : "dark:text-gray-300"
+                        }`}>{type.name}</span>
+                        <ChevronRight className={`h-4 w-4 ${
+                          activeType === type.name 
+                            ? "text-purple-600 dark:text-purple-400" 
+                            : "opacity-0 group-hover:opacity-100 transition-opacity"
+                        }`} />
                       </div>
-                      <h4 className="mt-2 text-sm font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{product.name}</h4>
-                    </Link>
+                    </motion.div>
                   ))}
                 </div>
-                
-                <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg flex items-center justify-between">
-                  <div>
-                    <h4 className="text-sm font-medium dark:text-white">Featured Collection</h4>
-                    <p className="text-xs text-gray-600 dark:text-gray-300">Explore our selection of top {activeType} products</p>
-                  </div>
-                  <Link 
-                    to={`/products/${activeType.toLowerCase().replace(/\s+/g, "-")}`}
-                    className="text-sm text-purple-600 dark:text-purple-400 hover:underline font-medium"
-                    onClick={() => setIsOpen(false)}
+              </div>
+              
+              {/* Products Grid */}
+              <div className="sm:col-span-3 p-4 h-full overflow-y-auto">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeType}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="space-y-4"
                   >
-                    Shop Now
-                  </Link>
-                </div>
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-medium text-lg dark:text-white">{activeType}</h3>
+                      <Link 
+                        to={`/products/${activeType.toLowerCase().replace(/\s+/g, "-")}`}
+                        className="text-sm text-purple-600 dark:text-purple-400 hover:underline"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        View All
+                      </Link>
+                    </div>
+                    
+                    <div className="grid grid-cols-3 gap-4">
+                      {productTypes
+                        .find((type) => type.name === activeType)
+                        ?.products.slice(0, 6).map((product, index) => (
+                        <Link
+                          key={index}
+                          to={`/products/${activeType.toLowerCase().replace(/\s+/g, "-")}/${product.name.toLowerCase().replace(/\s+/g, "-")}`}
+                          className="group"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          <div className="aspect-square overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700">
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
+                              }}
+                            />
+                          </div>
+                          <h4 className="mt-2 text-sm font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{product.name}</h4>
+                        </Link>
+                      ))}
+                    </div>
+                    
+                    <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg flex items-center justify-between">
+                      <div>
+                        <h4 className="text-sm font-medium dark:text-white">Featured Collection</h4>
+                        <p className="text-xs text-gray-600 dark:text-gray-300">Explore our selection of top {activeType} products</p>
+                      </div>
+                      <Link 
+                        to={`/products/${activeType.toLowerCase().replace(/\s+/g, "-")}`}
+                        className="text-sm text-purple-600 dark:text-purple-400 hover:underline font-medium"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Shop Now
+                      </Link>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

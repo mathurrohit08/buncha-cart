@@ -1,4 +1,5 @@
 
+import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 
 interface CategoryMenuItemProps {
@@ -15,7 +16,7 @@ export const CategoryMenuItem = ({
   onClick 
 }: CategoryMenuItemProps) => {
   return (
-    <div
+    <motion.div
       className={`group cursor-pointer rounded-lg ${
         isHovered 
           ? "bg-white dark:bg-gray-800" 
@@ -23,6 +24,8 @@ export const CategoryMenuItem = ({
       }`}
       onMouseEnter={onHover}
       onClick={onClick}
+      whileHover={{ x: 3 }}
+      transition={{ duration: 0.2 }}
     >
       <div className="flex items-center justify-between p-2 rounded-lg transition-colors">
         <span className={`text-sm ${
@@ -36,6 +39,6 @@ export const CategoryMenuItem = ({
             : "opacity-0 group-hover:opacity-100 transition-opacity"
         }`} />
       </div>
-    </div>
+    </motion.div>
   );
 };
