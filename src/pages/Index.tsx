@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Banner } from "@/components/Banner";
 import { Categories } from "@/components/Categories";
@@ -8,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Star, ShoppingCart } from "lucide-react";
 import { motion } from "framer-motion";
-import { productTypes } from "@/components/header/ProductMenu";
+import { productTypes } from "@/components/header/data/productTypesData";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { addToCart } from "@/components/header/CartMenu";

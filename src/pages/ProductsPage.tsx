@@ -6,7 +6,7 @@ import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
 import { ShoppingCart, Star, Heart, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { productTypes } from "@/components/header/ProductMenu";
+import { productTypes } from "@/components/header/data/productTypesData";
 import { categories } from "@/components/Categories";
 import { useToast } from "@/hooks/use-toast";
 import { addToCart } from "@/components/header/CartMenu";

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Header } from "@/components/Header";
@@ -6,7 +7,7 @@ import { motion } from "framer-motion";
 import { ShoppingCart, Truck, Package, Heart, Star, Info, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { productTypes } from "@/components/header/ProductMenu";
+import { productTypes } from "@/components/header/data/productTypesData";
 import { addToCart } from "@/components/header/CartMenu";
 import { addToWishlist, isInWishlist } from "@/components/header/WishlistButton";
 
