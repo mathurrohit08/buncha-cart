@@ -16,9 +16,24 @@
   @apply w-full;
 }
 
-/* Fix for menu dropdown positioning */
+/* Fixed menu positioning - properly centered */
 .menu-dropdown {
   @apply left-1/2 -translate-x-1/2 !important;
+}
+
+/* Ensure mega menus are centered on the page */
+.dropdown-menu-fixed {
+  @apply fixed left-1/2 transform -translate-x-1/2 z-50;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Make all menus have consistent sizing */
+.mega-menu {
+  width: 800px;
+  max-width: calc(100vw - 2rem);
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* Mobile responsive menu fixes */
@@ -51,17 +66,4 @@
 .hover-trigger:hover .hover-content {
   opacity: 1;
   visibility: visible;
-}
-
-/* Menu positioning fixes */
-.dropdown-menu-fixed {
-  @apply fixed left-1/2 transform -translate-x-1/2 z-50;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-/* Make all menus have consistent sizing */
-.mega-menu {
-  width: 800px;
-  max-width: calc(100vw - 2rem);
 }
