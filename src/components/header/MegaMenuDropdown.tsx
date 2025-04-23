@@ -73,8 +73,7 @@ export const MegaMenuDropdown = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.15 }}
-            className="fixed left-1/2 transform -translate-x-1/2 z-50 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700 w-[800px] max-w-[calc(100vw-2rem)]"
-            style={{ maxHeight: "80vh", overflowY: "auto" }}
+            className="dropdown-menu-fixed mega-menu border dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex gap-6">
