@@ -59,7 +59,7 @@ export const MegaMenuDropdown = ({
       onMouseLeave={() => setIsOpen(false)}
     >
       <button
-        className="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors focus:outline-none"
+        className="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors menu-item focus:outline-none"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span>{title}</span>
@@ -88,7 +88,14 @@ export const MegaMenuDropdown = ({
                     <div className="flex items-center">
                       {item.image && (
                         <div className="h-10 w-10 rounded-full overflow-hidden mr-3 flex-shrink-0">
-                          <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+                          <img 
+                            src={item.image} 
+                            alt={item.name} 
+                            className="h-full w-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=64&h=64";
+                            }} 
+                          />
                         </div>
                       )}
                       <div>
@@ -119,6 +126,9 @@ export const MegaMenuDropdown = ({
                               src={item.image}
                               alt={item.name}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=300&h=200";
+                              }}
                             />
                           </div>
                         )}

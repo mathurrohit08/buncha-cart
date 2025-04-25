@@ -26,6 +26,7 @@
   @apply fixed left-1/2 transform -translate-x-1/2 z-50;
   max-height: 80vh;
   overflow-y: auto;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 /* Make all menus have consistent sizing */
@@ -34,6 +35,7 @@
   max-width: calc(100vw - 2rem);
   left: 50%;
   transform: translateX(-50%);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
 /* Mobile responsive menu fixes */
@@ -48,7 +50,7 @@
   }
 }
 
-/* Fix hover delays on menus */
+/* Improve hover delays on menus */
 .hover-trigger {
   position: relative;
 }
@@ -60,10 +62,35 @@
   width: 100%;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
+  transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+  transform: translateY(10px);
 }
 
 .hover-trigger:hover .hover-content {
   opacity: 1;
   visibility: visible;
+  transform: translateY(0);
+}
+
+/* Enhanced menu animations */
+.menu-transition-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.menu-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.menu-transition-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.menu-transition-exit-active {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.2s, transform 0.2s;
 }
