@@ -27,6 +27,7 @@
   max-height: 80vh;
   overflow-y: auto;
   transition: opacity 0.3s ease, transform 0.3s ease;
+  margin-top: 1rem !important;
 }
 
 /* Make all menus have consistent sizing */

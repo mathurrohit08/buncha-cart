@@ -1,6 +1,8 @@
 
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useProductImage } from "@/hooks/use-product-image";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ProductGridContentProps {
   activeType: string;
@@ -10,6 +12,22 @@ interface ProductGridContentProps {
   }>;
   onCloseMenu: () => void;
 }
+
+// Image component with loading state
+const ProductImage = ({ src, alt }: { src: string; alt: string }) => {
+  const { imgSrc, isLoading } = useProductImage(src);
+  
+  return (
+    <>
+      {isLoading && <Skeleton className="w-full h-full absolute inset-0" />}
+      <img
+        src={imgSrc}
+        alt={alt}
+        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+      />
+    </>
+  );
+};
 
 export const ProductGridContent = ({ activeType, products, onCloseMenu }: ProductGridContentProps) => {
   return (
@@ -41,15 +59,8 @@ export const ProductGridContent = ({ activeType, products, onCloseMenu }: Produc
               className="group"
               onClick={onCloseMenu}
             >
-              <div className="aspect-square overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=150&h=150";
-                  }}
-                />
+              <div className="aspect-square overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700 relative">
+                <ProductImage src={product.image} alt={product.name} />
               </div>
               <h4 className="mt-2 text-sm font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{product.name}</h4>
             </Link>

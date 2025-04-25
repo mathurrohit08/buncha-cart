@@ -1,6 +1,8 @@
 
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useProductImage } from "@/hooks/use-product-image";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface CategoryContentProps {
   categoryName: string;
@@ -9,6 +11,22 @@ interface CategoryContentProps {
   path: string;
   onCloseMenu: () => void;
 }
+
+// Image component with loading state
+const CategoryImage = ({ src, alt }: { src: string; alt: string }) => {
+  const { imgSrc, isLoading } = useProductImage(src);
+  
+  return (
+    <div className="relative w-full h-full">
+      {isLoading && <Skeleton className="absolute inset-0 w-full h-full" />}
+      <img
+        src={imgSrc}
+        alt={alt}
+        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+      />
+    </div>
+  );
+};
 
 export const CategoryContent = ({
   categoryName,
@@ -52,19 +70,12 @@ export const CategoryContent = ({
       
       {/* Image Section */}
       <div className="sm:col-span-2 overflow-hidden">
-        <div className="aspect-[4/3] overflow-hidden rounded-lg">
+        <div className="aspect-[4/3] overflow-hidden rounded-lg relative">
           <Link
             to={path || "#"}
             onClick={onCloseMenu}
           >
-            <img
-              src={image}
-              alt={categoryName}
-              className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=400&h=300";
-              }}
-            />
+            <CategoryImage src={image} alt={categoryName} />
           </Link>
         </div>
         <div className="mt-3 bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">

@@ -3,6 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useProductImage } from "@/hooks/use-product-image";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface MenuItem {
   name: string;
@@ -17,6 +19,22 @@ interface MegaMenuDropdownProps {
   columnCount?: 2 | 3 | 4;
   featured?: MenuItem[];
 }
+
+// Image component with loading state
+const MenuItemImage = ({ src, alt, isRounded = false }: { src: string; alt: string; isRounded?: boolean }) => {
+  const { imgSrc, isLoading } = useProductImage(src);
+  
+  return (
+    <div className={`relative w-full h-full ${isRounded ? 'rounded-full overflow-hidden' : ''}`}>
+      {isLoading && <Skeleton className="absolute inset-0 w-full h-full" />}
+      <img 
+        src={imgSrc} 
+        alt={alt} 
+        className="h-full w-full object-cover"
+      />
+    </div>
+  );
+};
 
 export const MegaMenuDropdown = ({
   title,
@@ -88,14 +106,7 @@ export const MegaMenuDropdown = ({
                     <div className="flex items-center">
                       {item.image && (
                         <div className="h-10 w-10 rounded-full overflow-hidden mr-3 flex-shrink-0">
-                          <img 
-                            src={item.image} 
-                            alt={item.name} 
-                            className="h-full w-full object-cover"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=64&h=64";
-                            }} 
-                          />
+                          <MenuItemImage src={item.image} alt={item.name} isRounded />
                         </div>
                       )}
                       <div>
@@ -121,15 +132,8 @@ export const MegaMenuDropdown = ({
                         onClick={() => setIsOpen(false)}
                       >
                         {item.image && (
-                          <div className="rounded-lg overflow-hidden mb-2 aspect-[4/3]">
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=300&h=200";
-                              }}
-                            />
+                          <div className="rounded-lg overflow-hidden mb-2 aspect-[4/3] relative">
+                            <MenuItemImage src={item.image} alt={item.name} />
                           </div>
                         )}
                         <h5 className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
