@@ -30,7 +30,7 @@ const MenuItemImage = ({ src, alt, isRounded = false }: { src: string; alt: stri
       <img 
         src={imgSrc} 
         alt={alt} 
-        className="h-full w-full object-cover"
+        className={`h-full w-full object-cover ${isRounded ? 'rounded-full' : ''}`}
       />
     </div>
   );
@@ -91,7 +91,7 @@ export const MegaMenuDropdown = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.15 }}
-            className="dropdown-menu-fixed mega-menu border dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6"
+            className="dropdown-menu-fixed mega-menu border dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 menu-shadow"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex gap-6">

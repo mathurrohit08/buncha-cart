@@ -15,7 +15,20 @@ interface ProductGridContentProps {
 
 // Image component with loading state
 const ProductImage = ({ src, alt }: { src: string; alt: string }) => {
-  const { imgSrc, isLoading } = useProductImage(src);
+  // Use fallback categories based on product type
+  const getFallbackByName = (name: string) => {
+    if (name.toLowerCase().includes('laptop') || name.toLowerCase().includes('computer')) {
+      return "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=500&h=350";
+    } else if (name.toLowerCase().includes('phone') || name.toLowerCase().includes('mobile')) {
+      return "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=500&h=350";  
+    } else if (name.toLowerCase().includes('furniture') || name.toLowerCase().includes('chair')) {
+      return "https://images.unsplash.com/photo-1721322800607-8c38375eef04?auto=format&fit=crop&w=500&h=350";
+    } else {
+      return "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=500&h=350";
+    }
+  };
+  
+  const { imgSrc, isLoading } = useProductImage(src, getFallbackByName(alt));
   
   return (
     <>

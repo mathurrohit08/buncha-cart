@@ -54,7 +54,7 @@ export const addToCart = (product: {
   quantity?: number;
 }) => {
   const price = typeof product.price === 'string' 
-    ? parseFloat(product.price.replace('$', '')) 
+    ? parseFloat(product.price.replace(/[^0-9.]/g, '')) 
     : product.price;
   
   const existingItem = globalCartItems.find(item => item.name === product.name);
@@ -63,7 +63,7 @@ export const addToCart = (product: {
     existingItem.quantity += product.quantity || 1;
   } else {
     const newItem: CartItem = {
-      id: globalCartItems.length + 1,
+      id: Date.now(), // Use timestamp as a unique ID
       name: product.name,
       price: price,
       quantity: product.quantity || 1,
@@ -137,7 +137,6 @@ export const CartMenu = () => {
     toast({
       title: "Item removed",
       description: "The item has been removed from your cart",
-      variant: "default",
     });
   };
 
@@ -154,7 +153,7 @@ export const CartMenu = () => {
         </Button>
       </HoverCardTrigger>
       <HoverCardContent 
-        className="w-80 p-4 bg-white dark:bg-gray-800 border dark:border-gray-700" 
+        className="w-80 p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 menu-shadow" 
         align="end"
         sideOffset={8}
       >

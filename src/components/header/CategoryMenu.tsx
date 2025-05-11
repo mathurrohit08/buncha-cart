@@ -71,8 +71,7 @@ export const CategoryMenu = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
-            className="dropdown-menu-fixed w-[800px] border dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 mt-2 mega-menu"
-            style={{ maxHeight: '80vh', overflow: 'auto' }}
+            className="dropdown-menu-fixed w-[800px] border dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 menu-shadow mega-menu"
           >
             <div className="grid grid-cols-1 sm:grid-cols-5 h-[450px]">
               {/* Categories Column */}

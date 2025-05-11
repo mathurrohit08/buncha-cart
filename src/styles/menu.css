@@ -28,6 +28,7 @@
   overflow-y: auto;
   transition: opacity 0.3s ease, transform 0.3s ease;
   margin-top: 1rem !important;
+  top: 4rem; /* Add fixed top position */
 }
 
 /* Make all menus have consistent sizing */
@@ -36,7 +37,19 @@
   max-width: calc(100vw - 2rem);
   left: 50%;
   transform: translateX(-50%);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  animation: menuFadeIn 0.25s ease forwards;
+}
+
+@keyframes menuFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px) translateX(-50%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateX(-50%);
+  }
 }
 
 /* Mobile responsive menu fixes */
@@ -94,4 +107,14 @@
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 0.2s, transform 0.2s;
+}
+
+/* Professional menu styling */
+.menu-shadow {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+/* Fix featured collection button */
+.featured-collection-button {
+  @apply bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-md font-medium transition-colors;
 }
