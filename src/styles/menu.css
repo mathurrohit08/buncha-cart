@@ -27,8 +27,8 @@
   max-height: 80vh;
   overflow-y: auto;
   transition: opacity 0.3s ease, transform 0.3s ease;
-  margin-top: 1rem !important;
-  top: 4rem; /* Add fixed top position */
+  margin-top: 0.75rem !important;
+  top: 3.5rem; /* Adjusted top position */
 }
 
 /* Make all menus have consistent sizing */
@@ -77,7 +77,8 @@
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
-  transform: translateY(10px);
+  transform: translateY(5px);
+  z-index: 100;
 }
 
 .hover-trigger:hover .hover-content {
@@ -89,7 +90,7 @@
 /* Enhanced menu animations */
 .menu-transition-enter {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(8px);
 }
 
 .menu-transition-enter-active {
@@ -105,13 +106,13 @@
 
 .menu-transition-exit-active {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(8px);
   transition: opacity 0.2s, transform 0.2s;
 }
 
 /* Professional menu styling */
 .menu-shadow {
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
 }
 
 /* Fix featured collection button */

@@ -22,6 +22,8 @@ import { PaymentSection } from "@/components/checkout/PaymentSection";
 import { RelatedProducts } from "@/components/checkout/RelatedProducts";
 import { OrderSummary } from "@/components/checkout/OrderSummary";
 import { EmptyCart } from "@/components/checkout/EmptyCart";
+import { ApplyCouponSection, Coupon } from "@/components/checkout/ApplyCouponSection";
+import { OrderConfirmation } from "@/components/checkout/OrderConfirmation";
 
 // Mock saved addresses
 const savedAddresses: Address[] = [
@@ -106,6 +108,19 @@ const Checkout = () => {
   const [availableStates, setAvailableStates] = useState<{name: string, code: string}[]>([]);
   const [availableCities, setAvailableCities] = useState<{name: string, zipCodes: string[]}[]>([]);
   
+  // New states for coupon functionality
+  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
+  
+  // New state for order confirmation
+  const [orderComplete, setOrderComplete] = useState(false);
+  const [orderDetails, setOrderDetails] = useState<{
+    orderId: string;
+    total: number;
+    date: Date;
+    items: CartItem[];
+    paymentMethod: string;
+  } | null>(null);
+  
   useEffect(() => {
     // Get cart items from localStorage on component mount
     const savedCart = localStorage.getItem('cart');
@@ -156,7 +171,13 @@ const Checkout = () => {
   );
   const tax = subtotal * 0.08; // 8% tax
   const shipping = selectedShippingTier?.cost || 0;
-  const total = subtotal + tax + shipping;
+  
+  // Apply coupon discount if available
+  const discountAmount = appliedCoupon 
+    ? (subtotal * (appliedCoupon.discount / 100)) 
+    : 0;
+  
+  const total = subtotal + tax + shipping - discountAmount;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -274,11 +295,28 @@ const Checkout = () => {
     // Simulate payment processing
     setTimeout(() => {
       setIsProcessing(false);
+      
+      // Generate a random order ID
+      const orderId = `ORD-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+      
+      // Set order details
+      setOrderDetails({
+        orderId,
+        total,
+        date: new Date(),
+        items: [...cartItems],
+        paymentMethod: paymentMethod === 'credit' ? 'Credit Card' : 'PayPal'
+      });
+      
+      // Show success message and order confirmation
       toast({
         title: "Payment successful!",
         description: "Your order has been processed and will be shipped soon.",
         className: "bg-green-600 text-white",
       });
+      
+      // Set order complete to show confirmation screen
+      setOrderComplete(true);
     }, 1500);
   };
 
@@ -333,9 +371,18 @@ const Checkout = () => {
       setAvailableCities([]);
     }
   };
+  
+  const handleContinueShopping = () => {
+    // Reset order flow
+    setOrderComplete(false);
+    setOrderDetails(null);
+    
+    // Navigate back to products
+    window.location.href = "/products";
+  };
 
   // Message for empty cart
-  if (cartItems.length === 0) {
+  if (cartItems.length === 0 && !orderComplete) {
     return (
       <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
         <Header />
@@ -357,71 +404,89 @@ const Checkout = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-3xl font-bold text-center mb-8 dark:text-white">Checkout</h1>
+            {orderComplete && orderDetails ? (
+              <OrderConfirmation 
+                orderDetails={orderDetails}
+                coupon={appliedCoupon}
+                onContinueShopping={handleContinueShopping}
+              />
+            ) : (
+              <>
+                <h1 className="text-3xl font-bold text-center mb-8 dark:text-white">Checkout</h1>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Left column - Form */}
-              <div className="lg:col-span-2">
-                {/* Shipping Address Section */}
-                <ShippingAddressSection 
-                  addressMode={addressMode}
-                  setAddressMode={setAddressMode}
-                  savedAddresses={savedAddresses}
-                  selectedAddressId={selectedAddressId}
-                  setSelectedAddressId={setSelectedAddressId}
-                  formData={formData}
-                  setFormData={setFormData}
-                  showMap={showMap}
-                  setShowMap={setShowMap}
-                  availableStates={availableStates}
-                  availableCities={availableCities}
-                  shippingTier={shippingTier}
-                  setShippingTier={setShippingTier}
-                  selectedShippingTier={selectedShippingTier}
-                  setSelectedShippingTier={setSelectedShippingTier}
-                  showShippingOptions={showShippingOptions}
-                  setShowShippingOptions={setShowShippingOptions}
-                  handleInputChange={handleInputChange}
-                  handleCountryChange={handleCountryChange}
-                  handleStateChange={handleStateChange}
-                  handleCityChange={handleCityChange}
-                  resetNewAddressForm={resetNewAddressForm}
-                  selectAddress={selectAddress}
-                />
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  {/* Left column - Form */}
+                  <div className="lg:col-span-2">
+                    {/* Apply Coupon Section */}
+                    <ApplyCouponSection 
+                      appliedCoupon={appliedCoupon}
+                      setAppliedCoupon={setAppliedCoupon}
+                    />
+                    
+                    {/* Shipping Address Section */}
+                    <ShippingAddressSection 
+                      addressMode={addressMode}
+                      setAddressMode={setAddressMode}
+                      savedAddresses={savedAddresses}
+                      selectedAddressId={selectedAddressId}
+                      setSelectedAddressId={setSelectedAddressId}
+                      formData={formData}
+                      setFormData={setFormData}
+                      showMap={showMap}
+                      setShowMap={setShowMap}
+                      availableStates={availableStates}
+                      availableCities={availableCities}
+                      shippingTier={shippingTier}
+                      setShippingTier={setShippingTier}
+                      selectedShippingTier={selectedShippingTier}
+                      setSelectedShippingTier={setSelectedShippingTier}
+                      showShippingOptions={showShippingOptions}
+                      setShowShippingOptions={setShowShippingOptions}
+                      handleInputChange={handleInputChange}
+                      handleCountryChange={handleCountryChange}
+                      handleStateChange={handleStateChange}
+                      handleCityChange={handleCityChange}
+                      resetNewAddressForm={resetNewAddressForm}
+                      selectAddress={selectAddress}
+                    />
 
-                {/* Payment Section */}
-                <PaymentSection 
-                  paymentMethod={paymentMethod}
-                  setPaymentMethod={setPaymentMethod}
-                  cardDetails={cardDetails}
-                  handleCardDetailsChange={handleCardDetailsChange}
-                  isProcessing={isProcessing}
-                  handleSubmit={handleSubmit}
-                  cartItems={cartItems}
-                  selectedShippingTier={selectedShippingTier}
-                />
-                
-                {/* Related Products Section */}
-                <RelatedProducts 
-                  products={relatedProducts} 
-                  handleAddToCart={handleAddToCart} 
-                />
-              </div>
+                    {/* Payment Section */}
+                    <PaymentSection 
+                      paymentMethod={paymentMethod}
+                      setPaymentMethod={setPaymentMethod}
+                      cardDetails={cardDetails}
+                      handleCardDetailsChange={handleCardDetailsChange}
+                      isProcessing={isProcessing}
+                      handleSubmit={handleSubmit}
+                      cartItems={cartItems}
+                      selectedShippingTier={selectedShippingTier}
+                    />
+                    
+                    {/* Related Products Section */}
+                    <RelatedProducts 
+                      products={relatedProducts} 
+                      handleAddToCart={handleAddToCart} 
+                    />
+                  </div>
 
-              {/* Right column - Order summary */}
-              <div>
-                <OrderSummary 
-                  cartItems={cartItems}
-                  updateQuantity={updateQuantity}
-                  removeItem={removeItem}
-                  subtotal={subtotal}
-                  tax={tax}
-                  shipping={shipping}
-                  total={total}
-                  selectedShippingTier={selectedShippingTier}
-                />
-              </div>
-            </div>
+                  {/* Right column - Order summary */}
+                  <div>
+                    <OrderSummary 
+                      cartItems={cartItems}
+                      updateQuantity={updateQuantity}
+                      removeItem={removeItem}
+                      subtotal={subtotal}
+                      tax={tax}
+                      shipping={shipping}
+                      total={total}
+                      selectedShippingTier={selectedShippingTier}
+                      appliedCoupon={appliedCoupon}
+                      discountAmount={discountAmount}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
           </motion.div>
         </div>
       </main>
