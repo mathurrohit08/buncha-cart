@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CategoryMenuItem } from "./CategoryMenuItem";
 import { CategoryContent } from "./CategoryContent";
 import { categories } from "./data/categoriesData";
+import { Subcategory } from "./types/menuTypes";
 
 export const CategoryMenu = () => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
@@ -108,7 +109,9 @@ export const CategoryMenu = () => {
                           <CategoryContent 
                             key={category.name}
                             categoryName={category.name}
-                            subcategories={category.subcategories}
+                            subcategories={category.subcategories.map((sub: string | Subcategory) => 
+                              typeof sub === 'string' ? { name: sub } : sub
+                            )}
                             image={category.image}
                             path={category.path}
                             onCloseMenu={() => setIsOpen(false)}

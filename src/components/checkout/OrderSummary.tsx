@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { CartItem } from "@/components/header/CartMenu";
-import { ShoppingTier } from "@/utils/shippingCalculator";
+import { ShippingTier } from "@/utils/shippingCalculator";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Coupon } from "./ApplyCouponSection";

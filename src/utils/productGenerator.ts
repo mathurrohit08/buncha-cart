@@ -1,4 +1,3 @@
-
 import { Product } from "@/components/categories/CategoryPageTemplate";
 
 // Categories with their specific attributes
@@ -248,7 +247,7 @@ const generateProductSpecs = (category: string): Record<string, string> => {
 export const generateProduct = (category: string, index: number): Product => {
   const name = generateProductName(category);
   const categoryDetails = categorySpecificDetails[category] || categorySpecificDetails["Electronics"];
-  const basePrice = getRandomInt(50, 500);
+  let basePrice = getRandomInt(50, 500);
   const isOnSale = getRandomBoolean(0.3);
   const isNew = getRandomBoolean(0.2);
   const isBestSeller = getRandomBoolean(0.15);

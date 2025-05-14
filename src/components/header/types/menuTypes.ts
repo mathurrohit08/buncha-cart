@@ -9,3 +9,8 @@ export interface MenuItem {
 export interface FeaturedItem extends MenuItem {
   image: string;
 }
+
+export interface Subcategory {
+  name: string;
+  path?: string;
+}
