@@ -1,13 +1,8 @@
-
 import { Link } from "react-router-dom";
 import { useProductImage } from "@/hooks/use-product-image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronRight } from "lucide-react";
-
-interface Subcategory {
-  name: string;
-  path: string;
-}
+import { Subcategory } from "./types/menuTypes";
 
 interface CategoryContentProps {
   categoryName: string;

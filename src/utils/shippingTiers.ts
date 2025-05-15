@@ -1,18 +1,19 @@
-
 export type ShippingTier = {
   minMiles: number;
   maxMiles: number;
   cost: number;
   description: string;
+  name?: string;
+  deliveryTime?: string;
 };
 
 export const shippingTiers: ShippingTier[] = [
-  { minMiles: 0, maxMiles: 50, cost: 0, description: "Free Shipping (0-50 miles)" },
-  { minMiles: 51, maxMiles: 200, cost: 49, description: "Standard Shipping (51-200 miles)" },
-  { minMiles: 201, maxMiles: 300, cost: 99, description: "Express Shipping (201-300 miles)" },
-  { minMiles: 301, maxMiles: 500, cost: 249, description: "Premium Shipping (301-500 miles)" },
-  { minMiles: 501, maxMiles: 1000, cost: 999, description: "Long Distance Shipping (501-1000 miles)" },
-  { minMiles: 1001, maxMiles: Infinity, cost: 1499, description: "International Shipping (1000+ miles)" }
+  { minMiles: 0, maxMiles: 50, cost: 0, description: "Free Shipping (0-50 miles)", name: "Free Shipping", deliveryTime: "3-5 days" },
+  { minMiles: 51, maxMiles: 200, cost: 49, description: "Standard Shipping (51-200 miles)", name: "Standard Shipping", deliveryTime: "2-3 days" },
+  { minMiles: 201, maxMiles: 300, cost: 99, description: "Express Shipping (201-300 miles)", name: "Express Shipping", deliveryTime: "1-2 days" },
+  { minMiles: 301, maxMiles: 500, cost: 249, description: "Premium Shipping (301-500 miles)", name: "Premium Shipping", deliveryTime: "Next day" },
+  { minMiles: 501, maxMiles: 1000, cost: 999, description: "Long Distance Shipping (501-1000 miles)", name: "Long Distance", deliveryTime: "2-5 days" },
+  { minMiles: 1001, maxMiles: Infinity, cost: 1499, description: "International Shipping (1000+ miles)", name: "International", deliveryTime: "7-14 days" }
 ];
 
 export const calculateShippingCost = (distanceInMiles: number): ShippingTier => {
